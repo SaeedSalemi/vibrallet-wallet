@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "binrex-wallet",
+    "slug": "binrex-wallet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "description": ""
+  },
+  "name": "binrex-wallet"
+}

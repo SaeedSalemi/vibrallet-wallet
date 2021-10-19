@@ -1,0 +1,27 @@
+const Colors = {
+	bckColor: '#121113',
+	primaryColor: '#FF9901',
+	primaryColorOpacity: '#ff99011a',
+	secondaryColor: '#FFCC01',
+	textColor: '#D7D7D7',
+	text1: '#D7D7D7',
+	inputColor: '#272627',
+	inputColorOpacity: '#27262766',
+	inputColor2: '#151515',
+	whiteColor: '#fff',
+	grayColor: '#E5E5E5',
+	lightGrayColor: '#95949A',
+	text2: '#95949A',
+	text3: '#615F69',
+	darkTextColor: '#615F69',
+	blue: '#555FEB',
+	step2: '#ff990166',
+	lightOrange: '#F47169',
+	failure: '#F84837',
+	failureOpacity: '#f8483740',
+	success: '#27BF74',
+	successOpacity: '#27bf7440',
+	ethereum: '#1f1e2e',
+}
+
+export default Colors
