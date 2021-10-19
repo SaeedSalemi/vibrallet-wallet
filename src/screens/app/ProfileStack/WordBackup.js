@@ -9,6 +9,7 @@ import Screen from '../../../components/Screen'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
 import { finalCreateWallet } from '../../../redux/modules/wallets'
+import QRCode from 'react-native-qrcode-svg';
 
 export default function WordBackup({ navigation }) {
 	const dispatch = useDispatch()
@@ -37,7 +38,12 @@ export default function WordBackup({ navigation }) {
 	return (
 		<Screen edges={['bottom']} style={{ ...globalStyles.gapScreen }}>
 			<View style={{ paddingVertical: 18, ...globalStyles.flex.center }}>
-				<Image source={Images.qrCode} />
+				{/* <Image source={Images.qrCode} /> */}
+
+				<QRCode
+					value="http://awe1111some.link.qr"
+				/>
+
 			</View>
 			<View style={{ flex: 1 }}>
 				<View
