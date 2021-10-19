@@ -82,7 +82,7 @@ export default function WalletScreen() {
 			radius: 100,
 		},
 	]
-	const data = [...coins, ...coins]
+	const data = [...coins]
 	const series = pieData.map(item => item.series)
 	const sliceColor = pieData.map(item => item.color)
 

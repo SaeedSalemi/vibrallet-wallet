@@ -418,6 +418,13 @@ export function AppStackNavigation() {
 			<AppStack.Screen
 				name={routes.notification}
 				component={NotificationScreen}
+				options={{
+					headertitle: () => (
+						<AppText typo="md" bold>
+							Notifications
+						</AppText>
+					),
+				}}
 			/>
 			<AppStack.Screen
 				name={routes.newPassword}

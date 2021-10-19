@@ -41,8 +41,8 @@ export default function ProfileMenu({ data }) {
 						) : null}
 						{item.appSwitch ? (
 							<AppSwitch
-								value={item.appSwitch.value}
-								onValueChange={item.appSwitch.onPress}
+								value={item.appSwitch?.value}
+								onValueChange={item.appSwitch?.onPress}
 							/>
 						) : null}
 						{item.route && !item.children ? (

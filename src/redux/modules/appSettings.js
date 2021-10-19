@@ -15,17 +15,32 @@ export const setPassword = password => ({
 	type: SET_PASSWORD,
 	password,
 })
+export const SET_LIGHT_MODE = 'SET_LIGHT_MODE'
+export const setLightMode = lightMode => ({
+	type: SET_LIGHT_MODE,
+	lightMode,
+})
+
 export const SET_MODAL = 'SET_MODAL'
 export const setModal = showModal => ({
 	type: SET_MODAL,
 	showModal,
+})
+export const SET_TURN_ON_NOTIFICATIONS = 'SET_TURN_ON_NOTIFICATIONS'
+export const setTurnOnNotifications = turnOnNotifications => ({
+	type: SET_TURN_ON_NOTIFICATIONS,
+	turnOnNotifications,
 })
 export const SET_AUTH_PASS = 'SET_AUTH_PASS'
 export const setAuthPass = show => ({
 	type: SET_AUTH_PASS,
 	show,
 })
-
+export const SET_TURN_ON_SOUNDS = 'SET_TURN_ON_SOUNDS'
+export const setTurnOnSounds = turnOnSounds => ({
+	type: SET_TURN_ON_SOUNDS,
+	turnOnSounds,
+})
 export const SET_USE_TOUCH_ID = 'SET_USE_TOUCH_ID'
 export const setUseTouchId = useTouchId => ({
 	type: SET_USE_TOUCH_ID,
@@ -44,10 +59,28 @@ const initialState = {
 	password: null,
 	authPass: false,
 	showModal: false,
+	turnOnSounds: true,
+	turnOnNotifications: false,
+	lightMode: false,
 }
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
+		case SET_LIGHT_MODE:
+			return {
+				...state,
+				lightMode: action.lightMode,
+			}
+		case SET_TURN_ON_NOTIFICATIONS:
+			return {
+				...state,
+				turnOnNotifications: action.turnOnNotifications,
+			}
+		case SET_TURN_ON_SOUNDS:
+			return {
+				...state,
+				turnOnSounds: action.turnOnSounds,
+			}
 		case SET_MODAL:
 			return {
 				...state,

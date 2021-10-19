@@ -5,31 +5,38 @@ import { Images } from '../../assets'
 import Carousel from 'react-native-snap-carousel'
 import { TouchableOpacity } from 'react-native'
 import { globalStyles } from '../../config/styles'
-const ENTRIES1 = [
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MarketIcon from '../common/MarketIcon/MarketIcon'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import { SvgUri } from 'react-native-svg'
+
+const slideShowItems = [
 	{
-		title: 'Beautiful and dramatic Antelope Canyon',
-		subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-		illustration: Images.yourCoins,
+		icon: (
+			<MarketIcon color={globalStyles.Colors.ethereum} size={39}>
+				<MaterialCommunityIcons size={20} name="ethereum" color="#7037C9" />
+			</MarketIcon>
+		),
+		title: 'Ethereum',
+		value: '12.434 ETH',
 	},
 	{
-		title: 'Earlier this morning, NYC',
-		subtitle: 'Lorem ipsum dolor sit amet',
-		illustration: Images.yourCoins,
+		icon: (
+			<MarketIcon color={globalStyles.Colors.ethereum} size={39}>
+				<MaterialCommunityIcons size={20} name="ethereum" color="#7037C9" />
+			</MarketIcon>
+		),
+		title: 'Ethereum',
+		value: '12.434 ETH',
 	},
 	{
-		title: 'White Pocket Sunset',
-		subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-		illustration: Images.yourCoins,
-	},
-	{
-		title: 'Acrocorinth, Greece',
-		subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-		illustration: Images.yourCoins,
-	},
-	{
-		title: 'The lone tree, majestic landscape of New Zealand',
-		subtitle: 'Lorem ipsum dolor sit amet',
-		illustration: Images.yourCoins,
+		icon: (
+			<MarketIcon color={globalStyles.Colors.ethereum} size={39}>
+				<MaterialCommunityIcons size={20} name="ethereum" color="#7037C9" />
+			</MarketIcon>
+		),
+		title: 'Ethereum',
+		value: '12.434 ETH',
 	},
 ]
 const { width: screenWidth } = Dimensions.get('window')
@@ -39,12 +46,54 @@ export default function UserCoins() {
 
 	const renderItem = ({ item }) => {
 		return (
-			<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-				<Image
-					style={{ flex: 1, borderRadius: 10 }}
-					source={item.illustration}
-					resizeMode="contain"
-				/>
+			<View
+				style={{
+					backgroundColor: globalStyles.Colors.inputColor,
+					padding: 20,
+					borderRadius: 15,
+					marginVertical: 8,
+				}}
+			>
+				<View
+					style={{ ...globalStyles.flex.between, ...globalStyles.flex.row }}
+				>
+					<View>{item.icon}</View>
+					<View style={{ alignSelf: 'center' }}>
+						<FontAwesome5
+							name="eye-slash"
+							color={globalStyles.Colors.text2}
+							size={25}
+						/>
+					</View>
+				</View>
+				<View>
+					<View
+						style={{
+							marginVertical: 18,
+							...globalStyles.flex.row,
+							alignItems: 'center',
+							...globalStyles.flex.between,
+						}}
+					>
+						<View>
+							<AppText typo="xs">{item.title}</AppText>
+							<AppText
+								color="text2"
+								style={{ marginVertical: 8 }}
+								bold
+								typo="xl"
+							>
+								{item.value}
+							</AppText>
+						</View>
+						<View>
+							<SvgUri
+								width={100}
+								uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
+							/>
+						</View>
+					</View>
+				</View>
 			</View>
 		)
 	}
@@ -55,13 +104,14 @@ export default function UserCoins() {
 			</AppText>
 			<View style={{ ...globalStyles.flex.center }}>
 				<Carousel
-					sliderWidth={354}
+					sliderWidth={400}
+					sliderHeight={200}
 					layout="tinder"
 					ref={carouselRef}
 					lockScrollWhileSnapping
-					itemWidth={200}
+					itemWidth={330}
 					onSnapToItem={index => setActive(index)}
-					data={ENTRIES1}
+					data={slideShowItems}
 					renderItem={renderItem}
 				/>
 			</View>

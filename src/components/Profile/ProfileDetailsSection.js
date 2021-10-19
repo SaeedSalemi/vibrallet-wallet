@@ -16,7 +16,7 @@ export default function ProfileDetailsSection() {
 			children: (
 				<>
 					<AppText bold typo="sm">
-						344
+						0
 					</AppText>
 					<AppText typo="tiny" color="text3">
 						PRX
@@ -32,7 +32,7 @@ export default function ProfileDetailsSection() {
 			children: (
 				<>
 					<AppText bold color="lightOrange" typo="sm">
-						3
+						0
 					</AppText>
 				</>
 			),
@@ -49,7 +49,7 @@ export default function ProfileDetailsSection() {
 			children: (
 				<>
 					<AppText bold typo="sm">
-						25
+						0
 					</AppText>
 				</>
 			),

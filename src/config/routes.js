@@ -48,7 +48,7 @@ export const routes = {
 	confirmTransaction: 'ConfirmTransaction',
 	receiveAddressTab: 'Address',
 	receiveUsernameTab: 'Username',
-	notification: 'Notification',
+	notification: 'Notifications',
 	welcomeBack: 'WelcomeBack',
 	newPassword: 'NewPassword',
 	changePassword: 'ChangePassword',

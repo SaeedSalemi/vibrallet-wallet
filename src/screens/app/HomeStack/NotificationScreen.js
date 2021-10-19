@@ -5,6 +5,7 @@ import NotificationItem from '../../../components/Notification/NotificationItem'
 import ProfileMenu from '../../../components/Profile/ProfileMenu'
 import { globalStyles } from '../../../config/styles'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import AppButton from '../../../components/common/AppButton'
 
 const withdrawal = 'Withdrawal Successful'
 const deposit = 'Deposit Unsuccessful'
@@ -119,6 +120,15 @@ export default function NotificationScreen() {
 	return (
 		<View style={{ ...globalStyles.gapScreen }}>
 			<NotificationItem data={items} />
+			<AppButton
+				textStyle={{ color: globalStyles.Colors.primaryColor }}
+				title="Mark all as Read"
+				customStyle={{
+					backgroundColor: globalStyles.Colors.bckColor,
+					borderWidth: 1,
+					borderColor: globalStyles.Colors.inputColor,
+				}}
+			/>
 		</View>
 	)
 }
