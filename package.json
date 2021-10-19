@@ -43,6 +43,7 @@
     "formik": "^2.2.9",
     "hdkey": "^2.0.1",
     "https-browserify": "0.0.1",
+    "node-libs-browser": "^2.2.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^7.17.2",

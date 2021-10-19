@@ -10,6 +10,8 @@
 //  var ethUtils = require('ethereumjs-util');
 //  var Common = require('ethereumjs-common').default;
 var Web3 = require('web3');
+import WalletManager from '../blockchains/walletManager'
+
 // const crypto = require('../../../const/crypto')
 
 // let networkUrl = `https://mainnet.infura.io/v3/58b50bb378ad450996a9e32ce2985ab3`; //BSC MAINNET
@@ -30,8 +32,8 @@ class EthManager {
         // const wssProvider = new Web3.providers.WebsocketProvider(blockChainWebSocketUrl);
         // this.web3 = new Web3(wssProvider);
         this.web3 = new Web3(networkUrl);
-        this.tokenContract = new this.web3.eth.Contract(ERC20_ABI, tokenContractAddress);
 
+        this.defaultDecimals = 18;
         // this.common = common;
     }
 
@@ -42,6 +44,26 @@ class EthManager {
     async getLastBlockNumber() {
         return await this.web3.eth.getBlockNumber();
     }
+
+    async getWalletFromMnemonic(mnemonic) {
+        let wallet = await WalletManager.getEtherAddressFromMnemonic(mnemonic);
+        let account = await this.web3.eth.accounts.privateKeyToAccount(wallet.privateKey);
+        wallet.address = account.address;
+        console.log(wallet);
+        return wallet;
+    }
+
+    async getWalletFromPrivateKey(privateKey) {
+        let address = await this.web3.eth.accounts.privateKeyToAccount(privateKey);
+        let wallet = {
+            privateKey: privateKey,
+            address: address
+        }
+
+        return wallet;
+    }
+
+
 
 
     // /**
@@ -156,48 +178,53 @@ class EthManager {
         return result;
     }
 
+    convertAmount(amount, decimals) {
+        return amount * (10 ** decimals)
+    }
+    
     /**
      * انتقال توکن 
-     * @param {*} fromAddressPublicKey 
-     * @param {*} fromAddressPrivateKey 
+     * @param {Object} wallet format is { publicKey, privateKey , address }
      * @param {*} toAddress 
      * @param {BigInt} amount 
      * @returns 
      */
-    async transferCoin(fromAddress, privateKey, toAddress, amount) {
+    async transferCoin(wallet, toAddress, amount) {
+        amount = this.convertAmount(amount, this.defaultDecimals);
 
-        let nonce = await this.web3.eth.getTransactionCount(fromAddress);
+        let nonce = await this.web3.eth.getTransactionCount(wallet.address);
         // let tokenContract = new this.web3.eth.Contract(crypto.StandardBep20TokenABI, 'BNB');
 
         // let amountBigInt = BigInt(Math.trunc(amount * 1e18));
         // var transferAmount = amount.toString();
 
-        let gasPrice = '5000000000';
-
+        // let gasPrice = '5000000000';
         console.log('estimateGas ...');
-        // let estimateGas = '200000';
-        let estimateGas =  await this.web3.eth.estimateGas({
-            "from"      : fromAddress,       
-            "nonce"     : this.web3.utils.toHex(nonce), 
-            "gasPrice": this.web3.utils.toHex(gasPrice),
-            "to"        : toAddress,     
-       });
+
+        let estimateGas = '21000';
+        // let estimateGas = await this.web3.eth.estimateGas({
+        //     "from": wallet.address,
+        //     "nonce": this.web3.utils.toHex(nonce),
+        //     // "gasPrice": this.web3.utils.toHex(gasPrice),
+        // });
+        // console.log('estimateGas for coin --->', estimateGas);
 
         var rawTransaction = {
-            "from": fromAddress,
+            "from": wallet.address,
             "to": toAddress,
             "nonce": this.web3.utils.toHex(nonce),
-            "gasLimit": this.web3.utils.toHex(estimateGas),
-            "gasPrice": this.web3.utils.toHex(gasPrice),
+            "gas": this.web3.utils.toHex(estimateGas),
+            // "gasLimit": this.web3.utils.toHex(estimateGas),
+            // "gasPrice": this.web3.utils.toHex(gasPrice),
             "value": this.web3.utils.toHex(amount),
         };
 
         var receipt = null;
         try {
-            let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, privateKey);
+            let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, wallet.privateKey);
 
             console.log('sendSignedTransaction ...', signedTx);
-            
+
             receipt = await this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
 
             console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
@@ -210,33 +237,38 @@ class EthManager {
 
     /**
      * انتقال توکن 
-     * @param {*} fromAddressPublicKey 
-     * @param {*} fromAddressPrivateKey 
+     * @param {Object} wallet format is { publicKey, privateKey , address }
      * @param {*} toAddress 
      * @param {BigInt} amount 
      * @returns 
      */
-    async transfer(tokenContractAddress, publicKey, privateKey, toAddress, amount) {
+    async transfer(tokenContractAddress, wallet, toAddress, amount) {
         if (!tokenContractAddress || tokenContractAddress == null || tokenContractAddress.toLowerCase() == 'bnb') {
-            return this.transferCoin(publicKey, privateKey, toAddress, amount)
+            return this.transferCoin(wallet, toAddress, amount)
         }
+        amount = this.convertAmount(amount, this.defaultDecimals);
 
-        let nonce = await this.web3.eth.getTransactionCount(publicKey);
+        // publicKey = this.web3.eth.accounts.privateKeyToAccount(privateKey);
+
+        let tokenContract = new this.web3.eth.Contract(ERC20_ABI, tokenContractAddress);
+
+        let nonce = await this.web3.eth.getTransactionCount(wallet.address);
 
 
         // let amountBigInt = BigInt(Math.trunc(amount * 1e18));
         var transferAmount = amount.toString();
 
-        let gasPrice = '5000000000'
+        let gasPrice = '5000000000';
         let methodData = tokenContract.methods.transfer(toAddress, transferAmount);
 
         let estimateGas = await methodData.estimateGas({
             "from": fromAddress,
-            "gasPrice": this.web3.utils.toHex(gasPrice)
+            "gasPrice": this.web3.utils.toHex(gasPrice),
         });
 
+        console.log('estimateGas for token --->', estimateGas);
         var rawTransaction = {
-            "from": publicKey,
+            "from": wallet.address,
             "to": tokenContractAddress,
             "nonce": this.web3.utils.toHex(nonce),
             "gasLimit": this.web3.utils.toHex(estimateGas),
@@ -246,10 +278,12 @@ class EthManager {
             // "chainId": 56
         };
 
-        let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, privateKey);
+        let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, wallet.privateKey);
 
         console.log('sendSignedTransaction ...', signedTx);
+
         var receipt = await this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
+
         console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
 
         // var privKey = new Buffer.from(fromAddressPrivateKey, 'hex');
@@ -280,13 +314,14 @@ class EthManager {
      * @returns 
      */
     async transferApprove(tokenContractAddress, fromAddress, privateKey, toAddress, transferAmount) {
+        let tokenContract = new this.web3.eth.Contract(ERC20_ABI, tokenContractAddress);
 
         console.log('get nonce ...');
         let nonce = await this.web3.eth.getTransactionCount(fromAddress);
 
         let gasPrice = '5000000000'
 
-        let methodData = this.tokenContract.methods.approve(toAddress, transferAmount);
+        let methodData = tokenContract.methods.approve(toAddress, transferAmount);
         let estimateGas = await methodData.estimateGas({
             "from": fromAddress,
             "gasPrice": this.web3.utils.toHex(gasPrice)
@@ -319,6 +354,8 @@ class EthManager {
         // console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
         return receipt;
     }
+
+
 }
 
 var ethManager = new EthManager();
