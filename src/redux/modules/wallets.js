@@ -49,6 +49,7 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				data: [...(state.data || []), action.wallet],
+				create: null,
 			}
 		case INIT_CREATE_WALLET:
 			return {
@@ -65,18 +66,13 @@ export default function reducer(state = initialState, action) {
 					pincode: action.pincode,
 				},
 			}
-		case SET_CREATE_PINCODE:
+		case FINAL_CREATE_WALLET:
 			return {
 				...state,
 				create: {
 					...state.create,
 					backup: action.backup,
 				},
-			}
-		case FINAL_CREATE_WALLET:
-			return {
-				...state,
-				backup: action.backup,
 			}
 		case RESET_WALLETS:
 			return initialState
