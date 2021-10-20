@@ -7,7 +7,7 @@ import WalletSortSection from '../../../components/Profile/WalletSortSection'
 import { globalStyles } from '../../../config/styles'
 import { coins } from '../HomeStack/CreatePriceAlertScreen'
 
-const items = [...coins, ...coins]
+const items = coins
 
 export default function FiltersScreen() {
 	return (

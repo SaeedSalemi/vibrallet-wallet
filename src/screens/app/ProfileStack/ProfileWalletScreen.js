@@ -14,6 +14,7 @@ export default function ProfileWalletScreen({ navigation }) {
 	const walletItems = useSelector(state => state.wallets?.data)
 	const items = walletItems?.map(item => ({
 		title: item.name,
+		coins,
 	}))
 	// const items = useMemo(
 	// 	() => [

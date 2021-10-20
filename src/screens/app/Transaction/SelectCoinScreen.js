@@ -10,7 +10,7 @@ import { routes } from '../../../config/routes'
 import { coins } from '../HomeStack/CreatePriceAlertScreen'
 
 export default function SelectCoinScreen({ navigation, route }) {
-	const allCoins = useMemo(() => [...coins, ...coins, ...coins], [])
+	const allCoins = useMemo(() => coins, [])
 	const [filterdItems, setFilterItems] = useState(allCoins)
 	const arrayHolder = allCoins
 	const searchFilterFunction = text => {

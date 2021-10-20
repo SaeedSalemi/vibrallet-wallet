@@ -7,7 +7,7 @@ import { globalStyles } from '../../../config/styles'
 import { coins } from '../HomeStack/CreatePriceAlertScreen'
 
 export default function AddCoinOrToken() {
-	const items = [...coins, ...coins]
+	const items = coins
 
 	return (
 		<View style={{ ...globalStyles.gapScreen }}>

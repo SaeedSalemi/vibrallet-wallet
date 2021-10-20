@@ -8,8 +8,9 @@ import TopTabBar from '../../../navigation/TopTabBar'
 
 export const ReceiveTab = createMaterialTopTabNavigator()
 
-export default function ReceiveScreen({ route }) {
+export default function ReceiveScreen({ route, navigation }) {
 	const { coin } = route.params || {}
+
 	return (
 		<Screen gap={false} edges={['bottom']}>
 			<ReceiveTab.Navigator tabBar={props => <TopTabBar {...props} />}>
@@ -19,7 +20,7 @@ export default function ReceiveScreen({ route }) {
 					component={AddressScreen}
 				/>
 				<ReceiveTab.Screen
-				initialParams={{ coin }}
+					initialParams={{ coin }}
 					name={routes.receiveUsernameTab}
 					component={UsernameScreen}
 				/>

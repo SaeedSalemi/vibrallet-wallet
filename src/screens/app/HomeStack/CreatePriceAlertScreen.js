@@ -1,32 +1,25 @@
 import React, { useMemo } from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, View, Image } from 'react-native'
+import SvgUri from 'react-native-svg-uri'
 import AppText from '../../../components/common/AppText'
 import AppTextInput from '../../../components/common/AppTextInput/AppTextInput'
 import AlertItem from '../../../components/PriceAlert/AlertItem'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import AppIcon from '../../../components/common/AppIcon'
 
+const BSCIcon = () => (
+	<AppIcon style={{ width: 25, height: 25 }} name="binance" />
+)
+const EthIcon = () => <FontAwesome5 size={25} color="#7037C9" name="ethereum" />
 export const coins = [
-	{
-		title: 'Bitcoin',
-		slug: 'BTC',
-		price: '57,934',
-		currency: '$',
-		icon: 'btc',
-		increase: true,
-		changeAmount: '12.2%',
-		chart: 'sampleChart1',
-		amount: 2.34364,
-		balance: '$100,232.23',
-		vol: '2,322,232,231',
-		lastPrice: '55543.32',
-	},
 	{
 		title: 'Ethereum',
 		slug: 'ETH',
 		price: '1,934',
 		currency: '$',
-		icon: 'eth',
+		icon: <EthIcon />,
 		increase: false,
 		changeAmount: '6.2%',
 		chart: 'sampleChart2',
@@ -36,11 +29,11 @@ export const coins = [
 		lastPrice: '1764.23',
 	},
 	{
-		title: 'Ripple',
-		slug: 'XRP',
+		title: 'Binance',
+		slug: 'BSC',
 		price: '1.12',
 		currency: '$',
-		icon: 'xrp',
+		icon: <BSCIcon />,
 		increase: true,
 		changeAmount: '1.4%',
 		chart: 'sampleChart3',
@@ -52,7 +45,7 @@ export const coins = [
 ]
 
 export default function CreatePriceAlertScreen({ navigation }) {
-	const items = useMemo(() => [...coins, ...coins], [])
+	const items = useMemo(() => coins, [])
 
 	return (
 		<Screen

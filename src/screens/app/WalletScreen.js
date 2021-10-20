@@ -82,7 +82,7 @@ export default function WalletScreen() {
 			radius: 100,
 		},
 	]
-	const data = [...coins]
+	const data = coins
 	const series = pieData.map(item => item.series)
 	const sliceColor = pieData.map(item => item.color)
 
@@ -96,7 +96,7 @@ export default function WalletScreen() {
 	}
 
 	return (
-		<Screen>
+		<Screen edges={['bottom']}>
 			<Header route={routes.wallet} />
 
 			<View style={{ flex: 1, paddingHorizontal: 8 }}>

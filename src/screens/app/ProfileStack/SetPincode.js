@@ -66,6 +66,7 @@ export default function SetPincode({ navigation }) {
 						<ControllerAppInput
 							key={i}
 							password
+							keyboardType="number-pad"
 							name={item.name}
 							control={control}
 							errors={errors}

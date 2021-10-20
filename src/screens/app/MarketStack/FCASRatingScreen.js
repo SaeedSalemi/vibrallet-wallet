@@ -19,7 +19,7 @@ export default function FCASRatingScreen() {
 	]
 	const statuses = ['S', 'A', 'B', 'D', 'C']
 
-	const data = [...coins, ...coins, ...coins, ...coins]
+	const data = coins
 
 	return (
 		<View style={globalStyles.screen}>
