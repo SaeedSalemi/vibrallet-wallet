@@ -10,6 +10,7 @@ import { globalStyles } from '../../../config/styles'
 import { finalCreateWallet } from '../../../redux/modules/wallets'
 import WalletManager from '../../../blockchains/walletManager'
 import Clipboard from '@react-native-community/clipboard'
+import QRCode from 'react-native-qrcode-svg';
 
 export default function WordBackup({ navigation }) {
 	const dispatch = useDispatch()
