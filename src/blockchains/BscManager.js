@@ -10,6 +10,8 @@
 //  var ethUtils = require('ethereumjs-util');
 // const Common = require('ethereumjs-common').default;
 const Web3 = require('web3');
+import WalletManager from '../blockchains/walletManager'
+
 // let networkUrl = `https://bsc-dataseed.binance.org/`;
 let networkUrl = `https://data-seed-prebsc-1-s1.binance.org:8545`;  //BSC 
 const BEP20_ABI = require('./ABIs/BEP20.json');
@@ -26,23 +28,54 @@ const BEP20_ABI = require('./ABIs/BEP20.json');
 //     chainId: 97  //BSC TESTNET
 // },  'petersburg');
 
+const common = 
+{
+    baseChain: 'mainnet',
+    hardfork: 'petersburg',
+    customChain: {
+      name: 'bnb',
+      chainId: 97, //BSC TESTNET
+      networkId: 97, //BSC TESTNET
+    }
+  }
+  
 class BscManager {
     constructor() {
         // const wssProvider = new Web3.providers.WebsocketProvider(blockChainWebSocketUrl);
         // this.web3 = new Web3(wssProvider);
         this.web3 = new Web3(networkUrl);
-        this.tokenContract = new this.web3.eth.Contract(BEP20_ABI, tokenContractAddress);
-
+        this.defaultDecimals = 18;
         // this.common = common;
     }
 
-    /**
+     /**
      * get latest block number
      * @returns {int}
      */
-    async getLastBlockNumber() {
+      async getLastBlockNumber() {
         return await this.web3.eth.getBlockNumber();
     }
+
+    async getWalletFromMnemonic(mnemonic) {
+        let wallet = await WalletManager.getBscAddressFromMnemonic(mnemonic);
+        console.log(mnemonic);
+        let account = await this.web3.eth.accounts.privateKeyToAccount(wallet.privateKey);
+        wallet.address = account.address;
+        console.log(wallet);
+        return wallet;
+    }
+
+    async getWalletFromPrivateKey(privateKey) {
+        let address = await this.web3.eth.accounts.privateKeyToAccount(privateKey);
+        let wallet = {
+            privateKey: privateKey,
+            address: address
+        }
+
+        return wallet;
+    }
+
+
 
 
     // /**
@@ -157,112 +190,113 @@ class BscManager {
         return result;
     }
 
+    convertAmount(amount, decimals) {
+        return amount * (10 ** decimals)
+    }
+    
     /**
      * انتقال توکن 
-     * @param {*} fromAddressPublicKey 
-     * @param {*} fromAddressPrivateKey 
+     * @param {Object} wallet format is { publicKey, privateKey , address }
      * @param {*} toAddress 
      * @param {BigInt} amount 
      * @returns 
      */
-    async transferCoin(fromAddress, fromAddressPrivateKey, toAddress, amount) {
+    async transferCoin(wallet, toAddress, amount) {
+        amount = this.convertAmount(amount, this.defaultDecimals);
 
-        let nonce = await this.web3.eth.getTransactionCount(fromAddress);
+        let nonce = await this.web3.eth.getTransactionCount(wallet.address);
         // let tokenContract = new this.web3.eth.Contract(crypto.StandardBep20TokenABI, 'BNB');
 
         // let amountBigInt = BigInt(Math.trunc(amount * 1e18));
         // var transferAmount = amount.toString();
 
-        let gasPrice = '5000000000';
-
+        // let gasPrice = '5000000000';
         console.log('estimateGas ...');
-        let estimateGas =  await this.web3.eth.estimateGas({
-            "from"      : fromAddress,       
-            "nonce"     : this.web3.utils.toHex(nonce), 
-            "gasPrice": this.web3.utils.toHex(gasPrice),
-            "to"        : toAddress,     
-       });
 
-        // let estimateGas = await data.estimateGas({
-        //     "from": fromAddress,
-        //     "gasPrice": this.web3.utils.toHex(gasPrice)
+        let estimateGas = '21000';
+        // let estimateGas = await this.web3.eth.estimateGas({
+        //     "from": wallet.address,
+        //     "nonce": this.web3.utils.toHex(nonce),
+        //     // "gasPrice": this.web3.utils.toHex(gasPrice),
         // });
+        console.log('estimateGas for coin --->', estimateGas);
 
         var rawTransaction = {
-            "from": fromAddress,
+            "from": wallet.address,
             "to": toAddress,
             "nonce": this.web3.utils.toHex(nonce),
-            "gasLimit": this.web3.utils.toHex(estimateGas),
-            "gasPrice": this.web3.utils.toHex(gasPrice),
+            "gas": this.web3.utils.toHex(estimateGas),
+            // "gasLimit": this.web3.utils.toHex(estimateGas),
+            // "gasPrice": this.web3.utils.toHex(gasPrice),
             "value": this.web3.utils.toHex(amount),
+            // "common": common
         };
 
+        console.log(rawTransaction);
+        
         var receipt = null;
-        // try {
+        try {
+            let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, wallet.privateKey);
 
-        // var privKey = new Buffer.from(fromAddressPrivateKey, 'hex');
-        // console.log(fromAddressPrivateKey, privKey);
-        //  var tx = new Tx(rawTransaction);
-        //  tx.sign(privKey);
-        //  var serializedTx = tx.serialize();
-        //  console.log(' done sign');
-        // console.log('signTransaction ...');
-        let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, fromAddressPrivateKey);
+            console.log('sendSignedTransaction ...', signedTx);
 
-        console.log('sendSignedTransaction ...', signedTx);
+            receipt = await this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
 
-        receipt = await this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
-
-        console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
-    
-        // } catch (ex) {
-        //     console.log(' APP EXCEPTION: during send transaction', ex);
-        // }
+            console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
+        } catch (ex) {
+            console.log(' APP EXCEPTION: during send transaction', ex);
+        }
         return receipt;
     }
 
+
     /**
      * انتقال توکن 
-     * @param {*} fromAddressPublicKey 
-     * @param {*} fromAddressPrivateKey 
+     * @param {Object} wallet format is { publicKey, privateKey , address }
      * @param {*} toAddress 
      * @param {BigInt} amount 
      * @returns 
      */
-    async transfer(tokenContractAddress, publicKey, privateKey, toAddress, amount) {
+    async transfer(tokenContractAddress, wallet, toAddress, amount) {
         if (!tokenContractAddress || tokenContractAddress == null || tokenContractAddress.toLowerCase() == 'bnb') {
-            return this.transferCoin(publicKey, privateKey, toAddress, amount)
+            return this.transferCoin(wallet, toAddress, amount)
         }
+        amount = this.convertAmount(amount, this.defaultDecimals);
+        // publicKey = this.web3.eth.accounts.privateKeyToAccount(privateKey);
 
-        let nonce = await this.web3.eth.getTransactionCount(publicKey);
+        let tokenContract = new this.web3.eth.Contract(BEP20_ABI, tokenContractAddress);
+
+        let nonce = await this.web3.eth.getTransactionCount(wallet.address);
 
 
         // let amountBigInt = BigInt(Math.trunc(amount * 1e18));
-        var transferAmount = amount.toString();
 
-        let gasPrice = '5000000000'
-        let methodData = tokenContract.methods.transfer(toAddress, transferAmount);
+        // let gasPrice = '5000000000';
+        let methodData = tokenContract.methods.transfer(toAddress, amount);
 
         let estimateGas = await methodData.estimateGas({
             "from": fromAddress,
-            "gasPrice": this.web3.utils.toHex(gasPrice)
+            // "gasPrice": this.web3.utils.toHex(gasPrice),
         });
 
+        console.log('estimateGas for token --->', estimateGas);
         var rawTransaction = {
-            "from": publicKey,
+            "from": wallet.address,
             "to": tokenContractAddress,
             "nonce": this.web3.utils.toHex(nonce),
             "gasLimit": this.web3.utils.toHex(estimateGas),
-            "gasPrice": this.web3.utils.toHex(gasPrice),
+            // "gasPrice": this.web3.utils.toHex(gasPrice),
             "value": "0x0",
             "data": methodData.encodeABI(),
             // "chainId": 56
         };
 
-        let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, privateKey);
+        let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, wallet.privateKey);
 
         console.log('sendSignedTransaction ...', signedTx);
+
         var receipt = await this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
+
         console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
 
         // var privKey = new Buffer.from(fromAddressPrivateKey, 'hex');
@@ -293,13 +327,14 @@ class BscManager {
      * @returns 
      */
     async transferApprove(tokenContractAddress, fromAddress, privateKey, toAddress, transferAmount) {
+        let tokenContract = new this.web3.eth.Contract(ERC20_ABI, tokenContractAddress);
 
         console.log('get nonce ...');
         let nonce = await this.web3.eth.getTransactionCount(fromAddress);
 
         let gasPrice = '5000000000'
 
-        let methodData = this.tokenContract.methods.approve(toAddress, transferAmount);
+        let methodData = tokenContract.methods.approve(toAddress, transferAmount);
         let estimateGas = await methodData.estimateGas({
             "from": fromAddress,
             "gasPrice": this.web3.utils.toHex(gasPrice)
@@ -332,7 +367,6 @@ class BscManager {
         // console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
         return receipt;
     }
-
 }
 
 var bscManager = new BscManager();

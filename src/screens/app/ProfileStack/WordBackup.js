@@ -33,7 +33,12 @@ export default function WordBackup({ navigation }) {
 	return (
 		<Screen edges={['bottom']} style={{ ...globalStyles.gapScreen }}>
 			<View style={{ paddingVertical: 18, ...globalStyles.flex.center }}>
-				<Image source={Images.qrCode} />
+				{/* <Image source={Images.qrCode} /> */}
+
+				<QRCode
+					value="http://awe1111some.link.qr"
+				/>
+
 			</View>
 			<View style={{ flex: 1 }}>
 				<View

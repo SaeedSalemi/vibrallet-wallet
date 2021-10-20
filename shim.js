@@ -27,6 +27,7 @@ if (typeof localStorage !== 'undefined') {
 // crypto is loaded first, so it can populate global.crypto
 // require('crypto');
 
+<<<<<<< HEAD
 // make sure you use `import` and not require!
 import crypto from 'crypto'
 // import bitcore from 'bitcore-lib'
@@ -39,3 +40,8 @@ import crypto from 'crypto'
 //     if (err) throw err;
 //     console.log(`${buf.length} bytes of 222222222222 random data: ${buf.toString('hex')}`);
 //   });
+=======
+// make sure you use `import` and not require!  
+import crypto from 'crypto'
+
+>>>>>>> 88c0f7299ff3cb1c013737873db621281acc3c01
