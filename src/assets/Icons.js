@@ -90,5 +90,6 @@ const Icons = {
 	bankTransfer: require('./icons/bank-transfer.png'),
 	eth2: require('./icons/coins/eth-2.png'),
 	squareInfo: require('./icons/square-info.png'),
+	binance: require('./icons/bsc.png'),
 }
 export default Icons
