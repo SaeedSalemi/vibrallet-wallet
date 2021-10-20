@@ -3,7 +3,7 @@ import { FlatList, View } from 'react-native'
 import { coins } from '../../screens/app/HomeStack/CreatePriceAlertScreen'
 import Coin from '../common/Coin'
 
-const items = [...coins, ...coins, ...coins]
+const items = coins
 
 export default function UserCoinsItems() {
 	return (

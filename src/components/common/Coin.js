@@ -10,6 +10,7 @@ import AppIcon from './AppIcon'
 import AppSwitch from './AppSwitch'
 import AppText from './AppText'
 import HR from './HR/HR'
+import MarketIcon from './MarketIcon/MarketIcon'
 
 import SwapableRow from './Swapable/SwapableRow'
 
@@ -45,7 +46,9 @@ export default function Coin({
 				<View style={{ flexDirection: 'row', zIndex: 9 }}>
 					<View style={{ flex: 1 }}>
 						<View style={{ flexDirection: 'row' }}>
-							<AppIcon name={coin.icon} />
+							<MarketIcon size={50} color={globalStyles.Colors.inputColor2}>
+								{coin.icon}
+							</MarketIcon>
 							<View style={{ paddingStart: 8 }}>
 								<AppText bold typo="md">
 									{coin.slug}

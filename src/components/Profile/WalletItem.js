@@ -5,6 +5,7 @@ import { globalStyles } from '../../config/styles'
 import AppIcon from '../common/AppIcon'
 import AppSwitch from '../common/AppSwitch'
 import AppText from '../common/AppText'
+import MarketIcon from '../common/MarketIcon/MarketIcon'
 
 export default function WalletItem({ item, index }) {
 	const [up, setUp] = useState()
@@ -31,32 +32,31 @@ export default function WalletItem({ item, index }) {
 					</View>
 					<AppText bold>{item.title}</AppText>
 				</View>
-				{item.coin ? (
-					<View>
-						<AppSwitch value={up} onValueChange={() => setUp(!up)} />
+				<TouchableOpacity
+					style={{
+						...globalStyles.flex.row,
+						alignItems: 'center',
+						paddingHorizontal: 8,
+					}}
+				>
+					<View style={{ paddingHorizontal: 10 }}>
+						<AppIcon name="plus2" />
 					</View>
-				) : (
-					<TouchableOpacity
-						style={{
-							...globalStyles.flex.row,
-							alignItems: 'center',
-							paddingHorizontal: 8,
-						}}
-					>
-						<View style={{ paddingHorizontal: 10 }}>
-							<AppIcon name="plus2" />
-						</View>
-						<AppText bold color="secondaryColor">
-							Add Coin
-						</AppText>
-					</TouchableOpacity>
-				)}
+					<AppText bold color="secondaryColor">
+						Add Coin
+					</AppText>
+				</TouchableOpacity>
 			</View>
-			<View style={{ ...globalStyles.flex.row }}>
+			<View style={{ ...globalStyles.flex.row, marginTop: 16 }}>
 				{item?.coins?.map((coin, i) => (
-					<View key={i} style={{ paddingEnd: 6, paddingTop: 14 }}>
-						<AppIcon name={coin.icon} />
-					</View>
+					<MarketIcon
+						size={40}
+						color={globalStyles.Colors.ethereum}
+						key={i}
+						style={{ marginEnd: 8 }}
+					>
+						{coin.icon}
+					</MarketIcon>
 				))}
 			</View>
 		</View>
