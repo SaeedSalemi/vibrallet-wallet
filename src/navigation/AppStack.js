@@ -46,7 +46,6 @@ import ChangePasswordScreen from '../screens/app/ProfileStack/ChangePasswordScre
 import FiltersScreen from '../screens/app/WalletScreen/FIltersScreen'
 import DetailedHistory from '../screens/app/MarketStack/DetailedHistory'
 import CoinDetailWithoutHistory from '../screens/app/MarketStack/CoinDetailWithoutHistory'
-import MarketCoinDetail from '../screens/app/MarketStack/MarketCoinDetailScreen'
 import MarketCoinDetailScreen from '../screens/app/MarketStack/MarketCoinDetailScreen'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { TouchableOpacity, View } from 'react-native'

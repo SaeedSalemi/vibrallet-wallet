@@ -1,39 +1,35 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Images } from '../../../assets'
 import AppButton from '../../../components/common/AppButton'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import Screen from '../../../components/Screen'
-import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
 import { finalCreateWallet } from '../../../redux/modules/wallets'
+import WalletManager from '../../../blockchains/walletManager'
+import Clipboard from '@react-native-community/clipboard'
 
 export default function WordBackup({ navigation }) {
 	const dispatch = useDispatch()
+	const [backup, setBackup] = useState('')
+
+	useEffect(() => {
+		const words = WalletManager.generateMnemonic()
+		setBackup(words)
+	}, [])
 
 	const handleAddWallet = () => {
 		dispatch(finalCreateWallet())
 	}
 
-	const items = useMemo(
-		() => [
-			'1.Tape',
-			'2.Liberty',
-			'3.Manual',
-			'4.Upgrade',
-			'5.Diet',
-			'6.Quiet',
-			'7.Eye',
-			'8.Where',
-			'9.skin',
-			'10.Find',
-			'11.limb',
-			'12.Slush',
-		],
-		[]
-	)
+	const backupList = backup.split(' ').map((word, i) => `${i + 1}. ${word}`)
+
+	const handleCopy = () => {
+		Clipboard.setString(backup)
+	}
+
 	return (
 		<Screen edges={['bottom']} style={{ ...globalStyles.gapScreen }}>
 			<View style={{ paddingVertical: 18, ...globalStyles.flex.center }}>
@@ -53,15 +49,15 @@ export default function WordBackup({ navigation }) {
 							// flex: 1,
 							alignSelf: 'stretch',
 
-							paddingHorizontal: 18,
-							paddingVertical: 9,
+							paddingHorizontal: 16,
+							paddingVertical: 8,
 							...globalStyles.flex.row,
 							flexWrap: 'wrap',
 						}}
 					>
-						{items.map((item, i) => (
-							<View style={{ width: '25%', paddingVertical: 9 }} key={i}>
-								<AppText>{item}</AppText>
+						{backupList.map((item, i) => (
+							<View style={{ width: '25%', paddingVertical: 8 }} key={i}>
+								<AppText typo="tiny">{item}</AppText>
 							</View>
 						))}
 					</View>
@@ -71,6 +67,7 @@ export default function WordBackup({ navigation }) {
 							bold
 							color="secondaryColor"
 							style={{ paddingVertical: 12 }}
+							onPress={handleCopy}
 						>
 							Copy to clipboard
 						</AppText>
