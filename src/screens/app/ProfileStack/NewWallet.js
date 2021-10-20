@@ -61,6 +61,7 @@ export default function NewWallet({ navigation }) {
 					icon="wallet"
 					defaultValue={walletName}
 					placeholder="Type your wallet name"
+					onSubmitEditing={handleSubmit(onSubmit)}
 				/>
 				<View
 					style={{

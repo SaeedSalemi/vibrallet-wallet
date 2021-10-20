@@ -28,8 +28,9 @@ export const setCreateBackup = backup => ({
 })
 
 export const FINAL_CREATE_WALLET = 'FINAL_CREATE_WALLET'
-export const finalCreateWallet = () => ({
+export const finalCreateWallet = backup => ({
 	type: FINAL_CREATE_WALLET,
+	backup,
 })
 
 export const RESET_WALLETS = 'RESET_WALLETS'
@@ -71,6 +72,11 @@ export default function reducer(state = initialState, action) {
 					...state.create,
 					backup: action.backup,
 				},
+			}
+		case FINAL_CREATE_WALLET:
+			return {
+				...state,
+				backup: action.backup,
 			}
 		case RESET_WALLETS:
 			return initialState

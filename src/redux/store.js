@@ -11,14 +11,14 @@ const sagaMiddleware = createSagaMiddleware()
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
-	whitelist: ['appSettings'],
+	whitelist: ['appSettings', 'wallets'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export default () => {
 	const logger = createLogger()
-	let store = createStore(persistedReducer, applyMiddleware(sagaMiddleware))
+	let store = createStore(persistedReducer, applyMiddleware(sagaMiddleware, logger))
 	sagaMiddleware.run(rootSaga)
 
 	let persistor = persistStore(store)

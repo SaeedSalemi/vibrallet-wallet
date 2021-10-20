@@ -74,6 +74,7 @@ export default function SetPincode({ navigation }) {
 							endIcon={item.endIcon}
 							alertIcon={item.alertIcon}
 							message={item.message}
+							onSubmitEditing={handleSubmit(onSubmit)}
 						/>
 					))}
 				</View>
