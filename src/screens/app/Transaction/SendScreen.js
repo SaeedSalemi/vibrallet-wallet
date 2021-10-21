@@ -124,9 +124,19 @@ export default function SendScreen({ navigation, route }) {
 			</ScrollView>
 			<AppButton
 				onPress={async () => {
-					await ethManager().transfer(null, '', state.address, state.amount)
-
-					// navigation.navigate(routes.confirmTransaction, { coin })
+					try {
+						const result = await ethManager().transfer(
+							null,
+							'',
+							state.address,
+							state.amount
+						)
+						console.log({ result })
+					} catch (ex) {
+						console.error('log', ex)
+					}
+					console.log({ result })
+					navigation.navigate(routes.confirmTransaction, { coin })
 				}}
 				typo="sm"
 				customStyle={{
