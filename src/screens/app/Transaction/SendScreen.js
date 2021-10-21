@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/core'
 import React, { useMemo, useState } from 'react'
 import { View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import ethManager from '../../../blockchains/EthManager'
 import AppButton from '../../../components/common/AppButton'
 import AppCamera from '../../../components/common/AppCamera'
 import AppInput from '../../../components/common/AppInput/AppInput'
@@ -17,28 +18,35 @@ import { globalStyles } from '../../../config/styles'
 export default function SendScreen({ navigation, route }) {
 	const [show, setShow] = useState(false)
 	const { coin } = route.params || {}
+	const [state, setState] = useState({
+		address: '',
+		amount: '',
+	})
 
-	const inputItems = useMemo(
-		() => [
-			{
-				label: `${coin.slug} Address`,
-				endMessage: 'by Username',
-				placeholder: `Tap to paste ${coin.slug} address`,
-				endIcon: 'qrcode',
-				onPress: () => {
-					setShow(true)
-				},
-			},
-			{
-				label: 'Enter Amount',
-				placeholder: `Enter ${coin.slug} Amount`,
-				icon: coin.title?.toLowerCase(),
-				iconColor: '#7037C9',
-				message: 'Estimated Value ~ $123,342.43',
-			},
-		],
-		[]
-	)
+	// const inputItems = useMemo(
+	// 	() => [
+	// 		{
+	// 			label: `${coin.slug} Address`,
+	// 			endMessage: 'by Username',
+	// 			placeholder: `Tap to paste ${coin.slug} address`,
+	// 			endIcon: 'qrcode',
+	// 			onPress: () => {
+	// 				setShow(true)
+	// 			},
+	// 			onChangeText: text => setState({ ...state, address: text }),
+	// 			value:
+	// 		},
+	// 		{
+	// 			label: 'Enter Amount',
+	// 			placeholder: `Enter ${coin.slug} Amount`,
+	// 			icon: coin.title?.toLowerCase(),
+	// 			iconColor: '#7037C9',
+	// 			message: 'Estimated Value ~ $123,342.43',
+	// 			onChangeText: text => setState({ ...state, amount: text }),
+	// 		},
+	// 	],
+	// 	[]
+	// )
 	const valueItems = useMemo(
 		() => [
 			{ value: '25%', isActive: true },
@@ -74,20 +82,30 @@ export default function SendScreen({ navigation, route }) {
 						amount="$15,432"
 					/>
 				</View>
-				{inputItems.map((item, i) => (
-					<View key={i} style={{ marginVertical: 6 }}>
-						<AppInput
-							label={item.label}
-							message={item.message}
-							placeholder={item.placeholder}
-							icon={item.icon}
-							iconColor={item.iconColor}
-							endMessage={item.endMessage}
-							endIcon={item.endIcon}
-							onEndIconPress={item.onPress}
-						/>
-					</View>
-				))}
+				<View style={{ marginVertical: 6 }}>
+					<AppInput
+						label={`${coin.slug} Address`}
+						endMessage={'by Username'}
+						placeholder={`Tap to paste ${coin.slug} address`}
+						endIcon={'qrcode'}
+						onPress={() => {
+							setShow(true)
+						}}
+						onChangeText={text => setState({ ...state, address: text })}
+					/>
+				</View>
+
+				<View style={{ marginVertical: 6 }}>
+					<AppInput
+						label={'Enter Amount'}
+						placeholder={`Enter ${coin.slug} Amount`}
+						icon={coin.title?.toLowerCase()}
+						iconColor={'#7037C9'}
+						message={'Estimated Value ~ $123,342.43'}
+						onChangeText={text => setState({ ...state, amount: text })}
+					/>
+				</View>
+
 				<View style={{ marginVertical: 18 }}>
 					<PercentValueItems items={valueItems} />
 				</View>
@@ -105,8 +123,10 @@ export default function SendScreen({ navigation, route }) {
 				</View>
 			</ScrollView>
 			<AppButton
-				onPress={() => {
-					navigation.navigate(routes.confirmTransaction, { coin })
+				onPress={async () => {
+					await ethManager().transfer(null, '', state.address, state.amount)
+
+					// navigation.navigate(routes.confirmTransaction, { coin })
 				}}
 				typo="sm"
 				customStyle={{
