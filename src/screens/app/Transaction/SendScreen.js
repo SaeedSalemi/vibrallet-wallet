@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import ethManager from '../../../blockchains/EthManager'
@@ -14,6 +14,7 @@ import InfoItems from '../../../components/SendScreen/InfoItems/InfoItem'
 import PercentValueItems from '../../../components/SendScreen/PercentValueItems/PercentValueItems'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
+import { useSelector } from 'react-redux'
 
 export default function SendScreen({ navigation, route }) {
 	const [show, setShow] = useState(false)
@@ -21,7 +22,40 @@ export default function SendScreen({ navigation, route }) {
 	const [state, setState] = useState({
 		address: '',
 		amount: '',
+		wallet: '',
 	})
+
+	const wallet = useSelector(state =>
+		state.wallets.data ? state.wallets.data[0] : null
+	)
+
+	useEffect(() => {
+		if (wallet) {
+			ethManager
+				.getWalletFromMnemonic(wallet.backup)
+				.then(wallet => {
+					setState({ ...state, wallet })
+				})
+				.catch(ex => console.error('wallet', ex))
+		}
+	}, [])
+
+	const handleSendTransaction = async () => {
+		try {
+			console.log('wallet handle', state.wallet)
+			const result = await ethManager.transfer(
+				null,
+				state.wallet,
+				state.address,
+				state.amount
+			)
+			console.log({ result })
+		} catch (ex) {
+			console.error('log', ex)
+		}
+		console.log({ result })
+		navigation.navigate(routes.confirmTransaction, { coin })
+	}
 
 	// const inputItems = useMemo(
 	// 	() => [
@@ -71,6 +105,7 @@ export default function SendScreen({ navigation, route }) {
 		],
 		[]
 	)
+
 	return (
 		<Screen style={{ ...globalStyles.gapScreen }} edges={['bottom']}>
 			<ScrollView>
@@ -123,21 +158,7 @@ export default function SendScreen({ navigation, route }) {
 				</View>
 			</ScrollView>
 			<AppButton
-				onPress={async () => {
-					try {
-						const result = await ethManager().transfer(
-							null,
-							'',
-							state.address,
-							state.amount
-						)
-						console.log({ result })
-					} catch (ex) {
-						console.error('log', ex)
-					}
-					console.log({ result })
-					navigation.navigate(routes.confirmTransaction, { coin })
-				}}
+				onPress={handleSendTransaction}
 				typo="sm"
 				customStyle={{
 					backgroundColor: globalStyles.Colors.failure,
