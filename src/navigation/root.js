@@ -9,6 +9,7 @@ import { setAuthPass } from '../redux/modules/appSettings'
 import { useAppState } from '../hooks/appState'
 import WelcomeBack from '../screens/app/HomeStack/WelcomeBack'
 import { navigationRef } from '../utils/navigation'
+import HideKeyboard from '../utils/HideKeyboard'
 
 export default function RootNavigation() {
 	const { isLoggedIn, authPass, password, useTouchId } = useSelector(
