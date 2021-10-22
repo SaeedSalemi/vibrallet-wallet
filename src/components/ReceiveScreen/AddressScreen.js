@@ -87,6 +87,7 @@ export default function AddressScreen({ route, navigation }) {
 				<AppInput
 					containerStyle={{ flex: 1 }}
 					endText="Set"
+					keyboardType="numeric"
 					label="Advanced"
 					placeholder={`Set ${coin.slug} amount`}
 				/>

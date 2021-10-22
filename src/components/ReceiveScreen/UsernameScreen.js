@@ -49,6 +49,7 @@ export default function UsernameScreen({ route }) {
 				<View style={{ marginVertical: 30, flex: 1 }}>
 					<AppInput
 						endText="Set"
+						keyboardType="numeric"
 						label="Advanced"
 						placeholder={`Set ${coin.slug} amount`}
 					/>
