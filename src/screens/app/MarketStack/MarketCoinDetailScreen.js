@@ -53,9 +53,9 @@ const keysItems = [
 	{ title: 'Type', value: 'Coin' },
 	{ title: 'All Time High:', value: '2,111.34 USD (30 Dec, 2020)' },
 ]
-export default function MarketCoinDetailScreen({route}) {
-	const {coin} = route.params || {}
-	const {navigate} = useNavigation()
+export default function MarketCoinDetailScreen({ route }) {
+	const { coin } = route.params || {}
+	const { navigate } = useNavigation()
 	const dispatch = useDispatch()
 	const handleCloseModal = () => {
 		dispatch(setModal(false))
@@ -66,7 +66,7 @@ export default function MarketCoinDetailScreen({route}) {
 	const visible = useSelector(state => state.appSettings.showModal)
 
 	return (
-		<View>
+		<Screen>
 			<ScrollView>
 				<View style={{ ...globalStyles.flex.center, marginVertical: 32 }}>
 					<AppText bold typo="xxl">
@@ -110,7 +110,6 @@ export default function MarketCoinDetailScreen({route}) {
 				</View>
 				<View
 					style={{
-						paddingHorizontal: 12,
 						...globalStyles.flex.row,
 						marginVertical: 8,
 						...globalStyles.flex.between,
@@ -190,7 +189,7 @@ export default function MarketCoinDetailScreen({route}) {
 				<View style={{ marginVertical: 16 }}>
 					<Image source={Images.marketChartImage} />
 				</View>
-				<View style={{ paddingHorizontal: 16 }}>
+				<View>
 					<View
 						style={{
 							padding: 16,
@@ -258,34 +257,38 @@ export default function MarketCoinDetailScreen({route}) {
 							</TouchableOpacity>
 						</View>
 					</View>
-					<View
-						style={{
-							...globalStyles.flex.row,
-							justifyContent: 'space-between',
-						}}
-					>
-						<AppButton
-							title="Recieve"
-							onPress={()=> {navigate(routes.receive ,{coin :coin} )}}
-							icon="arrow-downward"
-							customStyle={{
-								flex: 0.48,
-								backgroundColor: globalStyles.Colors.success,
-							}}
-						/>
-						<AppButton
-							title="Send"
-							icon="arrow-upward"
-							onPress={()=> {navigate(routes.send,{coin :coin})}}
-							customStyle={{
-								flex: 0.48,
-								backgroundColor: globalStyles.Colors.failure,
-							}}
-						/>
-					</View>
 				</View>
 			</ScrollView>
+			<View
+				style={{
+					...globalStyles.flex.row,
+					justifyContent: 'space-between',
+				}}
+			>
+				<AppButton
+					title="Recieve"
+					onPress={() => {
+						navigate(routes.receive, { coin: coin })
+					}}
+					icon="arrow-downward"
+					customStyle={{
+						flex: 0.48,
+						backgroundColor: globalStyles.Colors.success,
+					}}
+				/>
+				<AppButton
+					title="Send"
+					icon="arrow-upward"
+					onPress={() => {
+						navigate(routes.send, { coin: coin })
+					}}
+					customStyle={{
+						flex: 0.48,
+						backgroundColor: globalStyles.Colors.failure,
+					}}
+				/>
+			</View>
 			<SetAlert visible={visible} onPress={handleCloseModal} />
-		</View>
+		</Screen>
 	)
 }
