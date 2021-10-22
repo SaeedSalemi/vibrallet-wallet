@@ -1,8 +1,10 @@
 {
   "main": "index.js",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "scripts": {
     "android": "react-native run-android",
+    "android:production": "react-native run-android --variant=release",
+    "android:apk": "cd android && ./gradlew assembleRelease && cd app/build/outputs/apk/release && open .",
     "ios": "react-native run-ios --simulator='iPhone 8'",
     "ios:md": "react-native run-ios --simulator='iPhone 12 Pro'",
     "ios:lg": "react-native run-ios --simulator='iPhone 12 Pro Max'",
@@ -37,7 +39,6 @@
     "crypto": "^1.0.1",
     "expo": "~42.0.1",
     "expo-app-loading": "^1.1.2",
-    "expo-barcode-scanner": "~10.2.2",
     "expo-font": "~9.2.1",
     "expo-linear-gradient": "~9.2.0",
     "expo-splash-screen": "~0.11.2",
