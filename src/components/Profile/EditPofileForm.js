@@ -24,6 +24,7 @@ export default function EditProfileForm() {
 				label: 'Phone Number',
 				placeholder: 'Enter your phone number',
 				icon: 'mobile',
+				keyboardType: 'numeric',
 			},
 			{
 				label: 'Region',
@@ -43,6 +44,7 @@ export default function EditProfileForm() {
 					icon={item.icon}
 					alertIconColor={item.alertIconColor}
 					alertIcon={item.alertIcon}
+					keyboardType={item.keyboardType}
 					message={item.message}
 					key={i}
 					endIcon={item.endIcon}
@@ -53,6 +55,7 @@ export default function EditProfileForm() {
 					title="Save & Get Reward"
 					textStyle={{ fontWeight: 'bold' }}
 					typo="sm"
+					z
 				/>
 			</View>
 		</View>
