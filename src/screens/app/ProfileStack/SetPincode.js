@@ -12,6 +12,7 @@ import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
 import { validators } from '../../../utils/validators'
 import { setCreatePincode } from '../../../redux/modules/wallets'
+import HideKeyboard from '../../../utils/HideKeyboard'
 // import { walletManager } from '../../../blockchains/walletManager'
 
 const pincodeSchema = yup.object({
@@ -56,30 +57,33 @@ export default function SetPincode({ navigation }) {
 
 	return (
 		<Screen edges={['bottom']} style={{ ...globalStyles.gapScreen }}>
-			<View style={{ flex: 1 }}>
-				<View style={{ paddingVertical: 18, ...globalStyles.flex.center }}>
-					<AppText typo="xs">Please set a pincode</AppText>
-					<AppText typo="xs">in order to secure your wallets</AppText>
+			<HideKeyboard>
+				<View style={{ flex: 1 }}>
+					<View style={{ paddingVertical: 18, ...globalStyles.flex.center }}>
+						<AppText typo="xs">Please set a pincode</AppText>
+						<AppText typo="xs">in order to secure your wallets</AppText>
+					</View>
+					<View>
+						{items.map((item, i) => (
+							<ControllerAppInput
+								key={i}
+								password
+								keyboardType="number-pad"
+								name={item.name}
+								control={control}
+								keyboardType="numeric"
+								errors={errors}
+								icon={item.icon}
+								placeholder={item.placeholder}
+								endIcon={item.endIcon}
+								alertIcon={item.alertIcon}
+								message={item.message}
+								onSubmitEditing={handleSubmit(onSubmit)}
+							/>
+						))}
+					</View>
 				</View>
-				<View>
-					{items.map((item, i) => (
-						<ControllerAppInput
-							key={i}
-							password
-							keyboardType="number-pad"
-							name={item.name}
-							control={control}
-							errors={errors}
-							icon={item.icon}
-							placeholder={item.placeholder}
-							endIcon={item.endIcon}
-							alertIcon={item.alertIcon}
-							message={item.message}
-							onSubmitEditing={handleSubmit(onSubmit)}
-						/>
-					))}
-				</View>
-			</View>
+			</HideKeyboard>
 			<AppButton title="Submit" bold onPress={handleSubmit(onSubmit)} />
 		</Screen>
 	)
