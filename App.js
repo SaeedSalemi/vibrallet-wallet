@@ -7,6 +7,8 @@ import { Provider } from 'react-redux'
 import configStore from './src/redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import SplashScreen from './src/screens/SplashScreen'
+import { Keyboard, TouchableWithoutFeedback } from 'react-native'
+import HideKeyboard from './src/utils/HideKeyboard'
 
 const { store, persistor } = configStore()
 
@@ -18,7 +20,9 @@ export default function App() {
 					style={{ backgroundColor: globalStyles.Colors.bckColor }}
 				>
 					<StatusBar translucent barStyle="light-content" />
-					<RootNavigation />
+					<HideKeyboard>
+						<RootNavigation />
+					</HideKeyboard>
 				</SafeAreaProvider>
 			</PersistGate>
 		</Provider>
