@@ -23,6 +23,8 @@ export default function SendScreen({ navigation, route }) {
 		address: '',
 		amount: '',
 		wallet: '',
+		balance: '',
+		balanceUSD: ''
 	})
 
 	const wallet = useSelector(state =>
@@ -35,8 +37,12 @@ export default function SendScreen({ navigation, route }) {
 				.getWalletFromMnemonic(wallet.backup)
 				.then(wallet => {
 					setState({ ...state, wallet })
+					ethManager.getBalance(wallet?.address, false).then(result => {
+						setState({ ...state, balance: result })
+					})
 				})
 				.catch(ex => console.error('wallet', ex))
+
 		}
 	}, [])
 
@@ -90,6 +96,7 @@ export default function SendScreen({ navigation, route }) {
 		],
 		[]
 	)
+
 	const infoItems = useMemo(
 		() => [
 			{
@@ -99,7 +106,7 @@ export default function SendScreen({ navigation, route }) {
 			},
 			{
 				title: 'Remaining Balance',
-				value: `12.21 ${coin.slug}`,
+				value: `${state.balance} ${coin.slug}`,
 				amount: '$213,940',
 			},
 		],
@@ -145,7 +152,22 @@ export default function SendScreen({ navigation, route }) {
 					<PercentValueItems items={valueItems} />
 				</View>
 				<View style={{ marginVertical: 24, flex: 1 }}>
-					{infoItems.map((item, i) => (
+					<View>
+						<InfoItems
+							title={`${coin.title} Network Fee`}
+							value={`${state.balance} ${coin.slug}`}
+							amount={'$2.31'}
+						/>
+					</View>
+
+					<View>
+						<InfoItems
+							title={'Remaining Balance'}
+							value={`${state.balance} ${coin.slug}`}
+							amount={'$213,940'}
+						/>
+					</View>
+					{/* {infoItems.map((item, i) => (
 						<View key={i}>
 							<InfoItems
 								title={item.title}
@@ -154,7 +176,7 @@ export default function SendScreen({ navigation, route }) {
 							/>
 							{i + 1 === infoItems.length ? null : <HR />}
 						</View>
-					))}
+					))} */}
 				</View>
 			</ScrollView>
 			<AppButton
