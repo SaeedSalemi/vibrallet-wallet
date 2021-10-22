@@ -18,6 +18,7 @@ const WelcomeScreen = ({ navigation }) => {
 	const handleCreateNewWallet = () => {
 		dispatch(setLoggedIn(true, true))
 	}
+
 	return (
 		<Screen style={defaultStyles.screen}>
 			<View style={[styles.screenContainer]}>

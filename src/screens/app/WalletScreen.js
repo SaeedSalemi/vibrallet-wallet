@@ -96,10 +96,10 @@ export default function WalletScreen() {
 	}
 
 	return (
-		<Screen edges={['bottom']}>
+		<Screen>
 			<Header route={routes.wallet} />
 
-			<View style={{ flex: 1, paddingHorizontal: 8 }}>
+			<View style={{ flex: 1, paddingHorizontal: 8, marginVertical: 24 }}>
 				<View
 					style={{
 						backgroundColor: globalStyles.Colors.inputColor,
