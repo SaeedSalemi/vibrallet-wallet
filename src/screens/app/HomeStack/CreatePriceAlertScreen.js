@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react'
-import { FlatList, View, Image } from 'react-native'
-import SvgUri from 'react-native-svg-uri'
+import { FlatList } from 'react-native'
 import AppText from '../../../components/common/AppText'
-import AppTextInput from '../../../components/common/AppTextInput/AppTextInput'
 import AlertItem from '../../../components/PriceAlert/AlertItem'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AppIcon from '../../../components/common/AppIcon'
+import AppInput from '../../../components/common/AppInput/AppInput'
 
 const BSCIcon = () => (
 	<AppIcon style={{ width: 25, height: 25 }} name="binance" />
@@ -40,7 +39,7 @@ export const coins = [
 		amount: 213.12653,
 		balance: '$7.69',
 		vol: '1.34340023',
-		lastPrice: '55543.32',
+		lastPrice: '489.27',
 	},
 ]
 
@@ -52,7 +51,7 @@ export default function CreatePriceAlertScreen({ navigation }) {
 			edges={['bottom']}
 			style={[globalStyles.gapScreen, { paddingVertical: 8 }]}
 		>
-			<AppTextInput icon="search" placeholder="Search All Pairs..." />
+			<AppInput icon="search" placeholder="Search All Pairs..." />
 			<AppText typo="tiny" color="text2" style={{ marginVertical: 12 }}>
 				Popular Pairs
 			</AppText>

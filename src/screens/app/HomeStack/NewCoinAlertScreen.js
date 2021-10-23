@@ -1,31 +1,31 @@
 import React from 'react'
-import { Image, View } from 'react-native'
-import { Images } from '../../../assets'
+import { View } from 'react-native'
 import AppButton from '../../../components/common/AppButton'
 import AppIcon from '../../../components/common/AppIcon'
 import AppText from '../../../components/common/AppText'
 import AlertItem from '../../../components/PriceAlert/AlertItem'
+import PriceCalculator from '../../../components/PriceAlert/PriceCalculator'
 import Screen from '../../../components/Screen'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
-import { coins } from './CreatePriceAlertScreen'
 
-export default function NewCoinAlertScreen({ navigation }) {
+export default function NewCoinAlertScreen({ route, navigation }) {
+	const { coin } = route.params || {}
+
 	return (
 		<Screen
 			edges={['bottom']}
 			style={[globalStyles.gapScreen, { paddingVertical: 8 }]}
 		>
-			<AlertItem item={coins[1]} index={1} length={1} />
+			<AlertItem item={coin} index={1} length={1} />
+			<PriceCalculator coin={coin} />
 			<View
 				style={{
 					flex: 1,
 					alignItems: 'center',
-					justifyContent: 'space-evenly',
+					// justifyContent: 'space-evenly',
 				}}
 			>
-				<Image source={Images.alertUsd} />
-				<Image source={Images.alertRange} />
 				<View
 					style={{
 						backgroundColor: globalStyles.Colors.inputColor,

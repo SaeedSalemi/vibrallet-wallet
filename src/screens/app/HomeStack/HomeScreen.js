@@ -104,7 +104,6 @@ const HomeScreen = ({ navigation }) => {
 
 	useFocusEffect(
 		React.useCallback(() => {
-			console.log(navigateToWallet, 'navigateToWallet')
 			if (navigateToWallet) {
 				navigation.navigate(routes.newWallet)
 			}
