@@ -19,7 +19,7 @@ export default function App() {
 				<SafeAreaProvider
 					style={{ backgroundColor: globalStyles.Colors.bckColor }}
 				>
-					<StatusBar translucent barStyle="light-content" />
+					<StatusBar backgroundColor={globalStyles.Colors.bckColor} barStyle="light-content" />
 					<HideKeyboard>
 						<RootNavigation />
 					</HideKeyboard>
