@@ -27,7 +27,6 @@ export default function AddressScreen({ route, navigation }) {
 					const info = await ethManager.getWalletFromMnemonic(wallet.backup)
 					setWalletInfo(info)
 				} else if (coin.slug === 'BSC') {
-					console.log('before')
 					const info = await bscManager.getWalletFromMnemonic(wallet.backup)
 					setWalletInfo(info, 'info after')
 				} else {
