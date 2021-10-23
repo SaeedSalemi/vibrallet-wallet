@@ -13,7 +13,7 @@ export default function AlertItem({ item, index, length }) {
 	return (
 		<TouchableOpacity
 			activeOpacity={0.75}
-			onPress={() => navigate(routes.newCoinAlert)}
+			onPress={() => navigate(routes.newCoinAlert, { coin: item })}
 		>
 			<View
 				style={{
@@ -33,7 +33,7 @@ export default function AlertItem({ item, index, length }) {
 				</View>
 				<AppText typo="md" bold>
 					{item.currency}
-					{item.price}
+					{item.lastPrice}
 				</AppText>
 			</View>
 			{index + 1 === length ? null : <HR style={{ marginVertical: 4 }} />}
