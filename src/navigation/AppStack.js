@@ -166,9 +166,11 @@ export function AppStackNavigation() {
 			<AppStack.Screen
 				name={routes.newCoinAlert}
 				component={NewCoinAlertScreen}
-				options={{
-					headerTitle: () => <AppText typo="sm">New ETH Alert</AppText>,
-				}}
+				options={({ route }) => ({
+					headerTitle: () => (
+						<AppText typo="sm">New {route.params?.coin.slug} Alert</AppText>
+					),
+				})}
 			/>
 			<AppStack.Screen
 				options={{

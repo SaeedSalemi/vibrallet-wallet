@@ -19,7 +19,6 @@ export default function SettingScreen() {
 		state => state.appSettings
 	)
 	const dispatch = useDispatch()
-	console.log(lightMode, turnOnNotifications, turnOnSounds, '<=== States')
 	const items = useMemo(() => [
 		{
 			title: 'Light Mode',

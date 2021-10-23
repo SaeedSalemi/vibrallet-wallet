@@ -20,7 +20,6 @@ const chartItems = [
 ]
 export default function CoinDetailWithoutHistory({ route }) {
 	const { coin } = route.params || {}
-	console.log(coin)
 
 	return (
 		<ScrollView>

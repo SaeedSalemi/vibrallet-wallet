@@ -25,7 +25,6 @@ export default function SendScreen({ navigation, route }) {
 	const { coin } = route.params || {}
 
 	const handelQR = qrData => {
-		console.log(qrData.data, '<==')
 		setQr(qrData.data)
 		setShow(false)
 	}

@@ -53,12 +53,13 @@ const keysItems = [
 	{ title: 'Type', value: 'Coin' },
 	{ title: 'All Time High:', value: '2,111.34 USD (30 Dec, 2020)' },
 ]
-export default function MarketCoinDetailScreen({ route }) {
+export default function MarketCoinDetailScreen({ route, navigation }) {
 	const { coin } = route.params || {}
 	const { navigate } = useNavigation()
 	const dispatch = useDispatch()
 	const handleCloseModal = () => {
 		dispatch(setModal(false))
+		navigation.navigate(routes.newCoinAlert, { coin })
 	}
 	useEffect(() => {
 		dispatch(setModal(false))
