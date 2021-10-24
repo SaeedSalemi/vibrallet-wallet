@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import {
 	View,
 	KeyboardAvoidingViewBase,
 	KeyboardAvoidingView,
+	ActivityIndicator
 } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import AppButton from '../../../components/common/AppButton'
@@ -17,17 +18,54 @@ import InfoItems from '../../../components/SendScreen/InfoItems/InfoItem'
 import PercentValueItems from '../../../components/SendScreen/PercentValueItems/PercentValueItems'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
-import QRCodeScanner from 'react-native-qrcode-scanner'
+import { useSelector } from 'react-redux'
+import ethManager from './../../../blockchains/EthManager'
+import bscManager from './../../../blockchains/BscManager'
+import AppLoader from './../../../components/common/AppLoader'
+
+
 
 export default function SendScreen({ navigation, route }) {
 	const [show, setShow] = useState(false)
 	const [qr, setQr] = useState('')
 	const { coin } = route.params || {}
+	const [isloading, setIsLoading] = useState(true)
+	const [state, setState] = useState({
+		address: '',
+		amount: '',
+		wallet: '',
+		balance: '',
+	})
+
+
+	const wallet = useSelector(state =>
+		state.wallets.data ? state.wallets.data[0] : null
+	)
+
+	useEffect(() => {
+		if (wallet) {
+
+			const coinSelector = { ETH: ethManager, BSC: bscManager }
+
+			coinSelector[coin.slug].getWalletFromMnemonic(wallet.backup)
+				.then(wallet => {
+					setState({ ...state, wallet })
+					ethManager.getBalance(wallet?.address, false).then(result => {
+						setState({ ...state, balance: result })
+						setIsLoading(false)
+					})
+				})
+				.catch(ex => console.error('balance wallet error', ex))
+
+		}
+	}, [wallet])
 
 	const handelQR = qrData => {
 		setQr(qrData.data)
 		setShow(false)
 	}
+
+
 
 	const inputItems = useMemo(
 		() => [
@@ -73,12 +111,15 @@ export default function SendScreen({ navigation, route }) {
 			},
 			{
 				title: 'Remaining Balance',
-				value: `12.21 ${coin.slug}`,
-				amount: '$213,940',
+				value: `${state.balance} ${coin.slug}`,
+				amount: '$1',
 			},
 		],
-		[]
+		[state.balance]
 	)
+
+
+
 	return (
 		<Screen style={{ ...globalStyles.gapScreen }}>
 			<ScrollView>
@@ -142,6 +183,10 @@ export default function SendScreen({ navigation, route }) {
 				bold
 				title="Send"
 			/>
+
+
+			{isloading && <AppLoader />}
+
 		</Screen>
 	)
 }
