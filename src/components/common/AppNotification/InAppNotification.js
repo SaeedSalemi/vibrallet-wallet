@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import FlashMessage from 'react-native-flash-message';
-import { Context } from '../classes/Provider'
 
 const InAppNotificaiton = (props) => {
-  const { is_rtl } = useContext(Context)
-  const align = is_rtl ? "right" : "left"
-  const paddright = is_rtl ? 20 : 0
+  const align = "left"
+  // const align = is_rtl ? "right" : "left"
+  const paddright = 0
   return (
     <FlashMessage
       titleStyle={{
@@ -22,7 +21,7 @@ const InAppNotificaiton = (props) => {
         fontSize: 12
 
       }}
-      style={{ flexDirection: is_rtl ? 'row-reverse' : "row", elevation: 5 }}
+      style={{ flexDirection: "row", elevation: 5 }}
       floating={true}
     />
   );
