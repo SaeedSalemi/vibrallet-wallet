@@ -9,6 +9,8 @@ import AppInput from '../common/AppInput/AppInput'
 import AppText from '../common/AppText'
 import QRCode from 'react-native-qrcode-svg'
 import bscManager from '../../blockchains/BscManager'
+import Clipboard from '@react-native-community/clipboard'
+import { showMessage } from "react-native-flash-message";
 
 export default function AddressScreen({ route, navigation }) {
 	const { coin } = route.params || {}
@@ -108,6 +110,18 @@ export default function AddressScreen({ route, navigation }) {
 				<AppButton
 					title="Copy"
 					customStyle={{ flex: 0.48, fontWeight: 'bold' }}
+					onPress={() => {
+						Clipboard.setString(walletInfo?.address)
+						showMessage({
+							message: 'Address cpied to clipbloard successfully',
+							description: null,
+							type: 'success',
+							icon: null,
+							duration: 1000,
+							style: { backgroundColor: "#6BC0B1" },
+							position: 'top'
+						})
+					}}
 				/>
 			</View>
 		</View>
