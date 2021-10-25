@@ -127,8 +127,8 @@ export default function SendScreen({ navigation, route }) {
 					<CoinTitle
 						title={`${coin.title} Balance`}
 						icon={coin.title?.toLowerCase()}
-						value={`12.432 ${coin.slug}`}
-						amount="$15,432"
+						value={`${state.balance} ${coin.slug}`}
+						amount="$1"
 					/>
 				</View>
 				{inputItems.map((item, i) => (
