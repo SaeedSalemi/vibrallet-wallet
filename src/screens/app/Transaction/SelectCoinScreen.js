@@ -37,7 +37,7 @@ export default function SelectCoinScreen({ navigation, route }) {
 					}}
 				/>
 			</View>
-			<View style={{ flex: 2 }}>
+			{/* <View style={{ flex: 2 }}>
 				<AppText typo="tiny" color="text2">
 					Suggested
 				</AppText>
@@ -58,7 +58,7 @@ export default function SelectCoinScreen({ navigation, route }) {
 						))}
 					</ScrollView>
 				</View>
-			</View>
+			</View> */}
 			<View style={{ flex: 3 }}>
 				<AppText typo="tiny" color="text2">
 					All Coins
