@@ -10,7 +10,7 @@ import { globalStyles } from '../../../config/styles'
 
 export default function ConfirmTransaction({ navigation, route }) {
 	const { navigate } = navigation
-	const { coin } = route.params || {}
+	const { coin, amount } = route.params || {}
 
 	const items = useMemo(
 		() => [
@@ -49,7 +49,7 @@ export default function ConfirmTransaction({ navigation, route }) {
 			<ScrollView>
 				<View>
 					<CoinTitle
-						value={`-10 ${coin.slug}`}
+						value={`-${amount} ${coin.slug}`}
 						failureTitle
 						amount="$15,432"
 						icon={coin.slug.toLowerCase()}
