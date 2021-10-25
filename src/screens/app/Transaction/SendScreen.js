@@ -35,6 +35,7 @@ export default function SendScreen({ navigation, route }) {
 		amount: '',
 		wallet: '',
 		balance: '',
+		percentCoin: 0
 	})
 
 
@@ -95,10 +96,10 @@ export default function SendScreen({ navigation, route }) {
 	)
 	const valueItems = useMemo(
 		() => [
-			{ value: '25%', isActive: true },
-			{ value: '50%' },
-			{ value: '75%' },
-			{ value: '100%' },
+			{ value: '25', isActive: true },
+			{ value: '50' },
+			{ value: '75' },
+			{ value: '100' },
 		],
 		[]
 	)
@@ -117,6 +118,19 @@ export default function SendScreen({ navigation, route }) {
 		],
 		[state.balance]
 	)
+
+
+	const calcTransferPercent = (balance, percent) => {
+		return ((balance / 100) * percent)
+	}
+
+	const handleSelectPercent = percent => {
+		setState({
+			...state,
+			percentCoin: percent,
+			balance: calcTransferPercent(state.balance, percent)
+		})
+	}
 
 
 
@@ -149,7 +163,7 @@ export default function SendScreen({ navigation, route }) {
 					</View>
 				))}
 				<View style={{ marginVertical: 18 }}>
-					<PercentValueItems items={valueItems} />
+					<PercentValueItems items={valueItems} onSelectPercent={handleSelectPercent} />
 				</View>
 				<View style={{ marginVertical: 24, flex: 1 }}>
 					{infoItems.map((item, i) => (
