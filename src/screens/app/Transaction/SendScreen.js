@@ -144,14 +144,17 @@ export default function SendScreen({ navigation, route }) {
 
 
 	const calcTransferPercent = (balance, percent) => {
-		return ((balance / 100) * percent)
+		balance = balance || 0;
+		console.log('calcTransferPercent: ', balance, percent);
+		let result = ((balance / 100) * percent);
+		return result;
 	}
 
 	const handleSelectPercent = percent => {
 		setState({
 			...state,
 			percentCoin: percent,
-			balance: state.balance === 0 ? 0 : calcTransferPercent(state.balance, percent)
+			balance: calcTransferPercent(state.balance, percent.value)
 		})
 	}
 
