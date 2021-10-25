@@ -18,7 +18,7 @@ export default function PercentValue({ item, isActive, onPress }) {
 			onPress={onPress}
 		>
 			<AppText bold typo="sm" color={isActive ? 'whiteColor' : 'text2'}>
-				{item.value}
+				{`${item.value}%`}
 			</AppText>
 		</TouchableOpacity>
 	)
