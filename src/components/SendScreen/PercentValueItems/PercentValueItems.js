@@ -3,7 +3,7 @@ import { View, ViewPropTypes } from 'react-native'
 import { globalStyles } from '../../../config/styles'
 import PercentValue from './PercentValue'
 
-export default function PercentValueItems({ items }) {
+export default function PercentValueItems({ items, onSelectPercent }) {
 	const [selected, setSelected] = useState(0)
 
 	return (
@@ -19,7 +19,11 @@ export default function PercentValueItems({ items }) {
 					key={i}
 					item={item}
 					isActive={selected === i}
-					onPress={() => setSelected(i)}
+					onPress={() => {
+						console.log('percent', item)
+						setSelected(i)
+						onSelectPercent(item)
+					}}
 				/>
 			))}
 		</View>
