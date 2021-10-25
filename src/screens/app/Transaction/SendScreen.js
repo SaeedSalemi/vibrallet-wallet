@@ -98,10 +98,10 @@ export default function SendScreen({ navigation, route }) {
 	)
 	const valueItems = useMemo(
 		() => [
-			{ value: '25', isActive: true },
-			{ value: '50' },
-			{ value: '75' },
-			{ value: '100' },
+			{ value: 25, isActive: true },
+			{ value: 50 },
+			{ value: 75 },
+			{ value: 100 },
 		],
 		[]
 	)
