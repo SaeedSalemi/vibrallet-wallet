@@ -190,6 +190,12 @@ class EthManager {
      * @returns 
      */
     async transferCoin(wallet, toAddress, amount) {
+        assert(amount > 0, 'amount must be greater than 0');
+        assert(toAddress && toAddress != null && toAddress.startWith('0x'), 'toAddress not defined!');
+        assert(wallet.privateKey, 'wallet.privateKey not defined!');
+        assert(wallet.publicKey, 'wallet.publicKey not defined!');
+        assert(wallet.address, 'wallet.address not defined!');
+
         amount = this.convertAmount(amount, this.defaultDecimals);
 
         let nonce = await this.web3.eth.getTransactionCount(wallet.address);
@@ -243,6 +249,13 @@ class EthManager {
      * @returns 
      */
     async transfer(tokenContractAddress, wallet, toAddress, amount) {
+
+        assert(amount > 0, 'amount must be greater than 0');
+        assert(toAddress && toAddress != null && toAddress.startWith('0x'), 'toAddress not defined!');
+        assert(wallet.privateKey, 'wallet.privateKey not defined!');
+        assert(wallet.publicKey, 'wallet.publicKey not defined!');
+        assert(wallet.address, 'wallet.address not defined!');
+        
         if (!tokenContractAddress || tokenContractAddress == null || tokenContractAddress.toLowerCase() == 'bnb') {
             return this.transferCoin(wallet, toAddress, amount)
         }

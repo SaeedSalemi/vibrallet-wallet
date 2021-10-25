@@ -138,7 +138,7 @@ export default function SendScreen({ navigation, route }) {
 		} catch (ex) {
 			console.error('log', ex)
 		}
-		console.log({ result })
+	
 		navigation.navigate(routes.confirmTransaction, { coin })
 	}
 

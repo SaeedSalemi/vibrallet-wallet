@@ -10,6 +10,7 @@
 //  var ethUtils = require('ethereumjs-util');
 // const Common = require('ethereumjs-common').default;
 const Web3 = require('web3');
+import assert from 'minimalistic-assert';
 import WalletManager from '../blockchains/walletManager'
 
 // let networkUrl = `https://bsc-dataseed.binance.org/`;
@@ -28,17 +29,17 @@ const BEP20_ABI = require('./ABIs/BEP20.json');
 //     chainId: 97  //BSC TESTNET
 // },  'petersburg');
 
-const common = 
+const common =
 {
     baseChain: 'mainnet',
     hardfork: 'petersburg',
     customChain: {
-      name: 'bnb',
-      chainId: 97, //BSC TESTNET
-      networkId: 97, //BSC TESTNET
+        name: 'bnb',
+        chainId: 97, //BSC TESTNET
+        networkId: 97, //BSC TESTNET
     }
-  }
-  
+}
+
 class BscManager {
     constructor() {
         // const wssProvider = new Web3.providers.WebsocketProvider(blockChainWebSocketUrl);
@@ -48,11 +49,11 @@ class BscManager {
         // this.common = common;
     }
 
-     /**
-     * get latest block number
-     * @returns {int}
-     */
-      async getLastBlockNumber() {
+    /**
+    * get latest block number
+    * @returns {int}
+    */
+    async getLastBlockNumber() {
         return await this.web3.eth.getBlockNumber();
     }
 
@@ -193,7 +194,7 @@ class BscManager {
     convertAmount(amount, decimals) {
         return amount * (10 ** decimals)
     }
-    
+
     /**
      * انتقال توکن 
      * @param {Object} wallet format is { publicKey, privateKey , address }
@@ -202,6 +203,13 @@ class BscManager {
      * @returns 
      */
     async transferCoin(wallet, toAddress, amount) {
+        
+        assert(amount > 0, 'amount must be greater than 0');
+        assert(toAddress && toAddress != null && toAddress.startWith('0x'), 'toAddress not defined!');
+        assert(wallet.privateKey, 'wallet.privateKey not defined!');
+        assert(wallet.publicKey, 'wallet.publicKey not defined!');
+        assert(wallet.address, 'wallet.address not defined!');
+
         amount = this.convertAmount(amount, this.defaultDecimals);
 
         let nonce = await this.web3.eth.getTransactionCount(wallet.address);
@@ -233,7 +241,7 @@ class BscManager {
         };
 
         console.log(rawTransaction);
-        
+
         var receipt = null;
         try {
             let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, wallet.privateKey);
@@ -258,6 +266,13 @@ class BscManager {
      * @returns 
      */
     async transfer(tokenContractAddress, wallet, toAddress, amount) {
+
+        assert(amount > 0, 'amount must be greater than 0');
+        assert(toAddress && toAddress != null && toAddress.startWith('0x'), 'toAddress not defined!');
+        assert(wallet.privateKey, 'wallet.privateKey not defined!');
+        assert(wallet.publicKey, 'wallet.publicKey not defined!');
+        assert(wallet.address, 'wallet.address not defined!');
+
         if (!tokenContractAddress || tokenContractAddress == null || tokenContractAddress.toLowerCase() == 'bnb') {
             return this.transferCoin(wallet, toAddress, amount)
         }
