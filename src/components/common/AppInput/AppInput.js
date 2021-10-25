@@ -24,6 +24,7 @@ export default function AppInput({
 	onChangeText,
 	onEndIconPress,
 	imageIcon,
+	IconComponent,
 	password,
 	...restProps
 }) {
@@ -80,6 +81,17 @@ export default function AppInput({
 					alignItems: 'center',
 				}}
 			>
+
+
+				{IconComponent &&
+					<View
+						style={{
+							marginHorizontal: 18,
+						}}
+					>
+						{IconComponent}
+					</View>
+				}
 				{imageIcon ? (
 					<View
 						style={{
