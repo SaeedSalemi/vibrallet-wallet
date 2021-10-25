@@ -28,13 +28,13 @@ import { showMessage } from 'react-native-flash-message'
 
 export default function SendScreen({ navigation, route }) {
 	const [show, setShow] = useState(false)
-	const [qr, setQr] = useState('')
+	// const [qr, setQr] = useState('')
 	const { coin } = route.params || {}
 	const [isloading, setIsLoading] = useState(true)
 	const [state, setState] = useState({
 		address: '',
 		amount: '',
-		wallet: '',
+		wallet: {},
 		balance: '',
 		percentCoin: 0
 	})
@@ -52,7 +52,8 @@ export default function SendScreen({ navigation, route }) {
 
 			selectedCoin.getWalletFromMnemonic(wallet.backup)
 				.then(wallet => {
-					setState({ ...state, wallet });
+					state.wallet = wallet;
+					setState({ ...state });
 
 					selectedCoin.getBalance(wallet?.address, false).then(result => {
 						setState({ ...state, balance: result })
@@ -65,7 +66,9 @@ export default function SendScreen({ navigation, route }) {
 	}, [wallet])
 
 	const handelQR = qrData => {
-		setQr(qrData.data)
+		// setQr(qrData.data)
+		state.address = qrData.data
+		setState({ ...state })
 		setShow(false)
 	}
 
@@ -78,9 +81,11 @@ export default function SendScreen({ navigation, route }) {
 					endMessage: 'by Username',
 					placeholder: `Tap to paste ${coin.slug} address`,
 					endIcon: 'qrcode',
-					value: qr,
+					value: `${state.address}`,
 					onChangeText: text => {
-						setQr(text)
+						// setQr(text)
+						state.address = text
+						setState({ ...state })
 					},
 					onPress: () => {
 						setShow(true)
@@ -96,7 +101,7 @@ export default function SendScreen({ navigation, route }) {
 					value: `${state.amount}`,
 					onChangeText: text => {
 						if (!isNaN(text)) {
-							state.amount = parseInt(text)
+							state.amount = parseFloat(text)
 							setState({ ...state })
 						}
 					},
@@ -104,7 +109,7 @@ export default function SendScreen({ navigation, route }) {
 				},
 			]
 		},
-		[qr, state.amount]
+		[state.address, state.amount]
 	)
 	const valueItems = useMemo(
 		() => [
@@ -159,6 +164,7 @@ export default function SendScreen({ navigation, route }) {
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[coin.slug];
 
+			console.log(' -----> state :', state);
 			const result = await selectedCoin.transfer(
 				null,
 				state.wallet,

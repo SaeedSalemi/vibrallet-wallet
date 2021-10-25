@@ -203,9 +203,9 @@ class BscManager {
      * @returns 
      */
     async transferCoin(wallet, toAddress, amount) {
-        
+
         assert(amount > 0, 'amount must be greater than 0');
-        assert(toAddress && toAddress != null && toAddress.startWith('0x'), 'toAddress not defined!');
+        assert(this.web3.utils.isAddress(toAddress), 'toAddress is not valid!');
         assert(wallet.privateKey, 'wallet.privateKey not defined!');
         assert(wallet.publicKey, 'wallet.publicKey not defined!');
         assert(wallet.address, 'wallet.address not defined!');
@@ -266,9 +266,9 @@ class BscManager {
      * @returns 
      */
     async transfer(tokenContractAddress, wallet, toAddress, amount) {
-
+        console.log(' transfer params: ', tokenContractAddress, wallet, toAddress, amount);
         assert(amount > 0, 'amount must be greater than 0');
-        assert(toAddress && toAddress != null && toAddress.startWith('0x'), 'toAddress not defined!');
+        assert(this.web3.utils.isAddress(toAddress), 'toAddress is not valid!');
         assert(wallet.privateKey, 'wallet.privateKey not defined!');
         assert(wallet.publicKey, 'wallet.publicKey not defined!');
         assert(wallet.address, 'wallet.address not defined!');

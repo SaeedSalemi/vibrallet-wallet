@@ -191,7 +191,7 @@ class EthManager {
      */
     async transferCoin(wallet, toAddress, amount) {
         assert(amount > 0, 'amount must be greater than 0');
-        assert(toAddress && toAddress != null && toAddress.startWith('0x'), 'toAddress not defined!');
+        assert(this.web3.utils.isAddress(toAddress), 'toAddress is not valid!');
         assert(wallet.privateKey, 'wallet.privateKey not defined!');
         assert(wallet.publicKey, 'wallet.publicKey not defined!');
         assert(wallet.address, 'wallet.address not defined!');
@@ -251,11 +251,11 @@ class EthManager {
     async transfer(tokenContractAddress, wallet, toAddress, amount) {
 
         assert(amount > 0, 'amount must be greater than 0');
-        assert(toAddress && toAddress != null && toAddress.startWith('0x'), 'toAddress not defined!');
+        assert(this.web3.utils.isAddress(toAddress), 'toAddress is not valid!');
         assert(wallet.privateKey, 'wallet.privateKey not defined!');
         assert(wallet.publicKey, 'wallet.publicKey not defined!');
         assert(wallet.address, 'wallet.address not defined!');
-        
+
         if (!tokenContractAddress || tokenContractAddress == null || tokenContractAddress.toLowerCase() == 'bnb') {
             return this.transferCoin(wallet, toAddress, amount)
         }
