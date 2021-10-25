@@ -22,6 +22,7 @@ import { useSelector } from 'react-redux'
 import ethManager from './../../../blockchains/EthManager'
 import bscManager from './../../../blockchains/BscManager'
 import AppLoader from './../../../components/common/AppLoader'
+import { showMessage } from 'react-native-flash-message'
 
 
 
@@ -45,7 +46,6 @@ export default function SendScreen({ navigation, route }) {
 
 	useEffect(() => {
 		if (wallet) {
-			console.log('icon', coin.title?.toLowerCase())
 
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[coin.slug];
@@ -71,30 +71,40 @@ export default function SendScreen({ navigation, route }) {
 
 
 	const inputItems = useMemo(
-		() => [
-			{
-				label: `${coin.slug} Address`,
-				endMessage: 'by Username',
-				placeholder: `Tap to paste ${coin.slug} address`,
-				endIcon: 'qrcode',
-				value: qr,
-				onChangeText: text => {
-					setQr(text)
+		() => {
+			return [
+				{
+					label: `${coin.slug} Address`,
+					endMessage: 'by Username',
+					placeholder: `Tap to paste ${coin.slug} address`,
+					endIcon: 'qrcode',
+					value: qr,
+					onChangeText: text => {
+						setQr(text)
+					},
+					onPress: () => {
+						setShow(true)
+					},
 				},
-				onPress: () => {
-					setShow(true)
+				{
+					label: 'Enter Amount',
+					placeholder: `Enter ${coin.slug} Amount`,
+					IconComponent: coin.icon,
+					iconColor: '#7037C9',
+					keybaordType: 'numeric',
+					defaultValue: "",
+					value: `${state.amount}`,
+					onChangeText: text => {
+						if (!isNaN(text)) {
+							state.amount = parseInt(text)
+							setState({ ...state })
+						}
+					},
+					message: 'Estimated Value ~ $123,342.43',
 				},
-			},
-			{
-				label: 'Enter Amount',
-				placeholder: `Enter ${coin.slug} Amount`,
-				IconComponent: coin.icon,
-				iconColor: '#7037C9',
-				keybaordType: 'numeric',
-				message: 'Estimated Value ~ $123,342.43',
-			},
-		],
-		[qr]
+			]
+		},
+		[qr, state.amount]
 	)
 	const valueItems = useMemo(
 		() => [
@@ -123,7 +133,28 @@ export default function SendScreen({ navigation, route }) {
 
 
 
+
+	const handleValidation = () => {
+		if (state.balance < state.amount) {
+			showMessage({
+				message: 'You dont have enough credit to excute transaction',
+				description: null,
+				type: 'danger',
+				icon: null,
+				duration: 2000,
+				style: { backgroundColor: "red" },
+				position: 'top'
+			})
+			return false
+		}
+		return true
+	}
+
+
 	const handleSendTransaction = async () => {
+
+		if (!handleValidation()) return
+
 		try {
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[coin.slug];
@@ -134,18 +165,15 @@ export default function SendScreen({ navigation, route }) {
 				state.address,
 				state.amount
 			)
-			console.log({ result })
 		} catch (ex) {
 			console.error('log', ex)
 		}
-		console.log({ result })
-		navigation.navigate(routes.confirmTransaction, { coin })
+		navigation.navigate(routes.confirmTransaction, { coin, amount: state.amount })
 	}
 
 
 	const calcTransferPercent = (balance, percent) => {
 		balance = balance || 0;
-		console.log('calcTransferPercent: ', balance, percent);
 		let result = ((balance / 100) * percent);
 		return result;
 	}
