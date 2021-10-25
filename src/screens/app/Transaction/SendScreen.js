@@ -45,6 +45,7 @@ export default function SendScreen({ navigation, route }) {
 
 	useEffect(() => {
 		if (wallet) {
+			console.log('icon', coin.title?.toLowerCase())
 
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[coin.slug];
@@ -69,7 +70,6 @@ export default function SendScreen({ navigation, route }) {
 	}
 
 
-
 	const inputItems = useMemo(
 		() => [
 			{
@@ -88,7 +88,7 @@ export default function SendScreen({ navigation, route }) {
 			{
 				label: 'Enter Amount',
 				placeholder: `Enter ${coin.slug} Amount`,
-				icon: coin.title?.toLowerCase(),
+				IconComponent: coin.icon,
 				iconColor: '#7037C9',
 				keybaordType: 'numeric',
 				message: 'Estimated Value ~ $123,342.43',
@@ -179,6 +179,7 @@ export default function SendScreen({ navigation, route }) {
 							placeholder={item.placeholder}
 							icon={item.icon}
 							iconColor={item.iconColor}
+							IconComponent={item.IconComponent}
 							keyboardType={item.keybaordType}
 							endMessage={item.endMessage}
 							endIcon={item.endIcon}
@@ -212,9 +213,6 @@ export default function SendScreen({ navigation, route }) {
 				onQR={handelQR}
 			/>
 			<AppButton
-				// onPress={() => {
-				// 	navigation.navigate(routes.confirmTransaction, { coin })
-				// }}
 				onPress={handleSendTransaction}
 				typo="sm"
 				customStyle={{
