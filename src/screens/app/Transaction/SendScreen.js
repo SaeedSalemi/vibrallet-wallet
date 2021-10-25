@@ -47,11 +47,13 @@ export default function SendScreen({ navigation, route }) {
 		if (wallet) {
 
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
+			let selectedCoin = coinSelector[coin.slug];
 
-			coinSelector[coin.slug].getWalletFromMnemonic(wallet.backup)
+			selectedCoin.getWalletFromMnemonic(wallet.backup)
 				.then(wallet => {
-					setState({ ...state, wallet })
-					ethManager.getBalance(wallet?.address, false).then(result => {
+					setState({ ...state, wallet });
+
+					selectedCoin.getBalance(wallet?.address, false).then(result => {
 						setState({ ...state, balance: result })
 						setIsLoading(false)
 					})
