@@ -128,7 +128,7 @@ export default function SendScreen({ navigation, route }) {
 		setState({
 			...state,
 			percentCoin: percent,
-			balance: calcTransferPercent(state.balance, percent)
+			balance: state.balance === 0 ? 0 : calcTransferPercent(state.balance, percent)
 		})
 	}
 
