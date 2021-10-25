@@ -16,11 +16,11 @@ export default function ConfirmTransaction({ navigation, route }) {
 		() => [
 			{
 				title: 'From',
-				detail: 'Ali (ox293r9jwwf093urj2fijoesfu9023r2rkvieow)',
+				detail: 'ox293r9jwwf093urj2fijoesfu9023r2rkvieow',
 			},
 			{
 				title: 'To',
-				detail: 'abdollah(ox593r9jwwf093urj2fijoesfu9023weweetre)',
+				detail: 'ox593r9jwwf093urj2fijoesfu9023weweetre',
 			},
 			{
 				title: 'Network Fee',
