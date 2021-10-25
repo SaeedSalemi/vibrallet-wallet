@@ -122,6 +122,27 @@ export default function SendScreen({ navigation, route }) {
 	)
 
 
+
+	const handleSendTransaction = async () => {
+		try {
+			const coinSelector = { ETH: ethManager, BSC: bscManager }
+			let selectedCoin = coinSelector[coin.slug];
+
+			const result = await selectedCoin.transfer(
+				null,
+				state.wallet,
+				state.address,
+				state.amount
+			)
+			console.log({ result })
+		} catch (ex) {
+			console.error('log', ex)
+		}
+		console.log({ result })
+		navigation.navigate(routes.confirmTransaction, { coin })
+	}
+
+
 	const calcTransferPercent = (balance, percent) => {
 		return ((balance / 100) * percent)
 	}
@@ -188,9 +209,10 @@ export default function SendScreen({ navigation, route }) {
 				onQR={handelQR}
 			/>
 			<AppButton
-				onPress={() => {
-					navigation.navigate(routes.confirmTransaction, { coin })
-				}}
+				// onPress={() => {
+				// 	navigation.navigate(routes.confirmTransaction, { coin })
+				// }}
+				onPress={handleSendTransaction}
 				typo="sm"
 				customStyle={{
 					backgroundColor: globalStyles.Colors.failure,
