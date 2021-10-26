@@ -46,7 +46,8 @@ export default function NewWallet({ navigation }) {
 
 	const onSubmit = value => {
 		dispatch(initCreateWallet(value.walletName))
-		navigation.navigate(routes.setPincode)
+		// navigation.navigate(routes.setPincode)
+		navigation.navigate(routes.wordBackup)
 	}
 
 	return (
