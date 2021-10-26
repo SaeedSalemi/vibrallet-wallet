@@ -129,11 +129,11 @@ export default function SendScreen({ navigation, route }) {
 			},
 			{
 				title: 'Remaining Balance',
-				value: `${state.balance} ${coin.slug}`,
-				amount: '$1',
+				value: `${state.amount ? (state.balance - parseFloat(state.amount)) : ""} ${coin.slug}`,
+				amount: `1$`,
 			},
 		],
-		[state.balance]
+		[state.balance, state.amount]
 	)
 
 
