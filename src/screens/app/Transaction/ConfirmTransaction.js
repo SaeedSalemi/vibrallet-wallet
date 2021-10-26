@@ -7,20 +7,28 @@ import CoinTitle from '../../../components/SendScreen/CoinTitle'
 import InfoItems from '../../../components/SendScreen/InfoItems/InfoItem'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
+import ethManager from './../../../blockchains/EthManager'
+import bscManager from './../../../blockchains/BscManager'
+import { useSelector } from 'react-redux'
+import { showMessage } from 'react-native-flash-message'
+
+
 
 export default function ConfirmTransaction({ navigation, route }) {
 	const { navigate } = navigation
-	const { coin, amount } = route.params || {}
+	const { coin, amount, wallet, address } = route.params || {}
+
 
 	const items = useMemo(
 		() => [
 			{
 				title: 'From',
-				detail: 'ox293r9jwwf093urj2fijoesfu9023r2rkvieow',
+				detail: wallet.address,
 			},
 			{
 				title: 'To',
-				detail: 'ox593r9jwwf093urj2fijoesfu9023weweetre',
+				detail: address,
+				// detail: wallet,
 			},
 			{
 				title: 'Network Fee',
@@ -34,7 +42,32 @@ export default function ConfirmTransaction({ navigation, route }) {
 		[]
 	)
 
-	const handleSend = () => {
+	const handleSend = async () => {
+
+		try {
+
+			const coinSelector = { ETH: ethManager, BSC: bscManager }
+			let selectedCoin = coinSelector[coin.slug];
+
+			const result = await selectedCoin.transfer(
+				null,
+				wallet,
+				address,
+				amount
+			)
+
+		} catch (ex) {
+			console.error('log', ex)
+		}
+		showMessage({
+			message: 'Transfer execute succesfuly',
+			description: null,
+			type: 'success',
+			icon: null,
+			duration: 2000,
+			style: { backgroundColor: "green" },
+			position: 'top'
+		})
 		navigation.reset({
 			index: 1,
 			routes: [

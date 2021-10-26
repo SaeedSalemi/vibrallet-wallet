@@ -101,7 +101,7 @@ export default function SendScreen({ navigation, route }) {
 					value: `${state.amount}`,
 					onChangeText: text => {
 						if (!isNaN(text)) {
-							state.amount = parseFloat(text)
+							state.amount = text
 							setState({ ...state })
 						}
 					},
@@ -160,21 +160,21 @@ export default function SendScreen({ navigation, route }) {
 
 		if (!handleValidation()) return
 
-		try {
-			const coinSelector = { ETH: ethManager, BSC: bscManager }
-			let selectedCoin = coinSelector[coin.slug];
+		// try {
+		// 	const coinSelector = { ETH: ethManager, BSC: bscManager }
+		// 	let selectedCoin = coinSelector[coin.slug];
 
-			console.log(' -----> state :', state);
-			const result = await selectedCoin.transfer(
-				null,
-				state.wallet,
-				state.address,
-				state.amount
-			)
-		} catch (ex) {
-			console.error('log', ex)
-		}
-		navigation.navigate(routes.confirmTransaction, { coin, amount: state.amount })
+		// 	console.log(' -----> state :', state);
+		// 	const result = await selectedCoin.transfer(
+		// 		null,
+		// 		state.wallet,
+		// 		state.address,
+		// 		state.amount
+		// 	)
+		// } catch (ex) {
+		// 	console.error('log', ex)
+		// }
+		navigation.navigate(routes.confirmTransaction, { coin, amount: state.amount, wallet: state.wallet, address: state.address })
 	}
 
 
