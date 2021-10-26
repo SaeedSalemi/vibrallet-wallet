@@ -23,8 +23,10 @@ const walletNameSchema = yup.object({
 	walletName: validators.string(true),
 })
 
-export default function NewWallet({ navigation }) {
+export default function NewWallet({ navigation, route }) {
 	const dispatch = useDispatch()
+	console.log("test", route)
+	const { no_back } = route.params || {}
 	const walletName = useSelector(state => state.wallets?.create?.name)
 	const items = useMemo(() => [
 		'My Wallet',
@@ -41,6 +43,10 @@ export default function NewWallet({ navigation }) {
 	})
 
 	useEffect(() => {
+		if (no_back) {
+			navigation.setOptions({ headerLeft: null })
+		}
+
 		dispatch(navigateToWallet(false))
 	}, [])
 

@@ -119,14 +119,14 @@ const HomeScreen = ({ navigation }) => {
 	}, [])
 	useEffect(() => {
 		if (navigateToWallet) {
-			navigation.navigate(routes.newWallet)
+			navigation.replace(routes.newWallet, { no_back: true })
 		}
 	}, [])
 
 	useFocusEffect(
 		React.useCallback(() => {
 			if (navigateToWallet) {
-				navigation.navigate(routes.newWallet)
+				navigation.replace(routes.newWallet, { no_back: true })
 			}
 
 			return () => {
