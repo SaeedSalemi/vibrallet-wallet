@@ -87,7 +87,7 @@ export default function ConfirmTransaction({ navigation, route }) {
 						value={`-${amount} ${coin.slug}`}
 						failureTitle
 						amount="$15,432"
-						icon={coin.slug.toLowerCase()}
+						icon={coin.title?.toLowerCase()}
 					/>
 				</View>
 				<View style={{ flex: 1, marginVertical: 18 }}>
