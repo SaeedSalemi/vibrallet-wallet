@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import AppButton from '../../../components/common/AppButton'
 import HR from '../../../components/common/HR/HR'
@@ -17,7 +17,7 @@ import { showMessage } from 'react-native-flash-message'
 export default function ConfirmTransaction({ navigation, route }) {
 	const { navigate } = navigation
 	const { coin, amount, wallet, address } = route.params || {}
-
+	const [isPosting, setIsPosting] = useState(false)
 
 	const items = useMemo(
 		() => [
@@ -45,7 +45,7 @@ export default function ConfirmTransaction({ navigation, route }) {
 	const handleSend = async () => {
 
 		try {
-
+			setIsPosting(true)
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[coin.slug];
 
@@ -59,6 +59,8 @@ export default function ConfirmTransaction({ navigation, route }) {
 		} catch (ex) {
 			console.error('log', ex)
 		}
+		setIsPosting(true)
+
 		showMessage({
 			message: 'Transfer execute succesfuly',
 			description: null,
@@ -104,6 +106,7 @@ export default function ConfirmTransaction({ navigation, route }) {
 			<AppButton
 				onPress={handleSend}
 				title="Send"
+				loading={isPosting}
 				bold
 				typo="sm"
 				customStyle={{ backgroundColor: globalStyles.Colors.failure }}

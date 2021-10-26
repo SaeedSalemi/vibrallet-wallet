@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, StyleSheet } from 'react-native'
+import { TouchableOpacity, StyleSheet, ActivityIndicator, View } from 'react-native'
 import AppIcon from '../AppIcon'
 import AppText from '../AppText'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -10,13 +10,14 @@ const AppButton = ({
 	title,
 	onPress,
 	customStyle,
+	loading,
 	textStyle,
 	typo,
 	icon,
 	bold,
 }) => {
 	return (
-		<TouchableOpacity onPress={onPress} style={[styles.button, customStyle]}>
+		<TouchableOpacity onPress={() => { loading ? () => { } : onPress() }} style={[styles.button, customStyle]}>
 			{icon ? (
 				<MaterialIcons
 					name={icon}
@@ -25,9 +26,16 @@ const AppButton = ({
 					style={{ marginHorizontal: 4 }}
 				/>
 			) : null}
-			<AppText typo={typo} style={[styles.text, textStyle]} bold={bold}>
-				{title}
-			</AppText>
+			{loading ?
+				<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+					<ActivityIndicator color={"white"} size="small" />
+				</View>
+				:
+				<AppText typo={typo} style={[styles.text, textStyle]} bold={bold}>
+					{title}
+				</AppText>
+			}
+
 		</TouchableOpacity>
 	)
 }
