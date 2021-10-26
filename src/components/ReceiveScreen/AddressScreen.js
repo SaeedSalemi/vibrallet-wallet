@@ -11,6 +11,7 @@ import QRCode from 'react-native-qrcode-svg'
 import bscManager from '../../blockchains/BscManager'
 import Clipboard from '@react-native-community/clipboard'
 import { showMessage } from "react-native-flash-message";
+import { share } from '../../utils/Functions'
 
 export default function AddressScreen({ route, navigation }) {
 	const { coin } = route.params || {}
@@ -41,6 +42,10 @@ export default function AddressScreen({ route, navigation }) {
 		setWalletAsync()
 	}, [])
 
+
+	const handleShare = () => {
+		share("Recive token", 'https://app.vibrallet.com/send?coin=BTC&address={toAddress}&amount={amount}')
+	}
 	return (
 		<View style={{ ...globalStyles.gapScreen }}>
 			<ScrollView>
@@ -99,6 +104,7 @@ export default function AddressScreen({ route, navigation }) {
 				<AppButton
 					bold
 					title="Share"
+					onPress={handleShare}
 					customStyle={{
 						flex: 0.48,
 						fontWeight: 'bold',
