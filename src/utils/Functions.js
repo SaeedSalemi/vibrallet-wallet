@@ -1,4 +1,27 @@
 import { Share, Platform } from 'react-native'
+const CryptoJS = require("crypto-js")
+
+
+const SECRET = 'bitrasecret'
+export function decrypt(text) {
+  try {
+    var bytes = CryptoJS.AES.decrypt(text, SECRET);
+    var originalText = bytes.toString(CryptoJS.enc.Utf8);
+    return originalText
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export function encrypt(text) {
+  try {
+    let originalText = CryptoJS.AES.encrypt(text, SECRET).toString();
+    return originalText
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 
 export function share(title = '', msg = '', url = 'https://app.vibrallet.com') {
   try {
