@@ -9,7 +9,6 @@ import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
 import ethManager from './../../../blockchains/EthManager'
 import bscManager from './../../../blockchains/BscManager'
-import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 
 

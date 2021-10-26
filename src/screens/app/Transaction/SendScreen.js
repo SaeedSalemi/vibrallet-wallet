@@ -10,7 +10,6 @@ import { ScrollView } from 'react-native-gesture-handler'
 import AppButton from '../../../components/common/AppButton'
 import AppCamera from '../../../components/common/AppCamera'
 import AppInput from '../../../components/common/AppInput/AppInput'
-import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import Screen from '../../../components/Screen'
 import CoinTitle from '../../../components/SendScreen/CoinTitle'
@@ -159,21 +158,6 @@ export default function SendScreen({ navigation, route }) {
 	const handleSendTransaction = async () => {
 
 		if (!handleValidation()) return
-
-		// try {
-		// 	const coinSelector = { ETH: ethManager, BSC: bscManager }
-		// 	let selectedCoin = coinSelector[coin.slug];
-
-		// 	console.log(' -----> state :', state);
-		// 	const result = await selectedCoin.transfer(
-		// 		null,
-		// 		state.wallet,
-		// 		state.address,
-		// 		state.amount
-		// 	)
-		// } catch (ex) {
-		// 	console.error('log', ex)
-		// }
 		navigation.navigate(routes.confirmTransaction, { coin, amount: state.amount, wallet: state.wallet, address: state.address })
 	}
 
