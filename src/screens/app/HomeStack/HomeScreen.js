@@ -5,6 +5,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import * as Network from 'expo-network';
 
 import {
 	View,
@@ -28,6 +29,8 @@ import { routes } from '../../../config/routes'
 import Steps from '../../../components/Steps/Steps'
 import Header from '../../../components/Header/Header'
 import { useSelector } from 'react-redux'
+import { showMessage } from 'react-native-flash-message'
+
 
 const ENTRIES1 = [
 	{
@@ -96,6 +99,24 @@ const HomeScreen = ({ navigation }) => {
 	const [active, setActive] = useState(0)
 	const carouselRef = useRef(null)
 
+	useEffect(() => {
+		Network.getNetworkStateAsync().then(status => {
+			console.log("debug", status)
+			if (!status.isConnected) {
+				showMessage({
+					message: 'Network connection not detected , please connect your phone to the internet connection and try again',
+					description: null,
+					type: 'danger',
+					icon: null,
+					duration: 8000,
+					style: { backgroundColor: "red" },
+					position: 'top'
+				})
+			}
+		})
+
+
+	}, [])
 	useEffect(() => {
 		if (navigateToWallet) {
 			navigation.navigate(routes.newWallet)
