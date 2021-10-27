@@ -6,11 +6,12 @@ import AppText from '../../common/AppText'
 
 export default function Bar({ title, value, color }) {
 	return (
-		<View style={{ alignItems: 'center' }}>
+		<View style={{ alignItems: 'center', justifyContent: "flex-end", flexDirection: "column" }}>
 			<View
 				style={{
 					width: 13,
 					height: 80,
+					maxHeight: 20,
 					borderRadius: 10,
 					backgroundColor: globalStyles.Colors.text3,
 					marginHorizontal: 16,

@@ -20,7 +20,7 @@ export default function BarChart({ data }) {
 						key={item}
 						typo="dot"
 						color="text3"
-						style={{ height: 16, marginVertical: 1 }}
+						style={{ height: 20, marginVertical: 1 }}
 					>
 						{item}
 					</AppText>
