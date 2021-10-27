@@ -20,7 +20,6 @@ export default function PercentValueItems({ items, onSelectPercent }) {
 					item={item}
 					isActive={selected === i}
 					onPress={() => {
-						console.log('percent', item)
 						setSelected(i)
 						onSelectPercent(item)
 					}}
