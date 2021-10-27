@@ -48,12 +48,14 @@ export default function ConfirmTransaction({ navigation, route }) {
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[coin.slug];
 
-			const result = await selectedCoin.transfer(
+			const receipt = await selectedCoin.transfer(
 				null,
 				wallet,
 				address,
 				amount
 			)
+
+			console.log('receipt info', receipt)
 
 		} catch (ex) {
 			console.error('log', ex)
@@ -70,14 +72,7 @@ export default function ConfirmTransaction({ navigation, route }) {
 			position: 'top'
 		})
 
-		navigation.navigate(routes.receipt, { coin: coin, wallet: wallet, address: address })
-		// navigation.reset({
-		// 	index: 1,
-		// 	routes: [
-		// 		{ name: routes.appTab },
-		// 		{ name: routes.rewards, params: { tabIndex: 1 } },
-		// 	],
-		// })
+		navigation.navigate(routes.receipt, { receipt: receipt, coin: coin, wallet: wallet, address: address })
 	}
 
 	return (
