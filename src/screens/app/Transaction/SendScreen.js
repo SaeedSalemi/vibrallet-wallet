@@ -135,11 +135,8 @@ export default function SendScreen({ navigation, route }) {
 		[state.balance, state.amount]
 	)
 
-
-
-
 	const handleValidation = () => {
-		if (state.balance < state.amount) {
+		if (parseFloat(state.balance) < parseFloat(state.amount)) {
 			showMessage({
 				message: 'You dont have enough credit to excute transaction',
 				description: null,
