@@ -72,11 +72,10 @@ export default function WalletScreen() {
 					price: '1,934',
 					currency: '$',
 					icon: <EthIcon />,
-
 					increase: false,
 					changeAmount: '6.2%',
 					chart: 'sampleChart2',
-					amount: 12.34364,
+					amount: "-",
 					balance: '-',
 					vol: '2,300341',
 					lastPrice: '1764.23',
@@ -91,7 +90,7 @@ export default function WalletScreen() {
 					icon: <BSCIcon />,
 					changeAmount: '1.4%',
 					chart: 'sampleChart3',
-					amount: 213.12653,
+					amount: "-",
 					balance: '-',
 					vol: '1.34340023',
 					lastPrice: '489.27',
@@ -116,7 +115,7 @@ export default function WalletScreen() {
 			}).Post(res => {
 				// console.log(res)
 				let inx = coins.findIndex((itm) => itm.slug === item.slug)
-				state.coins[inx]['price'] = res.data.rate
+				state.coins[inx]['price'] = parseFloat(res.data.rate).toFixed(2)
 				setState({ ...state })
 			})
 
@@ -134,7 +133,8 @@ export default function WalletScreen() {
 						// setState({ ...state, balance: result })
 						// setIsLoading(false)
 						let inx = coins.findIndex((itm) => itm.slug === item.slug)
-						state.coins[inx]['balance'] = result
+						state.coins[inx]['amount'] = parseFloat(result).toFixed(3)
+						state.coins[inx]['balance'] = state.coins[inx]['amount'] * state.coins[inx]['price']
 						setState({ ...state })
 					})
 				})
