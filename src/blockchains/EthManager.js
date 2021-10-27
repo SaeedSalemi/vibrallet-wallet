@@ -181,7 +181,7 @@ class EthManager {
     convertAmount(amount, decimals) {
         return amount * (10 ** decimals)
     }
-    
+
     /**
      * انتقال توکن 
      * @param {Object} wallet format is { publicKey, privateKey , address }
@@ -225,19 +225,21 @@ class EthManager {
             "value": this.web3.utils.toHex(amount),
         };
 
-        var receipt = null;
+        var txHash = null;
         try {
             let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, wallet.privateKey);
+            txHash = this.web3.utils.sha3(signedTx.raw || signedTx.rawTransaction);
 
             console.log('sendSignedTransaction ...', signedTx);
 
-            receipt = await this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
+            this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction).then(receipt => {
+                console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
+            });
 
-            console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
         } catch (ex) {
             console.log(' APP EXCEPTION: during send transaction', ex);
         }
-        return receipt;
+        return txHash;
     }
 
 
@@ -292,29 +294,15 @@ class EthManager {
         };
 
         let signedTx = await this.web3.eth.accounts.signTransaction(rawTransaction, wallet.privateKey);
+        let txHash = this.web3.utils.sha3(signedTx.raw || signedTx.rawTransaction);
 
         console.log('sendSignedTransaction ...', signedTx);
 
-        var receipt = await this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
+        this.web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction).then(receipt => {
+            console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
+        });
 
-        console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
-
-        // var privKey = new Buffer.from(fromAddressPrivateKey, 'hex');
-
-        // var tx = new Tx(rawTransaction, { common: common });
-        // tx.sign(privKey);
-        // var serializedTx = tx.serialize();
-
-        // // this.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-        // //     .then(receipt => {
-        // //         console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
-        // //         return receipt;
-        // //     })
-        // //     .catch(err => console.log(err));
-
-        // var receipt = await this.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'));
-        // console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
-        return receipt;
+        return txHash;
     }
 
 
