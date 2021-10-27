@@ -25,7 +25,6 @@ export default function Coin({
 	onPress,
 }) {
 	const { navigate } = useNavigation()
-
 	return (
 		<SwapableRow
 			leftItems={[
@@ -82,11 +81,11 @@ export default function Coin({
 							<AppText
 								typo="dot"
 								bold
-								color={coin.increase ? 'success' : 'failure'}
+								color={coin.change > 0 ? 'success' : 'failure'}
 								style={{ marginVertical: 4 }}
 							>
-								{coin.increase ? '+' : '-'}
-								{coin.amount}
+								{coin.change > 0 ? '+' : ''}
+								{coin.change}
 							</AppText>
 							{noPrice ? null : (
 								<AppText bold color="text2">
