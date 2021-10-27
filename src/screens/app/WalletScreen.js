@@ -13,7 +13,7 @@ import Header from '../../components/Header/Header'
 import Screen from '../../components/Screen'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
-import { coins } from './HomeStack/CreatePriceAlertScreen'
+// import { coins } from './HomeStack/CreatePriceAlertScreen'
 import AppText from '../../components/common/AppText'
 import { color } from 'react-native-reanimated'
 import BarChart from '../../components/BarChart/BarChart'
@@ -21,6 +21,9 @@ import Feather from 'react-native-vector-icons/Feather'
 
 import AppButton from '../../components/common/AppButton'
 import { useNavigation } from '@react-navigation/core'
+import HttpService from '../../services/HttpService'
+import AppIcon from '../../components/common/AppIcon'
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 
 const { width } = Dimensions.get('window')
 
@@ -51,6 +54,71 @@ const ChartItems = ({ iconColor, title, value }) => {
 export default function WalletScreen() {
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
+
+	const BSCIcon = () => (
+		<AppIcon style={{ width: 25, height: 25 }} name="binance" />
+	)
+	const EthIcon = () => <FontAwesome5Icon size={25} color="#7037C9" name="ethereum" />
+
+	const [state, setState] = useState({
+		coins:
+			[
+				{
+					title: 'Ethereum',
+					slug: 'ETH',
+					symbol: "ETHUSDT",
+					price: '1,934',
+					currency: '$',
+					icon: <EthIcon />,
+
+					increase: false,
+					changeAmount: '6.2%',
+					chart: 'sampleChart2',
+					amount: 12.34364,
+					balance: '$1,1111',
+					vol: '2,300341',
+					lastPrice: '1764.23',
+				},
+				{
+					title: 'Binance',
+					slug: 'BSC',
+					price: '1.12',
+					currency: '$',
+					increase: true,
+					symbol: "BNBUSDT",
+					icon: <BSCIcon />,
+					changeAmount: '1.4%',
+					chart: 'sampleChart3',
+					amount: 213.12653,
+					balance: '$7.69',
+					vol: '1.34340023',
+					lastPrice: '489.27',
+				},
+			]
+	})
+	const { coins } = state
+
+	useEffect(() => {
+
+
+		for (let item of state.coins) {
+			new HttpService("", {
+				"uniqueId": "abc1",
+				"action": "quotedPrice",
+				"data": {
+					"symbol": item.symbol
+				}
+			}).Post(res => {
+				// console.log(res)
+				let inx = coins.findIndex((itm) => itm.slug === item.slug)
+				state.coins[inx]['price'] = res.data.rate
+				setState({ ...state })
+			})
+		}
+
+
+	}, [coins])
+
 
 	const pieData = [
 		{

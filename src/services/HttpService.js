@@ -2,27 +2,19 @@ import axios from 'axios'
 import { Platform } from 'react-native'
 import { showMessage } from "react-native-flash-message";
 
-export default class XHR {
+export default class HttpService {
   constructor(url, data, notif = false, notif_time = 1, version = "") {
-    // this.version = version
     this.data = data || {};
     this.notif = notif;
     this.danger_notif = true;
     this.notif_time = notif_time;
-    this.config_data()
     this.base_url = "https://api.vibrallet.com/" + url
     this.time_out = Platform.OS === "android" ? 10000 : 12000
     this.maxRedirects = 2
     this.headers = {
       'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/json; charset=UTF8'
+      'Content-Type': 'application/json',
     }
-
-    if (axios.defaults.token && !this.data.token) {
-      this.data.token = axios.defaults.token
-    }
-    // this.data.locale = axios.defaults.Locale || "fa"
-    // console.log(this.base_url)
   }
 
   Get(xhr_response, err = null, prgDownload, prgUpload = null) {
@@ -75,6 +67,53 @@ export default class XHR {
 
   }
 
+  Post(xhr_response, err = null, prgDownload = null, prgUpload = null) {
+    try {
+      this.log("POST ::: " + this.base_url, this.data);
+      axios({
+        method: 'post',
+        data: this.data,
+        url: this.base_url,
+        responseType: 'json',
+        timeout: this.time_out,
+        headers: this.headers,
+        maxRedirects: this.maxRedirects,
+        onDownloadProgress: prgDownload ? (progressEvent) => {
+          let progress = Math.floor((progressEvent.loaded * 100) / progressEvent.total)
+          // console.log("downloading .... "  + this.url  + "  " ,progress)
+          prgDownload(progress)
+        } : null,
+        onUploadProgress: prgUpload ? (progressEvent) => {
+          let progress = Math.floor((progressEvent.loaded * 100) / progressEvent.total)
+          // console.log("uploading .... "  + this.url  + "  " ,progress)
+        } : null
+
+      }).catch((error) => {
+        this.check_status(error)
+        if (err) {
+          // console.error(error)
+          err(error.response)
+        }
+      }).then(async (response) => {
+        let responseData = response?.data || { item: {}, items: [] };
+        this.log("RESPONSE POST " + this.url + " :::  data response = ", responseData);
+        if (this.notif && responseData.note) {
+          // console.log(responseData.note)
+          // func.notif({ title: responseData.note, status: "success" })
+        }
+        xhr_response(responseData)
+      })
+
+    } catch (e) {
+      if (this.url !== "mobile_log") {
+        // func.exeption("err getting"+this.url+" = " + e);
+        // console.error(e)
+      } else {
+        // console.error("error mobile log "  , e)
+      }
+      return null
+    }
+  }
 
   config_data() {
     let data = this.data
@@ -97,5 +136,13 @@ export default class XHR {
       // }
       this.data = newData;
     }
+  }
+
+
+  log(text, value = "") {
+    // console.group("request" , this.url)
+    // console.log(this.base_url , this.data)
+    // console.log(text , value)
+    // console.groupEnd()
   }
 }
