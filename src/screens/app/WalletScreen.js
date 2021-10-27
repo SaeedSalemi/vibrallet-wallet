@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import {
 	Dimensions,
 	FlatList,
@@ -73,25 +73,29 @@ export default function WalletScreen() {
 					currency: '$',
 					icon: <EthIcon />,
 					increase: false,
+					color: "blue",
 					changeAmount: '6.2%',
 					chart: 'sampleChart2',
-					amount: "-",
-					balance: '-',
+					amount: 0,
+					change: 0,
+					balance: 0.01,
 					vol: '2,300341',
 					lastPrice: '1764.23',
 				},
 				{
 					title: 'Binance',
 					slug: 'BSC',
+					change: 0,
 					price: '1.12',
 					currency: '$',
+					color: "red",
 					increase: true,
 					symbol: "BNBUSDT",
 					icon: <BSCIcon />,
 					changeAmount: '1.4%',
 					chart: 'sampleChart3',
-					amount: "-",
-					balance: '-',
+					amount: 0,
+					balance: 0.01,
 					vol: '1.34340023',
 					lastPrice: '489.27',
 				},
@@ -103,8 +107,6 @@ export default function WalletScreen() {
 		state.wallets.data ? state.wallets.data[0] : null
 	)
 	useEffect(() => {
-
-
 		for (let item of state.coins) {
 			new HttpService("", {
 				"uniqueId": "abc1",
@@ -116,10 +118,10 @@ export default function WalletScreen() {
 				// console.log(res)
 				let inx = coins.findIndex((itm) => itm.slug === item.slug)
 				state.coins[inx]['price'] = parseFloat(res.data.rate).toFixed(2)
+				state.coins[inx]['change'] = parseFloat(res.data.percentChange).toFixed(2)
+				console.log("coin 2", state.coins[inx])
 				setState({ ...state })
 			})
-
-
 
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[item.slug];
@@ -134,50 +136,73 @@ export default function WalletScreen() {
 						// setIsLoading(false)
 						let inx = coins.findIndex((itm) => itm.slug === item.slug)
 						state.coins[inx]['amount'] = parseFloat(result).toFixed(3)
-						state.coins[inx]['balance'] = state.coins[inx]['amount'] * state.coins[inx]['price']
+						state.coins[inx]['balance'] = parseFloat(state.coins[inx]['amount'] * state.coins[inx]['price'])
 						setState({ ...state })
 					})
 				})
 				.catch(ex => console.error('balance wallet error', ex))
-
-
-
 		}
 
 
 	}, [coins])
 
 
-	const pieData = [
-		{
-			series: 77,
-			title: 'BTC',
-			value: '77.56%',
-			color: '#F47169',
-			radius: 100,
-		},
-		{
-			series: 59,
-			title: 'ETH',
-			value: '12%',
-			color: '#512888',
-			radius: 100,
-		},
-		{
-			series: 30,
-			title: 'XRP',
-			value: '12.54%',
-			color: '#047780',
-			radius: 100,
-		},
-		{
-			series: 47,
-			title: 'Others',
-			value: '1.23%',
-			color: '#2196F3',
-			radius: 100,
-		},
-	]
+
+	const totalBalance = useMemo(() => {
+		let balance = 0
+		state.coins.map((item, index) => {
+			balance += (parseFloat(item.amount) * parseFloat(item.price))
+		})
+		return balance
+	}, [state])
+
+
+	const pieData = useMemo(() => {
+		return state.coins.map((item, index) => {
+			const balance = ((parseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
+			return {
+				series: item.balance,
+				title: item.slug,
+				// value: '77.56%',
+				value: `${balance.toFixed(0)}%`,
+				color: item.color,
+				radius: 100,
+			}
+		})
+	}, [state, totalBalance])
+
+
+
+	// const pieData = [
+	// 	{
+	// 		series: 77,
+	// 		title: 'BTC',
+	// 		value: '77.56%',
+	// 		color: '#F47169',
+	// 		radius: 100,
+	// 	},
+	// 	{
+	// 		series: 59,
+	// 		title: 'ETH',
+	// 		value: '12%',
+	// 		color: '#512888',
+	// 		radius: 100,
+	// 	},
+	// 	{
+	// 		series: 30,
+	// 		title: 'XRP',
+	// 		value: '12.54%',
+	// 		color: '#047780',
+	// 		radius: 100,
+	// 	},
+	// 	{
+	// 		series: 47,
+	// 		title: 'Others',
+	// 		value: '1.23%',
+	// 		color: '#2196F3',
+	// 		radius: 100,
+	// 	},
+	// ]
 	const data = coins
 	const series = pieData.map(item => item.series)
 	const sliceColor = pieData.map(item => item.color)
@@ -245,7 +270,7 @@ export default function WalletScreen() {
 										Portfolio Value
 									</AppText>
 									<AppText typo="md" color="text2" bold>
-										$50,232
+										${totalBalance}
 									</AppText>
 								</View>
 							</View>
@@ -256,7 +281,7 @@ export default function WalletScreen() {
 							<View style={{ ...globalStyles.flex.center, marginVertical: 8 }}>
 								<AppText color="text3">Portfolio Value</AppText>
 								<AppText color="text1" bold typo="lg">
-									$50,232
+									${totalBalance}
 								</AppText>
 							</View>
 							<BarChart data={pieData} />
@@ -295,7 +320,7 @@ export default function WalletScreen() {
 				<View style={{ flex: 2 }}>
 					<FlatList
 						style={{ marginVertical: 16 }}
-						data={data}
+						data={state.coins}
 						renderItem={({ item, index }) => (
 							<Coin
 								coin={item}
