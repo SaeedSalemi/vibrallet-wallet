@@ -19,7 +19,7 @@ export default function AddressScreen({ route, navigation }) {
 	const wallet = useSelector(state =>
 		state.wallets.data ? state.wallets.data[0] : null
 	)
-
+	console.log("wallet address is  ", wallet)
 	const [walletInfo, setWalletInfo] = useState()
 
 	useEffect(() => {
