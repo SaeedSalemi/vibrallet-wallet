@@ -24,7 +24,9 @@ import { useNavigation } from '@react-navigation/core'
 import HttpService from '../../services/HttpService'
 import AppIcon from '../../components/common/AppIcon'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
-
+import { useSelector } from 'react-redux'
+import ethManager from './../../blockchains/EthManager'
+import bscManager from './../../blockchains/BscManager'
 const { width } = Dimensions.get('window')
 
 const ChartItems = ({ iconColor, title, value }) => {
@@ -75,7 +77,7 @@ export default function WalletScreen() {
 					changeAmount: '6.2%',
 					chart: 'sampleChart2',
 					amount: 12.34364,
-					balance: '$1,1111',
+					balance: '-',
 					vol: '2,300341',
 					lastPrice: '1764.23',
 				},
@@ -90,7 +92,7 @@ export default function WalletScreen() {
 					changeAmount: '1.4%',
 					chart: 'sampleChart3',
 					amount: 213.12653,
-					balance: '$7.69',
+					balance: '-',
 					vol: '1.34340023',
 					lastPrice: '489.27',
 				},
@@ -98,6 +100,9 @@ export default function WalletScreen() {
 	})
 	const { coins } = state
 
+	const wallet = useSelector(state =>
+		state.wallets.data ? state.wallets.data[0] : null
+	)
 	useEffect(() => {
 
 
@@ -114,6 +119,29 @@ export default function WalletScreen() {
 				state.coins[inx]['price'] = res.data.rate
 				setState({ ...state })
 			})
+
+
+
+			const coinSelector = { ETH: ethManager, BSC: bscManager }
+			let selectedCoin = coinSelector[item.slug];
+
+			selectedCoin.getWalletFromMnemonic(wallet.backup)
+				.then(wallet => {
+					state.wallet = wallet;
+					setState({ ...state });
+
+					selectedCoin.getBalance(wallet?.address, false).then(result => {
+						// setState({ ...state, balance: result })
+						// setIsLoading(false)
+						let inx = coins.findIndex((itm) => itm.slug === item.slug)
+						state.coins[inx]['balance'] = result
+						setState({ ...state })
+					})
+				})
+				.catch(ex => console.error('balance wallet error', ex))
+
+
+
 		}
 
 
