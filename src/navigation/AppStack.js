@@ -39,6 +39,7 @@ import BuyScreen from '../screens/app/Transaction/BuyScreen'
 import ReceiveScreen from '../screens/app/Transaction/ReceiveScreen'
 import SendScreen from '../screens/app/Transaction/SendScreen'
 import ConfirmTransaction from '../screens/app/Transaction/ConfirmTransaction'
+import ReceiptScreen from '../screens/app/Transaction/Receipt'
 import NotificationScreen from '../screens/app/HomeStack/NotificationScreen'
 import WelcomeBack from '../screens/app/HomeStack/WelcomeBack'
 import NewPasswordScreen from '../screens/app/ProfileStack/NewPasswordScreen'
@@ -412,6 +413,17 @@ export function AppStackNavigation() {
 					headerTitle: () => (
 						<AppText bold typo="md">
 							Confirm Transaction
+						</AppText>
+					),
+				}}
+			/>
+			<AppStack.Screen
+				name={routes.receipt}
+				component={ReceiptScreen}
+				options={{
+					headerTitle: () => (
+						<AppText bold typo="md">
+							Receipt
 						</AppText>
 					),
 				}}

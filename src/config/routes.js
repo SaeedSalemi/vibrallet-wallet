@@ -46,6 +46,7 @@ export const routes = {
 	receive: 'Receive',
 	send: 'Send',
 	confirmTransaction: 'ConfirmTransaction',
+	receipt: 'Receipt',
 	receiveAddressTab: 'Address',
 	receiveUsernameTab: 'Username',
 	notification: 'Notifications',

@@ -69,13 +69,15 @@ export default function ConfirmTransaction({ navigation, route }) {
 			style: { backgroundColor: "green" },
 			position: 'top'
 		})
-		navigation.reset({
-			index: 1,
-			routes: [
-				{ name: routes.appTab },
-				{ name: routes.rewards, params: { tabIndex: 1 } },
-			],
-		})
+
+		navigation.navigate(routes.receipt, { coin: coin, wallet: wallet, address: address })
+		// navigation.reset({
+		// 	index: 1,
+		// 	routes: [
+		// 		{ name: routes.appTab },
+		// 		{ name: routes.rewards, params: { tabIndex: 1 } },
+		// 	],
+		// })
 	}
 
 	return (
