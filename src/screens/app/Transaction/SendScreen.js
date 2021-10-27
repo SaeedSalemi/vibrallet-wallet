@@ -151,6 +151,9 @@ export default function SendScreen({ navigation, route }) {
 			})
 			return false
 		}
+		if (state.amount === 0) {
+			return false
+		}
 		return true
 	}
 
