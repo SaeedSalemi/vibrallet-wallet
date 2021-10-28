@@ -327,7 +327,7 @@ export default function WalletScreen() {
 								index={index}
 								length={data.length}
 								onPress={() => {
-									navigate(routes.coinDetailWithoutHistory, { coin: coins })
+									navigate(routes.coinDetailWithoutHistory, { coin: coins, slug: item.slug })
 								}}
 							/>
 						)}

@@ -281,7 +281,7 @@ export default function MarketCoinDetailScreen({ route, navigation }) {
 					title="Send"
 					icon="arrow-upward"
 					onPress={() => {
-						navigate(routes.send, { coin: coin })
+						navigate(routes.send, { coin })
 					}}
 					customStyle={{
 						flex: 0.48,

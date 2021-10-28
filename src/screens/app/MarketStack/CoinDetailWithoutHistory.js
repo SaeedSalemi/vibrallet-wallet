@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Image, ScrollView, View } from 'react-native'
 import MarketIcon from '../../../components/common/MarketIcon/MarketIcon'
 import Screen from '../../../components/Screen'
@@ -8,6 +8,10 @@ import AppText from '../../../components/common/AppText'
 import { Images } from '../../../assets'
 import CoinDetailChartItem from '../../../components/Market/CoinDetailChartItem'
 import AppButton from '../../../components/common/AppButton'
+import { routes } from '../../../config/routes'
+import { useSelector } from 'react-redux'
+import ethManager from '../../../blockchains/EthManager'
+import bscManager from '../../../blockchains/BscManager'
 
 const values = ['$1850', '$1750', '$1650', '$1550']
 const dates = ['5 Nov', '10 Nov', '15 Nov', '25 Nov', '30 Nov']
@@ -18,8 +22,54 @@ const chartItems = [
 	{ title: '1Y' },
 	{ title: 'ALL' },
 ]
-export default function CoinDetailWithoutHistory({ route }) {
-	const { coin } = route.params || {}
+export default function CoinDetailWithoutHistory({ route, navigation }) {
+	const { coin, slug } = route.params || {}
+
+	const [state, setState] = useState({
+		address: '',
+		amount: '',
+		wallet: {},
+		balance: 0,
+		percentCoin: 0,
+		coin: {}
+	})
+
+	const wallet = useSelector(state => {
+		state.wallets.data ? state.wallets.data[0] : null
+	}
+	)
+	useEffect(() => {
+
+		navigation.setOptions({ title: 'details' })
+
+		for (let item of coin) {
+			if (item.slug === slug) {
+				setState({ ...state, coin: item })
+			}
+		}
+
+
+
+		if (wallet) {
+
+			const coinSelector = { ETH: ethManager, BSC: bscManager }
+			let selectedCoin = coinSelector[coin.slug];
+
+			selectedCoin.getWalletFromMnemonic(wallet.backup)
+				.then(wallet => {
+					state.wallet = wallet;
+					setState({ ...state });
+
+					selectedCoin.getBalance(wallet?.address, false).then(result => {
+						setState({ ...state, balance: result })
+						setIsLoading(false)
+					})
+				})
+				.catch(ex => console.error('balance wallet error', ex))
+
+		}
+
+	}, [wallet])
 
 	return (
 		<ScrollView>
@@ -29,11 +79,12 @@ export default function CoinDetailWithoutHistory({ route }) {
 					style={{ marginVertical: 8 }}
 					color={globalStyles.Colors.ethereum}
 				>
-					<MaterialCommunityIcons size={30} name="ethereum" color="#7037C9" />
+					{/* <MaterialCommunityIcons size={30} name="ethereum" color="#7037C9" /> */}
+					{state.coin.icon}
 				</MarketIcon>
 				<AppText color="text2">{coin.title} Balance</AppText>
 				<AppText bold typo="xl">
-					12.432 ETH
+					{state.balance} {state.coin.title}
 				</AppText>
 				<View
 					style={{
@@ -42,10 +93,10 @@ export default function CoinDetailWithoutHistory({ route }) {
 					}}
 				>
 					<AppText color="text3" typo="tiny">
-						24h Change
+						{state.coin.change} Change
 					</AppText>
 					<AppText color="success" typo="dot" style={{ marginHorizontal: 8 }}>
-						+1.2%
+						{/* +1.2% */}
 					</AppText>
 				</View>
 			</View>
@@ -112,6 +163,7 @@ export default function CoinDetailWithoutHistory({ route }) {
 						flex: 0.48,
 						backgroundColor: globalStyles.Colors.success,
 					}}
+					onPress={() => navigation.navigate(routes['receive'], { coin: state.coin })}
 				/>
 				<AppButton
 					title="Send"
@@ -120,6 +172,7 @@ export default function CoinDetailWithoutHistory({ route }) {
 						flex: 0.48,
 						backgroundColor: globalStyles.Colors.failure,
 					}}
+					onPress={() => navigation.navigate(routes['send'], { coin: state.coin })}
 				/>
 			</View>
 		</ScrollView>

@@ -109,9 +109,9 @@ export function AppStackNavigation() {
 				name={routes.coinDetailWithoutHistory}
 				component={CoinDetailWithoutHistory}
 				options={{
-					headerTitle: () => (
+					headerTitle: ({ route }) => (
 						<AppText typo="md" bold>
-							Ethereum
+							Coin Detail History
 						</AppText>
 					),
 				}}

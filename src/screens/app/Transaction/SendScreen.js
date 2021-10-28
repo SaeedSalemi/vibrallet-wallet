@@ -39,8 +39,10 @@ export default function SendScreen({ navigation, route }) {
 	})
 
 
-	const wallet = useSelector(state =>
+	const wallet = useSelector(state => {
+		// console.log('debug 8', state)
 		state.wallets.data ? state.wallets.data[0] : null
+	}
 	)
 
 	useEffect(() => {
