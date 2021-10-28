@@ -4,7 +4,7 @@ import { FlatList } from 'react-native-gesture-handler'
 import { globalStyles } from '../../config/styles'
 import AppText from '../common/AppText'
 
-export default function PriceCalculator({ coin }) {
+export default function PriceCalculator({ coin, style }) {
 	const [items, setItems] = useState([])
 	const [priceAlertValue, setPriceAlertValue] = useState(coin.lastPrice)
 	const [loading, setLoading] = useState(true)
@@ -69,7 +69,7 @@ export default function PriceCalculator({ coin }) {
 	}
 
 	return (
-		<View>
+		<View style={style || {}}>
 			<Modal
 				visible={loading}
 				animationType="fade"
@@ -100,6 +100,7 @@ export default function PriceCalculator({ coin }) {
 					...globalStyles.flex.between,
 					alignItems: 'center',
 					marginVertical: 16,
+					marginBottom: 40
 				}}
 			>
 				<AppText>0.0%</AppText>

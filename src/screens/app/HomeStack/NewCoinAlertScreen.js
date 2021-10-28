@@ -18,12 +18,13 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 			style={[globalStyles.gapScreen, { paddingVertical: 8 }]}
 		>
 			<AlertItem item={coin} index={1} length={1} />
-			<PriceCalculator coin={coin} />
+			<PriceCalculator coin={coin} style={{}} />
 			<View
 				style={{
 					flex: 1,
 					alignItems: 'center',
 					// justifyContent: 'space-evenly',
+					marginTop: 30
 				}}
 			>
 				<View
