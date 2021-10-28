@@ -12,6 +12,9 @@ import { routes } from '../../../config/routes'
 import { useSelector } from 'react-redux'
 import ethManager from '../../../blockchains/EthManager'
 import bscManager from '../../../blockchains/BscManager'
+import { AreaChart } from 'react-native-svg-charts'
+import * as shape from 'd3-shape'
+import HttpService from '../../../services/HttpService'
 
 const values = ['$1850', '$1750', '$1650', '$1550']
 const dates = ['5 Nov', '10 Nov', '15 Nov', '25 Nov', '30 Nov']
@@ -31,7 +34,8 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		wallet: {},
 		balance: 0,
 		percentCoin: 0,
-		coin: {}
+		coin: {},
+		chartData: []
 	})
 
 	const wallet = useSelector(state => {
@@ -40,7 +44,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 	)
 	useEffect(() => {
 
-		navigation.setOptions({ title: 'details' })
+
 
 		for (let item of coin) {
 			if (item.slug === slug) {
@@ -49,6 +53,23 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		}
 
 
+
+		new HttpService("",
+
+			{
+				"uniqueId": "abc",
+				"action": "historicalPrice",
+				"data": {
+					"symbol": state.coin.slug,
+					"symbol": state.coin.symbol,
+					"timeframe": "1d",
+					"limit": 20
+				}
+			}).Post(res => {
+
+				const data = res.data.rates.map((d) => parseInt(d.value))
+				setState({ ...state, chartData: data })
+			})
 
 		if (wallet) {
 
@@ -70,6 +91,9 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		}
 
 	}, [wallet])
+
+
+	const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
 
 	return (
 		<ScrollView>
@@ -101,7 +125,19 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				</View>
 			</View>
 			<View style={{ ...globalStyles.flex.row, marginVertical: 32 }}>
-				<Image style={{ flex: 0.98 }} source={Images.inlineChart} />
+				{/* <Image style={{ flex: 0.98 }} source={Images.inlineChart} /> */}
+
+				<AreaChart
+					style={{ height: 200, flex: 0.98 }}
+					data={state.chartData}
+					// data={[50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]}
+					contentInset={{ top: 30, bottom: 30 }}
+					curve={shape.curveNatural}
+					svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+				>
+
+				</AreaChart>
+
 				<View style={{ justifyContent: 'space-between' }}>
 					{values.map((item, index) => (
 						<AppText
