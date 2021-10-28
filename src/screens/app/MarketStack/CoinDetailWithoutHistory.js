@@ -46,13 +46,13 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 
 
-		for (let item of coin) {
-			if (item.slug === slug) {
-				setState({ ...state, coin: item })
-			}
-		}
+		// for (let item of coin) {
+		// 	if (item.slug === slug) {
+		// 		setState({ ...state, coin: item })
+		// 	}
+		// }
 
-
+		state.coin = coin.filter((itm) => itm.slug === slug)[0]
 
 		new HttpService("",
 
@@ -94,7 +94,6 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 
 	const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
-
 	return (
 		<ScrollView>
 			<View style={{ ...globalStyles.flex.center, marginVertical: 24 }}>
