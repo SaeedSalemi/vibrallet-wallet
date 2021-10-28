@@ -17,12 +17,12 @@ export default function EditProfileScreen() {
 					Dear SamJones
 				</AppText>
 				<AppText typo="tiny" color="text2" style={{ marginVertical: 2 }}>
-					Complete identity fields blow to earn 100 PRX
+					Complete identity fields blow to earn 100
 				</AppText>
 				<View style={{ ...globalStyles.flex.center }}>
 					<Image source={Images.progress} />
 					<AppText typo="dot" color="text3">
-						3 fields to achieve 100 PRX
+						3 fields to achieve 100
 					</AppText>
 				</View>
 			</View>

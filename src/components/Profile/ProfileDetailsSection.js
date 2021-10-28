@@ -19,7 +19,7 @@ export default function ProfileDetailsSection() {
 						0
 					</AppText>
 					<AppText typo="tiny" color="text3">
-						PRX
+						{''}
 					</AppText>
 				</>
 			),

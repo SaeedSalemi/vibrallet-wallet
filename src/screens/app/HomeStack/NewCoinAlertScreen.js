@@ -1,5 +1,5 @@
-import React from 'react'
-import { View } from 'react-native'
+import React, { useState } from 'react'
+import { Pressable, View } from 'react-native'
 import AppButton from '../../../components/common/AppButton'
 import AppIcon from '../../../components/common/AppIcon'
 import AppText from '../../../components/common/AppText'
@@ -11,7 +11,9 @@ import { globalStyles } from '../../../config/styles'
 
 export default function NewCoinAlertScreen({ route, navigation }) {
 	const { coin } = route.params || {}
-
+	const [state, setState] = useState({
+		alert_type: "On time"
+	})
 	return (
 		<Screen
 			edges={['bottom']}
@@ -23,11 +25,23 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 				style={{
 					flex: 1,
 					alignItems: 'center',
-					// justifyContent: 'space-evenly',
 					marginTop: 30
 				}}
 			>
-				<View
+				<Pressable
+					onPress={() => {
+						navigation.navigate(routes.itemPicker, {
+							items: [
+								{ id: "on_time", title: "On time" },
+								{ id: "price_time", title: "Price time" },
+								{ id: "each_time", title: "Each time" }
+							],
+							onSelect: (item) => {
+								setState({ ...state, alert_type: item.title })
+							}
+						})
+					}}
+
 					style={{
 						backgroundColor: globalStyles.Colors.inputColor,
 						borderRadius: 10,
@@ -39,9 +53,9 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 						paddingHorizontal: 16,
 					}}
 				>
-					<AppText>One time</AppText>
-					<AppIcon name="arrowDownCircle" />
-				</View>
+					<AppText>{state.alert_type}</AppText>
+					<AppIcon name="arrowRightCircle" />
+				</Pressable>
 			</View>
 			<AppButton
 				title="Create Alert"
