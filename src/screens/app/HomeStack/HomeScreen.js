@@ -295,6 +295,8 @@ const styles = StyleSheet.create({
 	imageSliderContainer: {
 		flex: 2,
 		paddingVertical: 8,
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	servicesContainer: {
 		padding: 10,
