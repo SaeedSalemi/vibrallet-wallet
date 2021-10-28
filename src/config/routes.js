@@ -57,4 +57,5 @@ export const routes = {
 	detailedHistory: 'DetailedHistory',
 	coinDetailWithoutHistory: 'CoinDetailWithoutHistory',
 	marketCoinDetail: 'MarketCoinDetail',
+	itemPicker: 'itemPicker',
 }

@@ -49,6 +49,7 @@ import DetailedHistory from '../screens/app/MarketStack/DetailedHistory'
 import CoinDetailWithoutHistory from '../screens/app/MarketStack/CoinDetailWithoutHistory'
 import MarketCoinDetailScreen from '../screens/app/MarketStack/MarketCoinDetailScreen'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import AppItemPicker from '../components/common/AppItemPicker'
 import { TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { setModal } from '../redux/modules/appSettings'
@@ -446,6 +447,18 @@ export function AppStackNavigation() {
 					headerTitle: () => (
 						<AppText bold typo="md">
 							New Password
+						</AppText>
+					),
+				}}
+			/>
+			<AppStack.Screen
+				name={routes.itemPicker}
+				component={AppItemPicker}
+				options={{
+					headerLeft: (props) => <BackButton navigation={props.navigation} {...props} />,
+					headerTitle: () => (
+						<AppText bold typo="md">
+							Choose item
 						</AppText>
 					),
 				}}
