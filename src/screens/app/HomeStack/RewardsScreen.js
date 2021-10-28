@@ -19,12 +19,12 @@ export default function RewardsScreen() {
 					<AppText style={{ color: globalStyles.Colors.lightGrayColor }}>
 						Total Rewards Earned
 					</AppText>
-					<View style={styles.value}>
+					{/* <View style={styles.value}>
 						<AppText typo="xl" style={styles.pxrValue}>
 							12,233
 						</AppText>
 						<AppText style={styles.pxr}>PRX</AppText>
-					</View>
+					</View> */}
 				</View>
 				<Image
 					source={Images.xpReward}

@@ -24,12 +24,12 @@ export default function TransactionRewardsScreen() {
 						color={globalStyles.Colors.text3}
 						size={25}
 					/>
-					<View style={{ flex: 1, paddingStart: 8 }}>
+					{/* <View style={{ flex: 1, paddingStart: 8 }}>
 						<AppText typo="tiny" color="text2">
 							Transactions include (send, recieve and buy) BUT, buy or deposit
 							PRX Tokens have 2x reward points.
 						</AppText>
-					</View>
+					</View> */}
 				</View>
 				<UserLevel level={1} checked onPress={showModal} />
 				<UserLevel level={2} />

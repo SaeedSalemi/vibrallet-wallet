@@ -23,7 +23,7 @@ export default function LevelDetailsModal({ visible, setVisible }) {
 					}}
 				>
 					If you succeed to complete level 1 and have more than $1k transactions
-					you’ll got 5 PRX as reward.
+					you’ll got 5 as reward.
 				</AppText>
 			</View>
 		</AlertModal>

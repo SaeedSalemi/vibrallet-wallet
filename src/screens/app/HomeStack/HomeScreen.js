@@ -169,8 +169,8 @@ const HomeScreen = ({ navigation }) => {
 		},
 		{
 			id: 2,
-			title: 'Start invest in PRX ',
-			subTitle: 'Buy or deposit some PRX.',
+			title: 'Start invest ',
+			subTitle: 'Buy or deposit.',
 			icon: (
 				<MaterialCommunityIcons
 					name="file-upload"

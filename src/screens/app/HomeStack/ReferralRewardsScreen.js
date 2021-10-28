@@ -18,7 +18,7 @@ const data = [
 	},
 	{
 		title: 'You got your reward!',
-		subTitle: 'Then you receive your 1 PRX token.',
+		subTitle: 'Then you receive your 1 token.',
 	},
 ]
 
@@ -29,9 +29,9 @@ export default function ReferralRewardsScreen() {
 				<AppText typo="md" bold>
 					Refer a friend
 				</AppText>
-				<AppText typo="tiny" color="text2">
+				{/* <AppText typo="tiny" color="text2">
 					and you can earn PRX tokens as much as you want.
-				</AppText>
+				</AppText> */}
 				<View style={styles.info}>
 					<MaterialIcons
 						name="info"
@@ -57,7 +57,7 @@ export default function ReferralRewardsScreen() {
 				<View style={styles.gift}>
 					<FontAwesome5 name="gift" color="#727AF4" size={15} />
 					<AppText typo="dot" color="text3" style={styles.giftText}>
-						Your friends get 5 PRX on their Transactions above $10k total.
+						Your friends get 5 on their Transactions above $10k total.
 					</AppText>
 				</View>
 			</ScrollView>
