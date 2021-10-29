@@ -15,18 +15,13 @@ import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
 // import { coins } from './HomeStack/CreatePriceAlertScreen'
 import AppText from '../../components/common/AppText'
-import { color } from 'react-native-reanimated'
 import BarChart from '../../components/BarChart/BarChart'
 import Feather from 'react-native-vector-icons/Feather'
-
-import AppButton from '../../components/common/AppButton'
 import { useNavigation } from '@react-navigation/core'
-import HttpService from '../../services/HttpService'
-import AppIcon from '../../components/common/AppIcon'
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import { useSelector } from 'react-redux'
 import ethManager from './../../blockchains/EthManager'
 import bscManager from './../../blockchains/BscManager'
+import useCoins from '../../hooks/useCoins'
 const { width } = Dimensions.get('window')
 
 const ChartItems = ({ iconColor, title, value }) => {
@@ -56,72 +51,16 @@ const ChartItems = ({ iconColor, title, value }) => {
 export default function WalletScreen() {
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
-
-	const BSCIcon = () => (
-		<AppIcon style={{ width: 25, height: 25 }} name="binance" />
-	)
-	const EthIcon = () => <FontAwesome5Icon size={25} color="#7037C9" name="ethereum" />
-
-	const [state, setState] = useState({
-		coins:
-			[
-				{
-					title: 'Ethereum',
-					slug: 'ETH',
-					symbol: "ETHUSDT",
-					price: '1,934',
-					currency: '$',
-					icon: <EthIcon />,
-					increase: false,
-					color: "purple",
-					changeAmount: '6.2%',
-					chart: 'sampleChart2',
-					amount: 0,
-					change: 0,
-					balance: 0.01,
-					vol: '2,300341',
-					lastPrice: '1764.23',
-				},
-				{
-					title: 'Binance',
-					slug: 'BSC',
-					change: 0,
-					price: '1.12',
-					currency: '$',
-					color: "yellow",
-					increase: true,
-					symbol: "BNBUSDT",
-					icon: <BSCIcon />,
-					changeAmount: '1.4%',
-					chart: 'sampleChart3',
-					amount: 0,
-					balance: 0.01,
-					vol: '1.34340023',
-					lastPrice: '489.27',
-				},
-			]
-	})
-	const { coins } = state
-
+	const [state, setState] = useState({ coins: [] })
+	const coins = useCoins()
 	const wallet = useSelector(state =>
 		state.wallets.data ? state.wallets.data[0] : null
 	)
 	useEffect(() => {
+
+		setState({ ...state, coins: coins })
+
 		for (let item of state.coins) {
-			new HttpService("", {
-				"uniqueId": "abc1",
-				"action": "quotedPrice",
-				"data": {
-					"symbol": item.symbol
-				}
-			}).Post(res => {
-				// console.log(res)
-				let inx = coins.findIndex((itm) => itm.slug === item.slug)
-				state.coins[inx]['price'] = parseFloat(res.data.rate).toFixed(2)
-				state.coins[inx]['change'] = parseFloat(res.data.percentChange).toFixed(2)
-				console.log("coin 2", state.coins[inx])
-				setState({ ...state })
-			})
 
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[item.slug];
@@ -131,14 +70,15 @@ export default function WalletScreen() {
 					state.wallet = wallet;
 					setState({ ...state });
 
-					selectedCoin.getBalance(wallet?.address, false).then(result => {
-						// setState({ ...state, balance: result })
-						// setIsLoading(false)
-						let inx = coins.findIndex((itm) => itm.slug === item.slug)
-						state.coins[inx]['amount'] = parseFloat(result).toFixed(3)
-						state.coins[inx]['balance'] = parseFloat(state.coins[inx]['amount'] * state.coins[inx]['price'])
-						setState({ ...state })
-					})
+					// selectedCoin.getBalance(wallet?.address, false).then(result => {
+					// 	// setState({ ...state, balance: result })
+					// 	// setIsLoading(false)
+					// 	let inx = coins.findIndex((itm) => itm.slug === item.slug)
+					// 	state.coins[inx]['amount'] = parseFloat(result).toFixed(3)
+					// 	state.coins[inx]['balance'] = parseFloat(state.coins[inx]['amount'] * state.coins[inx]['price'])
+					// 	setState({ ...state })
+					// })
+
 				})
 				.catch(ex => console.error('balance wallet error', ex))
 		}
