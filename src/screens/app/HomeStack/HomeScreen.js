@@ -30,6 +30,9 @@ import Steps from '../../../components/Steps/Steps'
 import Header from '../../../components/Header/Header'
 import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import ethManager from '../../../blockchains/EthManager'
+import bscManager from '../../../blockchains/BscManager'
 
 
 const ENTRIES1 = [
@@ -99,7 +102,44 @@ const HomeScreen = ({ navigation }) => {
 	const [active, setActive] = useState(0)
 	const carouselRef = useRef(null)
 
+
+	const wallet = useSelector(state =>
+		state.wallets.data ? state.wallets.data[0] : null
+	)
+
+	const saveToStorage = async (title, data) => await AsyncStorage.setItem(title, data)
+
+	const _storeWalletData = () => {
+		const coinSelector = { ETH: ethManager, BSC: bscManager }
+		for (let selectCoin in coinSelector) {
+			coinSelector[selectCoin].getWalletFromMnemonic(wallet.backup)
+				.then(wallet => {
+					saveToStorage(selectCoin, JSON.stringify(wallet))
+				}).catch(ex => console.error('wallet', ex))
+		}
+	}
+
+	const checkWallet = async () => {
+		let context = this;
+		try {
+			let value = await AsyncStorage.getItem('ETH');
+			if (value != null) {
+				_storeWalletData()
+			}
+			else {
+				// do something else
+			}
+		} catch (error) {
+			// Error retrieving data
+		}
+	}
+
 	useEffect(() => {
+		checkWallet()
+	}, [])
+
+	useEffect(() => {
+
 		Network.getNetworkStateAsync().then(status => {
 			console.log("debug", status)
 			if (!status.isConnected) {
@@ -135,6 +175,7 @@ const HomeScreen = ({ navigation }) => {
 			}
 		}, [navigateToWallet])
 	)
+
 
 	const LISTDATA = [
 		{
