@@ -10,7 +10,7 @@ import { globalStyles } from '../../../config/styles'
 import { finalCreateWallet } from '../../../redux/modules/wallets'
 import WalletManager from '../../../blockchains/walletManager'
 import Clipboard from '@react-native-community/clipboard'
-
+import { showMessage } from "react-native-flash-message";
 export default function WordBackup({ navigation }) {
 	const dispatch = useDispatch()
 	const [backup, setBackup] = useState('')
@@ -22,6 +22,15 @@ export default function WordBackup({ navigation }) {
 
 	const handleAddWallet = () => {
 		dispatch(finalCreateWallet(backup))
+		showMessage({
+			message: 'Your wallet has been created successfully',
+			description: null,
+			type: 'success',
+			icon: null,
+			duration: 2000,
+			style: { backgroundColor: "#6BC0B1" },
+			position: 'top'
+		})
 	}
 
 	const backupList = backup.split(' ').map((word, i) => `${i + 1}. ${word}`)
