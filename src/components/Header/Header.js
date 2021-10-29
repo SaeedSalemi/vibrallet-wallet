@@ -19,6 +19,10 @@ import AppText from '../common/AppText'
 export default function Header({ route = routes.home, children }) {
 	const { navigate } = useNavigation()
 	const [show, setShow] = useState(false)
+
+	const [state, setState] = useState({
+		address: '',
+	})
 	const showCamera = () => {
 		setShow(true)
 	}
@@ -156,6 +160,13 @@ export default function Header({ route = routes.home, children }) {
 		}
 	})
 
+	const handelQR = qrData => {
+		// setQr(qrData.data)
+		state.address = qrData.data
+		setState({ ...state })
+		setShow(false)
+	}
+
 	return (
 		<View
 			style={{ flexDirection: 'row', marginVertical: 8, paddingHorizontal: 8 }}
@@ -174,7 +185,13 @@ export default function Header({ route = routes.home, children }) {
 					{icon2.icon}
 				</TouchableOpacity>
 			</View>
-			<AppCamera show={show} onClose={onClose} />
+			{/* <AppCamera show={show} onClose={onClose} /> */}
+			<AppCamera
+				show={show}
+				onClose={onClose}
+				qr
+				onQR={handelQR}
+			/>
 		</View>
 	)
 }
