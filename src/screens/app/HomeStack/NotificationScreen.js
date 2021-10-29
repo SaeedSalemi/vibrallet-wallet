@@ -128,7 +128,7 @@ export default function NotificationScreen() {
 			{items.length > 0 && <NotificationItem data={items} />}
 
 			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-				<AppText style={{ color: globalStyles.Colors.inputColor }}>
+				<AppText style={{ color: globalStyles.Colors.lightGrayColor }}>
 					You don't have notifications.
 				</AppText>
 			</View>
