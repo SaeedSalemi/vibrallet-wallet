@@ -35,7 +35,8 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		balance: 0,
 		percentCoin: 0,
 		coin: {},
-		chartData: []
+		chartData: [],
+		chartTimeStamp: 1
 	})
 
 	const wallet = useSelector(state => {
@@ -43,15 +44,6 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 	}
 	)
 	useEffect(() => {
-
-
-
-		// for (let item of coin) {
-		// 	if (item.slug === slug) {
-		// 		setState({ ...state, coin: item })
-		// 	}
-		// }
-
 		state.coin = coin.filter((itm) => itm.slug === slug)[0]
 
 		new HttpService("",

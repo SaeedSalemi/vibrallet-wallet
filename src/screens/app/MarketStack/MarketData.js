@@ -9,10 +9,12 @@ import { globalStyles } from '../../../config/styles'
 
 export default function MarketData({ items }) {
 	const { navigate } = useNavigation()
+	console.log('debug market', items)
 	return (
 		<FlatList
 			data={items}
 			renderItem={({ item, index }) => (
+
 				<SwapableRow
 					measure={75}
 					leftItems={[{ title: 'Favorite', icon: 'star' }]}
@@ -75,7 +77,7 @@ export default function MarketData({ items }) {
 										borderRadius: 10,
 										backgroundColor:
 											globalStyles.Colors[
-												item.increase ? 'successOpacity' : 'failureOpacity'
+											item.increase ? 'successOpacity' : 'failureOpacity'
 											],
 										...globalStyles.flex.center,
 									}}
@@ -85,7 +87,9 @@ export default function MarketData({ items }) {
 										typo="sm"
 										color={item.increase ? 'success' : 'failure'}
 									>
-										{item.increase ? '+' : '-'} 1.42%
+										{/* {item.increase ? '+' : '-'} 1.42% */}
+										{item.change > 0 ? '+' : ''}
+										{item.change}
 									</AppText>
 								</View>
 							</View>
