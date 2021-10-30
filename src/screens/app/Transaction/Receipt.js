@@ -14,7 +14,7 @@ import bscManager from './../../../blockchains/BscManager'
 
 export default function Receipt({ navigation, route }) {
   const { navigate } = navigation
-  const { coin, amount, wallet, address } = route.params || {}
+  const { coin, amount, wallet, address, receipt } = route.params || {}
 
 
   const items = useMemo(
