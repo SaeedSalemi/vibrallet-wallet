@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/core'
-import React from 'react'
+import React, { useContext } from 'react'
 import { FlatList, TouchableOpacity, View } from 'react-native'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
+import { Context } from '../../../context/marketContext'
 
 export default function MarketData({ items }) {
+	const { dispatch } = useContext(Context)
 	const { navigate } = useNavigation()
 	console.log('debug market', items)
 	return (
@@ -17,7 +19,12 @@ export default function MarketData({ items }) {
 
 				<SwapableRow
 					measure={75}
-					leftItems={[{ title: 'Favorite', icon: 'star' }]}
+					leftItems={[{
+						title: 'Favorite', icon: 'star', onPress: function () {
+							item.fav = true
+							dispatch({ item })
+						}
+					}]}
 				>
 					<TouchableOpacity
 						style={{ paddingHorizontal: 20 }}
