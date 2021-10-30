@@ -30,6 +30,7 @@ const useCoins = () => {
           balance: 0.01,
           vol: '0',
           lastPrice: '1764.23',
+          fav: false,
         },
         {
           title: 'Binance',
@@ -47,6 +48,7 @@ const useCoins = () => {
           balance: 0.01,
           vol: '0',
           lastPrice: '489.27',
+          fav: false,
         },
       ]
   })
