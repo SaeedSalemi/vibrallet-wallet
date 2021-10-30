@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import globalStyles from '../../../config/styles'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Feather from 'react-native-vector-icons/Feather'
@@ -33,6 +33,8 @@ import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import ethManager from '../../../blockchains/EthManager'
 import bscManager from '../../../blockchains/BscManager'
+import useWallet from './../../../hooks/useWallet'
+import useCoinStorage from '../../../hooks/useCoinStorage'
 
 
 const ENTRIES1 = [
@@ -119,22 +121,26 @@ const HomeScreen = ({ navigation }) => {
 		}
 	}
 
-	const checkWallet = async () => {
-		let context = this;
-		try {
-			let value = await AsyncStorage.getItem('ETH');
-			if (value != null) {
-				_storeWalletData()
-			}
-			else {
-				// do something else
-			}
-		} catch (error) {
-			// Error retrieving data
-		}
-	}
+
+
+	// const balance = useMemo(() => useWallet('ETH').balance, [])
+	// console.log('calc balance', balance)
 
 	useEffect(() => {
+
+		async function checkWallet() {
+			try {
+				let value = await AsyncStorage.getItem('ETH');
+				if (value != null) {
+					_storeWalletData()
+				}
+				else {
+					// do something else
+				}
+			} catch (error) {
+				// Error retrieving data
+			}
+		}
 		checkWallet()
 	}, [])
 
