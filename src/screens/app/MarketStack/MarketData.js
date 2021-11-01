@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useContext } from 'react'
 import { FlatList, TouchableOpacity, View } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
@@ -21,7 +22,29 @@ export default function MarketData({ items }) {
 					measure={75}
 					leftItems={[{
 						title: 'Favorite', icon: 'star', onPress: function () {
-							item.fav = true
+							item.fav = !item.fav
+							if (item.fav) {
+								showMessage({
+									message: `${item.slug} added to your favorite list.`,
+									description: null,
+									type: 'success',
+									icon: null,
+									duration: 1000,
+									style: { backgroundColor: "#6BC0B1" },
+									position: 'top'
+								})
+							}
+							else {
+								showMessage({
+									message: `${item.slug} removed to your favorite list.`,
+									description: null,
+									type: 'danger',
+									icon: null,
+									duration: 1000,
+									style: { backgroundColor: "#e74c3c" },
+									position: 'top'
+								})
+							}
 							dispatch({ item })
 						}
 					}]}
