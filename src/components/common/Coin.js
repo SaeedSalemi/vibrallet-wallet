@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { SvgUri } from 'react-native-svg'
 import { Images } from '../../assets'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
+import useSVGChart from '../../hooks/useSVGChart'
 import { coins } from '../../screens/app/HomeStack/CreatePriceAlertScreen'
 import AppIcon from './AppIcon'
 import AppSwitch from './AppSwitch'
@@ -23,8 +24,10 @@ export default function Coin({
 	hideDetails,
 	hasSwitch,
 	onPress,
+	increase
 }) {
 	const { navigate } = useNavigation()
+	const SVGUri = useSVGChart(coin.symbol, 1, 1)
 	return (
 		<SwapableRow
 			leftItems={[
@@ -65,11 +68,24 @@ export default function Coin({
 						</View>
 					</View>
 					{noChart ? null : (
-						<View style={{ flex: 1, ...globalStyles.flex.center, width: 50 }}>
+						// <View style={{ flex: 1, ...globalStyles.flex.center, width: 50, }}>
+						<View style={[
+							StyleSheet.absoluteFill,
+							{
+								alignItems: 'center',
+								justifyContent: 'center',
+								height: 4,
+								padding: 0,
+								marginVertical: 2
+							},
+						]}>
 							<SvgUri
 								width={100}
-								style={{ alignSelf: 'center' }}
-								uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
+								style={{
+									// backgroundColor: 'yellow'
+								}}
+								// uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
+								uri={SVGUri}
 							/>
 						</View>
 					)}
