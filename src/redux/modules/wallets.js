@@ -1,7 +1,6 @@
 import { delay, put, select, take, takeEvery } from '@redux-saga/core/effects'
 import { routes } from '../../config/routes'
 import { navigate, reset } from '../../utils/navigation'
-import { setLoggedIn, SET_LOGGED_IN } from './appSettings'
 
 export const ADD_WALLET = 'ADD_WALLET'
 export const addWallet = wallet => ({
@@ -83,6 +82,7 @@ export default function reducer(state = initialState, action) {
 
 export function* watchFinalCreateWallet() {
 	const wallet = yield select(state => state.wallets.create)
+	console.log('wallet modules', wallet)
 	yield put(addWallet(wallet))
 	yield reset({
 		index: 1,
