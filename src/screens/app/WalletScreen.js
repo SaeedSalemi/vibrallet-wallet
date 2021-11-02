@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from 'react'
 import {
 	Dimensions,
 	FlatList,
-	RecyclerViewBackedScrollViewBase,
 	TouchableOpacity,
 	View,
 } from 'react-native'
@@ -13,7 +12,6 @@ import Header from '../../components/Header/Header'
 import Screen from '../../components/Screen'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
-// import { coins } from './HomeStack/CreatePriceAlertScreen'
 import AppText from '../../components/common/AppText'
 import BarChart from '../../components/BarChart/BarChart'
 import Feather from 'react-native-vector-icons/Feather'
