@@ -7,7 +7,17 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "description": ""
+    "description": "",
+    "packagerOpts": { 
+      "config": "metro.config.js",
+      "sourceExts": [
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
+    }
   },
   "name": "binrex-wallet"
 }
