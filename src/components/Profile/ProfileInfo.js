@@ -14,7 +14,7 @@ const ProfileInfo = () => {
 
 	return (
 		<>
-			<HR style={{ marginVertical: 20 }} />
+			<HR style={{ marginVertical: 4 }} />
 			<View style={{ flexDirection: 'row' }}>
 				<Image source={Images.avatar} />
 				<View
@@ -55,7 +55,7 @@ const ProfileInfo = () => {
 					</TouchableOpacity>
 				</View>
 			</View>
-			<HR style={{ marginVertical: 20 }} />
+			<HR style={{ marginVertical: 4 }} />
 		</>
 	)
 }

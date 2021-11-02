@@ -26,12 +26,12 @@ export default function ProfileMainRoute({
 						...globalStyles.flex.row,
 						...globalStyles.flex.between,
 						alignItems: 'center',
-						paddingVertical: 25,
+						paddingVertical: 16,
 					}}
 				>
 					<View style={{ ...globalStyles.flex.row, alignItems: 'center' }}>
 						{icon}
-						<AppText style={{ marginLeft: 15 }}>{title}</AppText>
+						<AppText style={{ marginLeft: 16 }}>{title}</AppText>
 					</View>
 					<FontAwesome5
 						name="chevron-circle-right"

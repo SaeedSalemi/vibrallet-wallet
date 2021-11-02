@@ -30,11 +30,11 @@ export default function ProfileScreen() {
 				<View style={{ marginVertical: 8 }}>
 					<ProfileDetailsSection />
 				</View>
-				<View style={{ marginVertical: 24 }}>
+				<View style={{ marginVertical: 16 }}>
 					<UserCoins />
 				</View>
 				<ProfileMainRouteSection />
-				<View style={{ paddingHorizontal: 24 }}>
+				<View style={{ paddingHorizontal: 16 }}>
 					<AppButton
 						typo="xs"
 						title="Backup and Log Out"

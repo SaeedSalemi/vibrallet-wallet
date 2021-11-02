@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { View, Image, Dimensions } from 'react-native'
 import AppText from '../common/AppText'
 import { Images } from '../../assets'
@@ -18,7 +18,7 @@ const slideShowItems = [
 			</MarketIcon>
 		),
 		title: 'Ethereum',
-		value: '12.434 ETH',
+		value: '0 ETH',
 	},
 	{
 		icon: (
@@ -27,7 +27,7 @@ const slideShowItems = [
 			</MarketIcon>
 		),
 		title: 'Ethereum',
-		value: '12.434 ETH',
+		value: '0 ETH',
 	},
 	{
 		icon: (
@@ -36,7 +36,7 @@ const slideShowItems = [
 			</MarketIcon>
 		),
 		title: 'Ethereum',
-		value: '12.434 ETH',
+		value: '0 ETH',
 	},
 ]
 const { width: screenWidth } = Dimensions.get('window')
@@ -49,9 +49,9 @@ export default function UserCoins() {
 			<View
 				style={{
 					backgroundColor: globalStyles.Colors.inputColor,
-					padding: 20,
-					borderRadius: 15,
-					marginVertical: 8,
+					padding: 16,
+					borderRadius: 16,
+					marginVertical: 4,
 				}}
 			>
 				<View
@@ -69,7 +69,7 @@ export default function UserCoins() {
 				<View>
 					<View
 						style={{
-							marginVertical: 18,
+							marginVertical: 8,
 							...globalStyles.flex.row,
 							alignItems: 'center',
 							...globalStyles.flex.between,
@@ -79,9 +79,9 @@ export default function UserCoins() {
 							<AppText typo="xs">{item.title}</AppText>
 							<AppText
 								color="text2"
-								style={{ marginVertical: 8 }}
+								style={{ marginVertical: 4 }}
 								bold
-								typo="xl"
+								typo="lg"
 							>
 								{item.value}
 							</AppText>
