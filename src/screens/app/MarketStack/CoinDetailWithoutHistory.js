@@ -15,6 +15,7 @@ import bscManager from '../../../blockchains/BscManager'
 import { AreaChart } from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
 import HttpService from '../../../services/HttpService'
+import { SvgUri } from 'react-native-svg'
 
 const values = ['$1850', '$1750', '$1650', '$1550']
 const dates = ['5 Nov', '10 Nov', '15 Nov', '25 Nov', '30 Nov']
@@ -84,8 +85,6 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 	}, [wallet])
 
-
-	const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
 	return (
 		<ScrollView>
 			<View style={{ ...globalStyles.flex.center, marginVertical: 24 }}>
