@@ -87,17 +87,17 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 	return (
 		<ScrollView>
-			<View style={{ ...globalStyles.flex.center, marginVertical: 24 }}>
+			<View style={{ ...globalStyles.flex.center, marginVertical: 12 }}>
 				<MarketIcon
 					size={52}
-					style={{ marginVertical: 8 }}
+					style={{ marginVertical: 4 }}
 					color={globalStyles.Colors.ethereum}
 				>
 					{/* <MaterialCommunityIcons size={30} name="ethereum" color="#7037C9" /> */}
 					{state.coin.icon}
 				</MarketIcon>
-				<AppText color="text2">{coin.title} Balance</AppText>
-				<AppText bold typo="xl">
+				<AppText color="text2">{state.coin.title} Balance</AppText>
+				<AppText bold typo="lg">
 					{state.balance} {state.coin.title}
 				</AppText>
 				<View
@@ -109,12 +109,12 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					<AppText color="text3" typo="tiny">
 						{state.coin.change} Change
 					</AppText>
-					<AppText color="success" typo="dot" style={{ marginHorizontal: 8 }}>
+					<AppText color="success" typo="dot" style={{ marginHorizontal: 4 }}>
 						{/* +1.2% */}
 					</AppText>
 				</View>
 			</View>
-			<View style={{ ...globalStyles.flex.row, marginVertical: 32 }}>
+			<View style={{ ...globalStyles.flex.row, marginVertical: 24 }}>
 				{/* <Image style={{ flex: 0.98 }} source={Images.inlineChart} /> */}
 
 				<AreaChart
@@ -157,7 +157,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				style={{
 					...globalStyles.flex.row,
 					justifyContent: 'space-evenly',
-					marginVertical: 32,
+					marginVertical: 24,
 				}}
 			>
 				{chartItems.map((item, index) => (
@@ -169,7 +169,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				))}
 			</View>
 			<View
-				style={{ ...globalStyles.flex.center, marginVertical: 32, flex: 1 }}
+				style={{ ...globalStyles.flex.center, marginVertical: 18, flex: 1 }}
 			>
 				<Image source={Images.marketImage} />
 				<AppText color="text2">No transactions yet</AppText>
