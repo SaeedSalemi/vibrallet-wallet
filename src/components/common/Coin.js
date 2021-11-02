@@ -74,9 +74,12 @@ export default function Coin({
 							{
 								alignItems: 'center',
 								justifyContent: 'center',
+								marginLeft: 22,
 								height: 4,
-								padding: 0,
-								marginVertical: 2
+								paddingVertical: -10,
+								marginVertical: -2,
+								width: '100%'
+
 							},
 						]}>
 							<SvgUri
