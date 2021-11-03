@@ -41,27 +41,22 @@ const ENTRIES1 = [
 	{
 		title: 'Beautiful and dramatic Antelope Canyon',
 		subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-		illustration: Images.homeSlider,
+		illustration: Images.homeSlider1,
 	},
 	{
 		title: 'Earlier this morning, NYC',
 		subtitle: 'Lorem ipsum dolor sit amet',
-		illustration: Images.homeSlider,
+		illustration: Images.homeSlider2,
 	},
 	{
 		title: 'White Pocket Sunset',
 		subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-		illustration: Images.homeSlider,
+		illustration: Images.homeSlider3,
 	},
 	{
 		title: 'Acrocorinth, Greece',
 		subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-		illustration: Images.homeSlider,
-	},
-	{
-		title: 'The lone tree, majestic landscape of New Zealand',
-		subtitle: 'Lorem ipsum dolor sit amet',
-		illustration: Images.homeSlider,
+		illustration: Images.homeSlider4,
 	},
 ]
 const iconSize = 20
