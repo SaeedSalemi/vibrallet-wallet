@@ -15,14 +15,14 @@ export default function CoinTitle({
 }) {
 	return (
 		<View style={{ ...globalStyles.flex.center }}>
-			<MarketIcon size={52} color={globalStyles.Colors.ethereum}>
+			<MarketIcon size={42} color={globalStyles.Colors.ethereum}>
 				{icon === 'ethereum' ? (
-					<MaterialCommunityIcons name={icon} size={25} color="#7037C9" />
+					<MaterialCommunityIcons name={icon} size={24} color="#7037C9" />
 				) : (
-					<AppIcon name={icon} style={{ width: 25, height: 25 }} />
+					<AppIcon name={icon} style={{ width: 24, height: 24 }} />
 				)}
 			</MarketIcon>
-			<View style={{ marginVertical: 6 }}></View>
+			<View style={{ marginVertical: 4 }}></View>
 			{title ? (
 				<AppText color="text2" typo="sm">
 					{title}
@@ -30,9 +30,9 @@ export default function CoinTitle({
 			) : null}
 			{value ? (
 				<AppText
-					style={{ marginVertical: 6 }}
+					style={{ marginVertical: 4 }}
 					bold
-					typo="xl"
+					typo="lg"
 					color={failureTitle ? 'failure' : 'text1'}
 				>
 					{value}
