@@ -183,7 +183,7 @@ export default function SendScreen({ navigation, route }) {
 	return (
 		<Screen style={{ ...globalStyles.gapScreen }}>
 			<ScrollView>
-				<View style={{ marginVertical: 32 }}>
+				<View style={{ marginVertical: 8 }}>
 					<CoinTitle
 						title={`${coin.title} Balance`}
 						icon={coin.title?.toLowerCase()}
@@ -209,10 +209,10 @@ export default function SendScreen({ navigation, route }) {
 						/>
 					</View>
 				))}
-				<View style={{ marginVertical: 18 }}>
+				<View style={{ marginVertical: 8 }}>
 					<PercentValueItems items={valueItems} onSelectPercent={handleSelectPercent} />
 				</View>
-				<View style={{ marginVertical: 24, flex: 1 }}>
+				<View style={{ marginVertical: 8, flex: 1 }}>
 					{infoItems.map((item, i) => (
 						<View key={i}>
 							<InfoItems
@@ -244,7 +244,7 @@ export default function SendScreen({ navigation, route }) {
 			/>
 
 
-			{isloading && <AppLoader />}
+			{/* {isloading && <AppLoader />} */}
 
 		</Screen>
 	)
