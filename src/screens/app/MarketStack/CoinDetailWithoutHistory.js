@@ -87,17 +87,17 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 	return (
 		<ScrollView>
-			<View style={{ ...globalStyles.flex.center, marginVertical: 12 }}>
+			<View style={{ ...globalStyles.flex.center, marginVertical: 8 }}>
 				<MarketIcon
-					size={52}
-					style={{ marginVertical: 4 }}
+					size={40}
+					style={{ marginVertical: 0 }}
 					color={globalStyles.Colors.ethereum}
 				>
 					{/* <MaterialCommunityIcons size={30} name="ethereum" color="#7037C9" /> */}
 					{state.coin.icon}
 				</MarketIcon>
 				<AppText color="text2">{state.coin.title} Balance</AppText>
-				<AppText bold typo="lg">
+				<AppText bold typo="md">
 					{state.balance} {state.coin.title}
 				</AppText>
 				<View
