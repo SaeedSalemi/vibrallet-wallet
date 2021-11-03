@@ -82,14 +82,15 @@ export default function Coin({
 
 							},
 						]}>
-							<SvgUri
+
+							{/* <SvgUri
 								width={100}
 								style={{
 									// backgroundColor: 'yellow'
 								}}
 								// uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
 								uri={SVGUri}
-							/>
+							/> */}
 						</View>
 					)}
 					{hideDetails ? null : (
