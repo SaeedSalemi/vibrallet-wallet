@@ -107,7 +107,8 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 					</View>
 					<AppButton
 						title="Add BTC Alert"
-						icon="plus"
+						icon="add"
+						onPress={() => alert('alert has been set')}
 						customStyle={{ backgroundColor: globalStyles.Colors.bckColor }}
 						textStyle={{ color: globalStyles.Colors.secondaryColor }}
 					/>
