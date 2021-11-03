@@ -175,7 +175,7 @@ export default function WalletScreen() {
 								paddingVertical: 12,
 							}}
 						>
-							<View style={{ flex: 2, justifyContent: 'center' }}>
+							<View style={{ flex: 2, justifyContent: 'space-around' }}>
 								{pieData.map((item, index) => (
 									<ChartItems
 										key={index}
