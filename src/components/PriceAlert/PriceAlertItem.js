@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Image, View, Switch } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Images } from '../../assets'
 import { globalStyles } from '../../config/styles'
@@ -108,7 +109,17 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 					<AppButton
 						title="Add BTC Alert"
 						icon="add"
-						onPress={() => alert('alert has been set')}
+						onPress={() => {
+							showMessage({
+								message: `Your alert has been created successfully.`,
+								description: null,
+								type: 'success',
+								icon: null,
+								duration: 1000,
+								style: { backgroundColor: "#6BC0B1" },
+								position: 'top'
+							})
+						}}
 						customStyle={{ backgroundColor: globalStyles.Colors.bckColor }}
 						textStyle={{ color: globalStyles.Colors.secondaryColor }}
 					/>
