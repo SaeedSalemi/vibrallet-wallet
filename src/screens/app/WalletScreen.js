@@ -21,6 +21,7 @@ import ethManager from './../../blockchains/EthManager'
 import bscManager from './../../blockchains/BscManager'
 import useCoins from '../../hooks/useCoins'
 const { width } = Dimensions.get('window')
+import { SvgXml } from 'react-native-svg'
 
 const ChartItems = ({ iconColor, title, value }) => {
 	return (
@@ -30,7 +31,7 @@ const ChartItems = ({ iconColor, title, value }) => {
 					style={{
 						width: 7,
 						height: 7,
-						marginVertical: 5,
+						marginVertical: 4,
 						borderRadius: 2,
 						backgroundColor: iconColor,
 					}}
