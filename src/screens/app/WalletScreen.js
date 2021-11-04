@@ -20,8 +20,8 @@ import { useSelector } from 'react-redux'
 import ethManager from './../../blockchains/EthManager'
 import bscManager from './../../blockchains/BscManager'
 import useCoins from '../../hooks/useCoins'
+import { showMessage } from 'react-native-flash-message'
 const { width } = Dimensions.get('window')
-import { SvgXml } from 'react-native-svg'
 
 const ChartItems = ({ iconColor, title, value }) => {
 	return (
@@ -56,8 +56,9 @@ export default function WalletScreen() {
 		state.wallets.data ? state.wallets.data[0] : null
 	)
 	useEffect(() => {
-
+		// const fileredCoins = coins.filter(coin => coin.hide === false)
 		setState({ ...state, coins: coins })
+		// console.log('CC', state.coins.filter(c => c.hide === false))
 
 		for (let item of state.coins) {
 
@@ -70,7 +71,7 @@ export default function WalletScreen() {
 					setState({ ...state });
 
 					// selectedCoin.getBalance(wallet?.address, false).then(result => {
-					// 	// setState({ ...state, balance: result })
+					// 	// setStat...state,e({ ...state, balance: result })
 					// 	// setIsLoading(false)
 					// 	let inx = coins.findIndex((itm) => itm.slug === item.slug)
 					// 	state.coins[inx]['amount'] = parseFloat(result).toFixed(3)
@@ -111,6 +112,28 @@ export default function WalletScreen() {
 	}, [state, totalBalance])
 
 
+	const hideCoinHandler = coin => {
+		showMessage({
+			message: `${coin.slug} was hide successfully.`,
+			description: null,
+			type: 'success',
+			icon: null,
+			duration: 1000,
+			style: { backgroundColor: "#6BC0B1" },
+			position: 'top'
+		})
+		const coins = state.coins
+		console.log('state coin', state.coins)
+		console.log('to hide', coin)
+		coins.map(item => {
+			if (item.slug === coin.slug) {
+				item.hide = true
+			}
+		})
+
+		setState({ coins: coins })
+	}
+
 
 	// const pieData = [
 	// 	{
@@ -142,7 +165,7 @@ export default function WalletScreen() {
 	// 		radius: 100,
 	// 	},
 	// ]
-	const data = coins
+	const data = state.coins
 	const series = pieData.map(item => item.series)
 	const sliceColor = pieData.map(item => item.color)
 
@@ -154,6 +177,10 @@ export default function WalletScreen() {
 			},
 		],
 	}
+
+	const filteredCoins = state.coins.filter(c => c.hide === false)
+
+	console.log('filterd hiddens', filteredCoins)
 
 	return (
 		<Screen>
@@ -259,7 +286,7 @@ export default function WalletScreen() {
 				<View style={{ flex: 2 }}>
 					<FlatList
 						style={{ marginVertical: 16 }}
-						data={state.coins}
+						data={filteredCoins}
 						renderItem={({ item, index }) => (
 							<Coin
 								coin={item}
@@ -268,6 +295,7 @@ export default function WalletScreen() {
 								onPress={() => {
 									navigate(routes.coinDetailWithoutHistory, { coin: coins, slug: item.slug })
 								}}
+								onHideHandler={hideCoinHandler}
 							/>
 						)}
 						keyExtractor={(_, index) => index.toString()}
