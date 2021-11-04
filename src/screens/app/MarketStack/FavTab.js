@@ -11,7 +11,6 @@ export default function FavTabScreen() {
 	// const coins = useCoins()
 	const { coins } = useContext(Context)
 	const filteredFavCoins = coins.filter(coin => coin.fav === true)
-	console.log('filtered fav coins', filteredFavCoins)
 	return (
 		<View style={globalStyles.screen}>
 			<SortHeader />
