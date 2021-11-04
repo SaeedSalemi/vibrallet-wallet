@@ -10,7 +10,6 @@ const useCoins = () => {
   )
   const EthIcon = () => <FontAwesome5Icon size={25} color="#7037C9" name="ethereum" />
 
-
   const [state, setState] = useState({
     coins:
       [
@@ -18,7 +17,7 @@ const useCoins = () => {
           title: 'Ethereum',
           slug: 'ETH',
           symbol: "ETHUSDT",
-          price: '1,934',
+          price: '0',
           currency: '$',
           icon: <EthIcon />,
           increase: false,
@@ -29,14 +28,15 @@ const useCoins = () => {
           change: 0,
           balance: 0.01,
           vol: '0',
-          lastPrice: '1764.23',
+          lastPrice: '0',
           fav: false,
+          hide: false,
         },
         {
           title: 'Binance',
           slug: 'BSC',
           change: 0,
-          price: '1.122',
+          price: '0',
           currency: '$',
           color: "yellow",
           increase: true,
@@ -47,8 +47,9 @@ const useCoins = () => {
           amount: 0,
           balance: 0.01,
           vol: '0',
-          lastPrice: '489.27',
+          lastPrice: '0',
           fav: false,
+          hide: false,
         },
       ]
   })
