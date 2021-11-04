@@ -1,8 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import { SvgUri } from 'react-native-svg'
-import { Images } from '../../assets'
+import { View, TouchableOpacity, StyleSheet } from 'react-native'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
 import useSVGChart from '../../hooks/useSVGChart'
@@ -14,6 +12,9 @@ import HR from './HR/HR'
 import MarketIcon from './MarketIcon/MarketIcon'
 
 import SwapableRow from './Swapable/SwapableRow'
+import Svg from 'react-native-svg'
+import { SvgXml } from 'react-native-svg'
+import { SvgUri } from 'react-native-svg'
 
 export default function Coin({
 	coin,
@@ -24,10 +25,10 @@ export default function Coin({
 	hideDetails,
 	hasSwitch,
 	onPress,
-	increase
+	onHideHandler
 }) {
 	const { navigate } = useNavigation()
-	const SVGUri = useSVGChart(coin.symbol, 1, 1)
+	const SVGUri = useSVGChart(coin.symbol)
 	return (
 		<SwapableRow
 			leftItems={[
@@ -42,7 +43,13 @@ export default function Coin({
 					onPress: () => navigate(routes.send, { coin }),
 				},
 			]}
-			rightItems={[{ title: 'Hide', icon: 'eye-slash' }]}
+			rightItems={[
+				{
+					title: 'Hide',
+					icon: 'eye-slash',
+					onPress: () => onHideHandler(coin)
+				},
+			]}
 		>
 			<TouchableOpacity onPress={onPress} activeOpacity={0.9}>
 				<View style={{ flexDirection: 'row', zIndex: 9 }}>
@@ -69,19 +76,21 @@ export default function Coin({
 					</View>
 					{noChart ? null : (
 						// <View style={{ flex: 1, ...globalStyles.flex.center, width: 50, }}>
-						<View style={[
-							StyleSheet.absoluteFill,
-							{
-								alignItems: 'center',
-								justifyContent: 'center',
-								marginLeft: 22,
-								height: 4,
-								paddingVertical: -10,
-								marginVertical: -2,
-								width: '100%'
+						// [
+						// 	StyleSheet.absoluteFill,
+						// 	{
+						// 		alignItems: 'center',
+						// 		justifyContent: 'center',
+						// 		// marginLeft: 22,
+						// 		// height: 20,
+						// 		// paddingVertical: -10,
+						// 		// marginVertical: -2,
+						// 		width: '100%'
 
-							},
-						]}>
+						// 	},
+						// ]
+						<View style={{}}>
+
 
 							{/* <SvgUri
 								width={100}
@@ -91,6 +100,13 @@ export default function Coin({
 								// uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
 								uri={SVGUri}
 							/> */}
+
+
+							{/* <SvgUri /> */}
+							{/* <Svg height="100%" width="100%" viewBox="0 0 100 100">
+								<SvgUri />
+							</Svg> */}
+							{/* <SvgXml xml={SVGUri} /> */}
 						</View>
 					)}
 					{hideDetails ? null : (
