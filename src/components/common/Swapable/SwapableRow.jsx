@@ -20,11 +20,11 @@ export default class SwapableRow extends Component {
 		measure: 70,
 	}
 
-	private renderLeftAction = (
-		item: any,
-		x: number,
-		progress: Animated.AnimatedInterpolation,
-		divider: boolean
+	 renderLeftAction = (
+		item,
+		x,
+		progress,
+		divider
 	) => {
 		const trans = progress.interpolate({
 			inputRange: [0, 1],
@@ -70,9 +70,9 @@ export default class SwapableRow extends Component {
 		)
 	}
 
-	private renderLeftActions = (
-		progress: Animated.AnimatedInterpolation,
-		_dragAnimatedValue: Animated.AnimatedInterpolation
+	 renderLeftActions = (
+		progress,
+		_dragAnimatedValue
 	) => (
 		<View
 			style={{
@@ -86,11 +86,11 @@ export default class SwapableRow extends Component {
 		</View>
 	)
 
-	private renderRightAction = (
-		item: string,
-		x: number,
-		progress: Animated.AnimatedInterpolation,
-		divider: boolean
+	 renderRightAction = (
+		item,
+		x,
+		progress,
+		divider
 	) => {
 		const trans = progress.interpolate({
 			inputRange: [0, 1],
@@ -98,7 +98,8 @@ export default class SwapableRow extends Component {
 		})
 		const pressHandler = () => {
 			this.close()
-			Alert.alert(item.title)
+			item?.onPress?.()
+			// Alert.alert(item.title)
 		}
 
 		return (
@@ -136,9 +137,9 @@ export default class SwapableRow extends Component {
 		)
 	}
 
-	private renderRightActions = (
-		progress: Animated.AnimatedInterpolation,
-		_dragAnimatedValue: Animated.AnimatedInterpolation
+	 renderRightActions = (
+		progress,
+		_dragAnimatedValue
 	) => (
 		<View
 			style={{
@@ -163,12 +164,12 @@ export default class SwapableRow extends Component {
 		</View>
 	)
 
-	private swipeableRow?: Swipeable
+	// private swipeableRow?: Swipeable
 
-	private updateRef = (ref: Swipeable) => {
-		this.swipeableRow = ref
-	}
-	private close = () => {
+	// private updateRef = (ref: Swipeable) => {
+	// 	this.swipeableRow = ref
+	// }
+	 close = () => {
 		this.swipeableRow?.close()
 	}
 	render() {
