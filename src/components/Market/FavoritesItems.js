@@ -1,12 +1,26 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, TouchableOpacity, Vibration } from 'react-native'
 import { globalStyles } from '../../config/styles'
 import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Foundation from 'react-native-vector-icons/Foundation'
 
-export default function FavoritesItems({ title }) {
+export default function FavoritesItems({ title, onDrag }) {
+
+	const ONE_SECOND_IN_MS = 1000;
+
+	const PATTERN = [
+		1 * ONE_SECOND_IN_MS,
+		2 * ONE_SECOND_IN_MS,
+		3 * ONE_SECOND_IN_MS
+	];
+
+	const PATTERN_DESC =
+		Platform.OS === "android"
+			? "wait 1s, vibrate 2s, wait 3s"
+			: "wait 1s, vibrate, wait 2s, vibrate, wait 3s";
+
 	return (
 		<View
 			style={{
@@ -40,7 +54,12 @@ export default function FavoritesItems({ title }) {
 				/>
 			</View>
 			<View style={{ flex: 1, alignItems: 'flex-end' }}>
-				<Foundation name="list" size={20} color={globalStyles.Colors.text3} />
+				<TouchableOpacity onLongPress={() => {
+					Vibration.vibrate(1 * 150)
+					onDrag()
+				}}>
+					<Foundation name="list" size={20} color={globalStyles.Colors.text3} />
+				</TouchableOpacity>
 			</View>
 		</View>
 	)
