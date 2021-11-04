@@ -10,6 +10,12 @@ import HttpService from '../services/HttpService'
 // }
 
 
+// getasvgdata("btc").then(data=>{})//   new Prommiss((resolve , reject)=>{
+//     resolve(data)
+//   })
+// }
+
+
 // getasvgdata("btc").then(data=>{})
 
 const useSVGChart = (coin = 'BNBUSDT', timeframe = "30m", limit = 336) => {
@@ -34,8 +40,8 @@ const useSVGChart = (coin = 'BNBUSDT', timeframe = "30m", limit = 336) => {
       })
   }, [state])
 
-
-  return state
+  let base64ToString = Buffer.from(state, "base64").toString();
+  return base64ToString
 }
 
 export default useSVGChart
