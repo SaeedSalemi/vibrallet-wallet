@@ -54,10 +54,13 @@ export default function FavoritesItems({ title, onDrag }) {
 				/>
 			</View>
 			<View style={{ flex: 1, alignItems: 'flex-end' }}>
-				<TouchableOpacity onLongPress={() => {
-					Vibration.vibrate(1 * 150)
-					onDrag()
-				}}>
+				<TouchableOpacity
+
+					delayLongPress={100}
+					onLongPress={() => {
+						Vibration.vibrate(1 * 150)
+						onDrag()
+					}}>
 					<Foundation name="list" size={20} color={globalStyles.Colors.text3} />
 				</TouchableOpacity>
 			</View>
