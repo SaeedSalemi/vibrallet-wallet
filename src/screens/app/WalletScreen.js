@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useContext } from 'react'
 import {
-	Dimensions,
 	FlatList,
 	TouchableOpacity,
 	View,
@@ -19,9 +18,8 @@ import { useNavigation } from '@react-navigation/core'
 import { useSelector } from 'react-redux'
 import ethManager from './../../blockchains/EthManager'
 import bscManager from './../../blockchains/BscManager'
-import useCoins from '../../hooks/useCoins'
 import { showMessage } from 'react-native-flash-message'
-const { width } = Dimensions.get('window')
+import { Context } from '../../context/Provider'
 
 const ChartItems = ({ iconColor, title, value }) => {
 	return (
@@ -51,16 +49,12 @@ export default function WalletScreen() {
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
 	const [state, setState] = useState({ coins: [] })
-	const coins = useCoins()
+	const { coins, setCoin } = useContext(Context)
 	const wallet = useSelector(state =>
 		state.wallets.data ? state.wallets.data[0] : null
 	)
 	useEffect(() => {
-		// const fileredCoins = coins.filter(coin => coin.hide === false)
-		setState({ ...state, coins: coins })
-		// console.log('CC', state.coins.filter(c => c.hide === false))
-
-		for (let item of state.coins) {
+		for (let item of coins) {
 
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
 			let selectedCoin = coinSelector[item.slug];
@@ -74,8 +68,8 @@ export default function WalletScreen() {
 					// 	// setStat...state,e({ ...state, balance: result })
 					// 	// setIsLoading(false)
 					// 	let inx = coins.findIndex((itm) => itm.slug === item.slug)
-					// 	state.coins[inx]['amount'] = parseFloat(result).toFixed(3)
-					// 	state.coins[inx]['balance'] = parseFloat(state.coins[inx]['amount'] * state.coins[inx]['price'])
+					// 	coins[inx]['amount'] = parseFloat(result).toFixed(3)
+					// 	coins[inx]['balance'] = parseFloat(coins[inx]['amount'] * coins[inx]['price'])
 					// 	setState({ ...state })
 					// })
 
@@ -90,7 +84,7 @@ export default function WalletScreen() {
 
 	const totalBalance = useMemo(() => {
 		let balance = 0
-		state.coins.map((item, index) => {
+		coins.map((item, index) => {
 			balance += (parseFloat(item.amount) * parseFloat(item.price))
 		})
 		return balance
@@ -98,7 +92,7 @@ export default function WalletScreen() {
 
 
 	const pieData = useMemo(() => {
-		return state.coins.map((item, index) => {
+		return coins.map((item, index) => {
 			const balance = ((parseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
 			return {
 				series: item.balance,
@@ -122,16 +116,14 @@ export default function WalletScreen() {
 			style: { backgroundColor: "#6BC0B1" },
 			position: 'top'
 		})
-		const coins = state.coins
-		console.log('state coin', state.coins)
-		console.log('to hide', coin)
 		coins.map(item => {
 			if (item.slug === coin.slug) {
 				item.hide = true
 			}
 		})
+		setCoin(coins)
 
-		setState({ coins: coins })
+		// setState({ coins: coins })
 	}
 
 
@@ -165,7 +157,7 @@ export default function WalletScreen() {
 	// 		radius: 100,
 	// 	},
 	// ]
-	const data = state.coins
+	const data = coins
 	const series = pieData.map(item => item.series)
 	const sliceColor = pieData.map(item => item.color)
 
@@ -178,7 +170,7 @@ export default function WalletScreen() {
 		],
 	}
 
-	const filteredCoins = state.coins.filter(c => c.hide === false)
+	const filteredCoins = coins.filter(c => c.hide === false)
 
 	console.log('filterd hiddens', filteredCoins)
 
