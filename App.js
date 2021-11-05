@@ -10,7 +10,7 @@ import SplashScreen from './src/screens/SplashScreen'
 import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import HideKeyboard from './src/utils/HideKeyboard'
 import InAppNotificaiton from './src/components/common/AppNotification/InAppNotification'
-import MarketProvider from './src/context/marketContext'
+import MainProvider from './src/context/Provider'
 
 const { store, persistor } = configStore()
 
@@ -18,7 +18,7 @@ export default function App() {
 	return (
 		<Provider store={store}>
 			<PersistGate loading={<SplashScreen />} persistor={persistor}>
-				<MarketProvider>
+				<MainProvider>
 					<SafeAreaProvider
 						style={{ backgroundColor: globalStyles.Colors.bckColor }}
 					>
@@ -28,7 +28,7 @@ export default function App() {
 							<RootNavigation />
 						</HideKeyboard>
 					</SafeAreaProvider>
-				</MarketProvider>
+				</MainProvider>
 			</PersistGate>
 		</Provider>
 	)
