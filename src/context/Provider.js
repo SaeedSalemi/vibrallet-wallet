@@ -8,13 +8,13 @@ const MainProvider = props => {
   })
 
 
-  const coins = useCoins()
+  const { coins, setCoin } = useCoins()
 
   const dispatch = value => setState({ ...state, ...value })
 
 
   return (
-    <Context.Provider value={{ ...state, coins, dispatch }}>
+    <Context.Provider value={{ ...state, coins, setCoin, dispatch }}>
       {props.children}
     </Context.Provider>
   )

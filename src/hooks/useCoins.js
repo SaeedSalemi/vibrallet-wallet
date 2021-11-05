@@ -53,7 +53,9 @@ const useCoins = () => {
         },
       ]
   })
-
+  const setCoin = (value) => {
+    setState({ ...state, coins: value })
+  }
 
   const { coins } = state
 
@@ -78,7 +80,7 @@ const useCoins = () => {
 
 
 
-  return coins
+  return { coins, setCoin }
 
 }
 
