@@ -3,20 +3,21 @@ import useCoins from '../hooks/useCoins'
 
 export const Context = createContext()
 
-const MarketProvider = props => {
+const MainProvider = props => {
   const [state, setState] = useState({
-    coins: useCoins()
   })
 
+
+  const coins = useCoins()
 
   const dispatch = value => setState({ ...state, ...value })
 
 
   return (
-    <Context.Provider value={{ ...state, dispatch }}>
+    <Context.Provider value={{ ...state, coins, dispatch }}>
       {props.children}
     </Context.Provider>
   )
 }
 
-export default MarketProvider
+export default MainProvider
