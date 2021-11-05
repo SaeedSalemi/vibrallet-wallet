@@ -5,7 +5,7 @@ import { globalStyles } from '../../../config/styles'
 import useCoins from '../../../hooks/useCoins'
 // import { coins } from '../HomeStack/CreatePriceAlertScreen'
 import MarketData from './MarketData'
-import { Context } from '../../../context/marketContext'
+import { Context } from '../../../context/Provider'
 
 export default function FavTabScreen() {
 	// const coins = useCoins()

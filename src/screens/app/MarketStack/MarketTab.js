@@ -4,7 +4,7 @@ import SortHeader from '../../../components/Market/SortHeader'
 import { globalStyles } from '../../../config/styles'
 import useCoins from '../../../hooks/useCoins'
 // import { coins } from '../HomeStack/CreatePriceAlertScreen'
-import { Context } from '../../../context/marketContext'
+import { Context } from '../../../context/Provider'
 import MarketData from './MarketData'
 
 export default function MarketTabScreen() {

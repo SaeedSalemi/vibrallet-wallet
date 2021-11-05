@@ -11,7 +11,7 @@ import {
 	Platform
 } from 'react-native';
 
-import { Context } from '../../../context/marketContext'
+import { Context } from '../../../context/Provider'
 
 const Separator = () => {
 	return <View style={Platform.OS === "android" ? styles.separator : null} />;
