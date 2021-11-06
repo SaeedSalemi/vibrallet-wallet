@@ -2253,6 +2253,15 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@target-corp/react-native-svg-parser@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@target-corp/react-native-svg-parser/-/react-native-svg-parser-1.0.6.tgz#5c7fa560b3f6f9f6048bed4a432d1aedbbdb7795"
+  integrity sha512-ioALGFzIFxqVrFrnXilsio4bK+RoyPqSm4uZQmN3hfh1ACZmIGi1dKxzcqLnKR64SEjcZnZPHOFsu7wqwAGezw==
+  dependencies:
+    camelcase "^5.0.0"
+    css-parse-no-fs "^2.0.0"
+    xmldom "^0.1.27"
+
 "@tradle/react-native-http@^2.0.1":
   version "2.0.1"
   resolved "https://registry.npmjs.org/@tradle/react-native-http/-/react-native-http-2.0.1.tgz"
@@ -3891,6 +3900,11 @@ css-in-js-utils@^2.0.0:
   dependencies:
     hyphenate-style-name "^1.0.2"
     isobject "^3.0.1"
+
+css-parse-no-fs@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/css-parse-no-fs/-/css-parse-no-fs-2.0.0.tgz#7bcd3432bb9ebed75ccfd21c166ee849a16dd282"
+  integrity sha512-tfUa/gR0gYt+BEP+2StI+QDYj3XD7JwC4uGvtOmQ+7oAlEd6cWTa/rn8jSnctjy7hPY9UcTuYZg2dcFCeovLQA==
 
 css-select-base-adapter@^0.1.1:
   version "0.1.1"
@@ -10366,7 +10380,7 @@ xmldoc@^1.1.2:
   dependencies:
     sax "^1.2.1"
 
-xmldom@^0.1.22:
+xmldom@^0.1.22, xmldom@^0.1.27:
   version "0.1.31"
   resolved "https://registry.npmjs.org/xmldom/-/xmldom-0.1.31.tgz"
   integrity sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==
