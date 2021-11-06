@@ -22,27 +22,14 @@ export default function EditFavorites() {
 	const { coins } = useContext(Context)
 	const filteredFavCoins = coins.filter(coin => coin.fav === true)
 
-
-
-	const items = useMemo(() => {
-		return [
-			'BTC/USDT',
-			'BTC/USDT',
-			'BTC/USDT',
-			'BTC/USDT',
-			'BTC/USDT',
-			'BTC/USDT',
-		]
-	}, [])
-
-
 	const renderCoinItem = ({ item, index, drag, isActive }) => {
+
 		return (
 			<View key={index}>
 				<View style={{ paddingHorizontal: 18, marginVertical: 18 }}>
-					<FavoritesItems title={item} onDrag={drag} />
+					<FavoritesItems item={item} onDrag={drag} />
 				</View>
-				{index + 1 !== items.length ? (
+				{index + 1 !== filteredFavCoins.length ? (
 					<HR style={{ marginVertical: 16 }} />
 				) : null}
 			</View>
@@ -69,7 +56,7 @@ export default function EditFavorites() {
 			</View>
 
 			<DraggableFlatList
-				data={items}
+				data={filteredFavCoins}
 				style={{ marginVertical: 18 }}
 				renderItem={renderCoinItem}
 				keyExtractor={(_, index) => index.toString()}
