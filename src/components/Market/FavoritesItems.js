@@ -6,7 +6,7 @@ import AppText from '../common/AppText'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Foundation from 'react-native-vector-icons/Foundation'
 
-export default function FavoritesItems({ title, onDrag }) {
+export default function FavoritesItems({ item, onDrag }) {
 
 	const ONE_SECOND_IN_MS = 1000;
 
@@ -43,7 +43,7 @@ export default function FavoritesItems({ title, onDrag }) {
 					></View>
 				</View>
 				<AppText color="text1" bold typo="sm" style={{ paddingHorizontal: 8 }}>
-					{title}
+					{item.symbol}
 				</AppText>
 			</View>
 			<View style={{ flex: 1, alignItems: 'center' }}>
