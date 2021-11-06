@@ -85,6 +85,7 @@
     "react-native-web": "~0.13.12",
     "react-native-websocket": "^1.0.2",
     "react-native-webview": "^11.14.0",
+    "react-query": "^3.31.0",
     "react-redux": "^7.2.5",
     "readable-stream": "^1.0.33",
     "redux": "^4.1.1",
