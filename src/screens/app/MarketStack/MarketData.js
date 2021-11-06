@@ -12,7 +12,6 @@ import { Context } from '../../../context/Provider'
 export default function MarketData({ items }) {
 	const { dispatch } = useContext(Context)
 	const { navigate } = useNavigation()
-	console.log('debug market', items)
 	return (
 		<FlatList
 			data={items}
