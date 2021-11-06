@@ -3,6 +3,7 @@ import { View, ActivityIndicator, Modal } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { globalStyles } from '../../config/styles'
 import AppText from '../common/AppText'
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function PriceCalculator({ coin, style }) {
 	const [items, setItems] = useState([])
@@ -100,7 +101,7 @@ export default function PriceCalculator({ coin, style }) {
 					...globalStyles.flex.between,
 					alignItems: 'center',
 					marginVertical: 16,
-					marginBottom: 40
+					marginBottom: 40,
 				}}
 			>
 				<AppText>0.0%</AppText>
@@ -149,7 +150,28 @@ export default function PriceCalculator({ coin, style }) {
 					position: 'relative',
 				}}
 			>
-				<View
+
+				<LinearGradient
+					// Button Linear Gradient
+					colors={[
+						globalStyles.Colors.successOpacity,
+						'rgba(39, 191, 116,.6)',
+						globalStyles.Colors.successOpacity,
+						'rgba(39, 191, 116,.1)',
+					]}
+					start={{ x: 5, y: 2 }}
+					style={{
+						height: 180,
+						paddingVertical: 20,
+						width: 140,
+						position: 'absolute',
+						// backgroundColor: globalStyles.Colors.successOpacity,
+						top: 0,
+						bottom: 0,
+						left: 0,
+					}}>
+				</LinearGradient>
+				{/* <View
 					style={{
 						height: 180,
 						paddingVertical: 20,
@@ -160,7 +182,7 @@ export default function PriceCalculator({ coin, style }) {
 						bottom: 0,
 						left: 0,
 					}}
-				></View>
+				></View> */}
 				<FlatList
 					contentContainerStyle={{ alignItems: 'center' }}
 					showsHorizontalScrollIndicator={false}
