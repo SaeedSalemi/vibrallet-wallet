@@ -26,7 +26,7 @@ export default function ProfileMainRoute({
 						...globalStyles.flex.row,
 						...globalStyles.flex.between,
 						alignItems: 'center',
-						paddingVertical: 16,
+						paddingVertical: 10,
 					}}
 				>
 					<View style={{ ...globalStyles.flex.row, alignItems: 'center' }}>

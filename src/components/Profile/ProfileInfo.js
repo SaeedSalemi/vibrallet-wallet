@@ -27,7 +27,7 @@ const ProfileInfo = () => {
 					}}
 				>
 					<View>
-						<AppText bold typo="sm">
+						<AppText bold typo="xs">
 							@SamJones
 						</AppText>
 						<AppText color="text3" bold typo="dot">

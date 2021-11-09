@@ -30,7 +30,7 @@ export default function ProfileScreen() {
 				<View style={{ marginVertical: 8 }}>
 					<ProfileDetailsSection />
 				</View>
-				<View style={{ marginVertical: 16 }}>
+				<View style={{ marginVertical: 8 }}>
 					<UserCoins />
 				</View>
 				<ProfileMainRouteSection />
