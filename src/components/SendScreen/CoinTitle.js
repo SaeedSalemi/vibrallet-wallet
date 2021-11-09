@@ -24,7 +24,7 @@ export default function CoinTitle({
 			</MarketIcon>
 			<View style={{ marginVertical: 4 }}></View>
 			{title ? (
-				<AppText color="text2" typo="sm">
+				<AppText color="text2" typo="tiny">
 					{title}
 				</AppText>
 			) : null}
@@ -32,7 +32,7 @@ export default function CoinTitle({
 				<AppText
 					style={{ marginVertical: 4 }}
 					bold
-					typo="lg"
+					typo="sm"
 					color={failureTitle ? 'failure' : 'text1'}
 				>
 					{value}

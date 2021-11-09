@@ -180,6 +180,7 @@ export default function SendScreen({ navigation, route }) {
 
 
 
+	//TODO: calculate the state amount into the coin title
 	return (
 		<Screen style={{ ...globalStyles.gapScreen }}>
 			<ScrollView>
@@ -188,7 +189,7 @@ export default function SendScreen({ navigation, route }) {
 						title={`${coin.title} Balance`}
 						icon={coin.title?.toLowerCase()}
 						value={`${state.balance} ${coin.slug}`}
-						amount="$1"
+						amount={state.amount}
 					/>
 				</View>
 				{inputItems.map((item, i) => (
