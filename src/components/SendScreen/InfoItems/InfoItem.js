@@ -13,7 +13,7 @@ export default function InfoItems({ title, value, amount, detail }) {
 			}}
 		>
 			<View>
-				<AppText bold color="text1">
+				<AppText color="text1">
 					{title}
 				</AppText>
 				{detail ? (
