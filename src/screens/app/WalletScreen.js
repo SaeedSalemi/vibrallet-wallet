@@ -172,8 +172,6 @@ export default function WalletScreen() {
 
 	const filteredCoins = coins.filter(c => c.hide === false)
 
-	console.log('filterd hiddens', filteredCoins)
-
 	return (
 		<Screen>
 			<Header route={routes.wallet} />
