@@ -40,7 +40,7 @@ export default function UsernameScreen({ route }) {
 				<View style={{ ...globalStyles.flex.center }}>
 					<Image source={Images.avatar3} style={{ marginVertical: 12 }} />
 					<AppText bold typo="md">
-						@ SamJones
+						@SamJones
 					</AppText>
 					<AppText typo="dot" color="text3">
 						Click to copy
