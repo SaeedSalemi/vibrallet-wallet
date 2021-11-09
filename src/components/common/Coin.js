@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
-import { View, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
 import useSVGChart from '../../hooks/useSVGChart'
@@ -15,7 +15,6 @@ import SwapableRow from './Swapable/SwapableRow'
 import Svg from 'react-native-svg'
 import { SvgXml } from 'react-native-svg'
 import { SvgUri } from 'react-native-svg'
-
 export default function Coin({
 	coin,
 	index,
@@ -29,6 +28,7 @@ export default function Coin({
 }) {
 	const { navigate } = useNavigation()
 	const SVGUri = useSVGChart(coin.symbol)
+	console.log('svg2', SVGUri)
 	return (
 		<SwapableRow
 			leftItems={[
@@ -58,15 +58,15 @@ export default function Coin({
 							<MarketIcon size={50} color={globalStyles.Colors.inputColor2}>
 								{coin.icon}
 							</MarketIcon>
-							<View style={{ paddingStart: 8 }}>
-								<AppText bold typo="md">
+							<View style={{ paddingStart: 4 }}>
+								<AppText bold typo="sm">
 									{coin.slug}
 								</AppText>
-								<AppText typo="tiny" color="text3">
+								<AppText typo="dot" color="text3">
 									{coin.title}
 								</AppText>
 								{noPrice ? null : (
-									<AppText color="text2" bold style={{ marginTop: 4 }}>
+									<AppText color="text2" bold style={{ marginTop: 2 }}>
 										{coin.currency}
 										{coin.price}
 									</AppText>
@@ -90,8 +90,6 @@ export default function Coin({
 						// 	},
 						// ]
 						<View style={{}}>
-
-
 							{/* <SvgUri
 								width={100}
 								style={{
@@ -100,25 +98,26 @@ export default function Coin({
 								// uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
 								uri={SVGUri}
 							/> */}
-
-
 							{/* <SvgUri /> */}
-							{/* <Svg height="100%" width="100%" viewBox="0 0 100 100">
-								<SvgUri />
-							</Svg> */}
+							{/* <Svg height="100%" width="100%"> */}
+							{/* <SvgNode /> */}
+							{/* </Svg> */}
+							{/* <SvgUri /> */}
+							{/* <Image source={{ uri: SVGUri }} /> */}
+
 							{/* <SvgXml xml={SVGUri} /> */}
 						</View>
 					)}
 					{hideDetails ? null : (
 						<View style={{ flex: 1, alignItems: 'flex-end' }}>
-							<AppText typo="md" bold>
+							<AppText typo="sm" bold>
 								{coin.amount}
 							</AppText>
 							<AppText
 								typo="dot"
 								bold
 								color={coin.change > 0 ? 'success' : 'failure'}
-								style={{ marginVertical: 4 }}
+								style={{ marginVertical: 2 }}
 							>
 								{coin.change > 0 ? '+' : ''}
 								{coin.change}
@@ -136,7 +135,7 @@ export default function Coin({
 						</View>
 					) : null}
 				</View>
-				<View style={{ marginVertical: 12 }}>
+				<View style={{ marginVertical: 8 }}>
 					{index + 1 !== (length || coins.length) ? <HR /> : null}
 				</View>
 			</TouchableOpacity>
