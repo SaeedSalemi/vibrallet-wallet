@@ -68,7 +68,7 @@ export default function AddressScreen({ route, navigation }) {
 							/>
 						</View>
 					) : null}
-					<AppText style={{ alignItems: 'center' }}>
+					<AppText typo="tiny" style={{ alignItems: 'center' }}>
 						Your {coin.title} Address
 					</AppText>
 				</View>
