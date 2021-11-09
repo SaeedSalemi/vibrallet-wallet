@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FlatList, Image, View } from 'react-native'
 import { Images } from '../../../assets'
 import AppText from '../../../components/common/AppText'
@@ -6,9 +6,12 @@ import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import RatingSortHeader from '../../../components/Market/RatingSortHeader'
 import { globalStyles } from '../../../config/styles'
-import { coins } from '../HomeStack/CreatePriceAlertScreen'
-
+// import { coins } from '../HomeStack/CreatePriceAlertScreen'
+import { Context } from '../../../context/Provider'
 export default function FCASRatingScreen() {
+
+	const { FCASList } = useContext(Context)
+
 	const colors = [
 		'#67B010',
 		'#4ED69D',
@@ -19,7 +22,7 @@ export default function FCASRatingScreen() {
 	]
 	const statuses = ['S', 'A', 'B', 'D', 'C']
 
-	const data = coins
+	const data = FCASList
 
 	return (
 		<View style={globalStyles.screen}>
