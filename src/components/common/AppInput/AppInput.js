@@ -46,12 +46,12 @@ export default function AppInput({
 						justifyContent: endMessage ? 'space-between' : 'flex-start',
 					}}
 				>
-					<AppText typo="xs" color="text2">
+					<AppText typo="tiny" color="text2">
 						{label}
 					</AppText>
 					{endMessage ? (
 						<TouchableOpacity>
-							<AppText color="secondaryColor">{endMessage}</AppText>
+							<AppText typo="tiny" color="secondaryColor">{endMessage}</AppText>
 						</TouchableOpacity>
 					) : null}
 					{labelBadge ? (
