@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
-		marginVertical: 15,
+		marginVertical: 6,
 	},
 	ourService: {
 		flexDirection: 'row',
@@ -368,8 +368,8 @@ const styles = StyleSheet.create({
 		flex: 3,
 	},
 	listBarTitle: {
-		paddingHorizontal: 5,
-		marginBottom: 20,
+		paddingHorizontal: 4,
+		marginBottom: 12,
 	},
 	item: {
 		flex: 1,
