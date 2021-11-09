@@ -79,9 +79,9 @@ export default function UserCoins() {
 							<AppText typo="xs">{item.title}</AppText>
 							<AppText
 								color="text2"
-								style={{ marginVertical: 4 }}
+								style={{ marginVertical: 2 }}
 								bold
-								typo="lg"
+								typo="md"
 							>
 								{item.value}
 							</AppText>
