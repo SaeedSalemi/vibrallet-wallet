@@ -20,8 +20,8 @@ export default function Steps({ data }) {
 										i === 0
 											? globalStyles.Colors.primaryColor
 											: i === 1
-											? globalStyles.Colors.step2
-											: undefined,
+												? globalStyles.Colors.step2
+												: undefined,
 								},
 							]}
 						>
@@ -55,7 +55,7 @@ export default function Steps({ data }) {
 									{item.icon}
 								</View>
 							) : null}
-							<View style={{ padding: 10 }}>
+							<View style={{ padding: 8 }}>
 								<AppText typo="tiny" bold>
 									{item.title}
 								</AppText>
