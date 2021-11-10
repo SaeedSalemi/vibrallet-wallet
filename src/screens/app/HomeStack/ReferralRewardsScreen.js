@@ -26,7 +26,7 @@ export default function ReferralRewardsScreen() {
 	return (
 		<View style={[globalStyles.screen, styles.container]}>
 			<ScrollView style={styles.scroll}>
-				<AppText typo="md" bold>
+				<AppText typo="sm">
 					Refer a friend
 				</AppText>
 				{/* <AppText typo="tiny" color="text2">
