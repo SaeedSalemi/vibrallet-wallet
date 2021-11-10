@@ -11,7 +11,7 @@ export default function PercentValueItems({ items, onSelectPercent }) {
 			style={{
 				...globalStyles.flex.row,
 				...globalStyles.flex.between,
-				paddingHorizontal: 6,
+				paddingHorizontal: 8,
 			}}
 		>
 			{items.map((item, i) => (
