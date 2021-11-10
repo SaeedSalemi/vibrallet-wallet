@@ -2,7 +2,6 @@ import React from 'react'
 import { Modal, View } from 'react-native'
 import { globalStyles } from '../../config/styles'
 import AppButton from '../common/AppButton'
-import AppText from '../common/AppText'
 
 export default function SetAlert({ visible, onPress }) {
 	return (
