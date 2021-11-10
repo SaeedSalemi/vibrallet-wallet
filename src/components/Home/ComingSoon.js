@@ -15,7 +15,7 @@ export default function ComingSoon({ details, time, imageName }) {
 					justifyContent: 'space-evenly',
 				}}
 			>
-				<AppText typo="xl" bold style={styles.title}>
+				<AppText typo="lg" bold style={styles.title}>
 					COMING SOON!
 				</AppText>
 				<Image style={styles.image} source={Images[imageName]} />
@@ -23,7 +23,7 @@ export default function ComingSoon({ details, time, imageName }) {
 			<View
 				style={{ flex: 1, paddingHorizontal: 40, ...globalStyles.flex.center }}
 			>
-				<AppText style={{ textAlign: 'center' }}>{details}</AppText>
+				<AppText typo="tiny" style={{ textAlign: 'center', color: '#95949A' }}>{details}</AppText>
 			</View>
 			<View style={{ flex: 2 }}>
 				<Timer time={time} />
