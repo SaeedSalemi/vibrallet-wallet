@@ -9,10 +9,6 @@ import HR from '../common/HR/HR'
 
 export default function AlertItem({ item, index, length }) {
 	const { navigate } = useNavigation()
-
-
-	console.log('alert item', item.icon)
-
 	return (
 		<TouchableOpacity
 			activeOpacity={0.75}
@@ -28,14 +24,14 @@ export default function AlertItem({ item, index, length }) {
 				{/* <AppIcon name={item.icon} /> */}
 				{item.icon}
 				<View style={{ flex: 1, paddingHorizontal: 12 }}>
-					<AppText bold typo="md">
+					<AppText bold typo="sm">
 						{item.title}
 					</AppText>
-					<AppText typo="tiny" color="text3">
+					<AppText typo="dot" color="text3">
 						{item.slug}
 					</AppText>
 				</View>
-				<AppText typo="md" bold>
+				<AppText typo="sm" bold>
 					{item.price}
 					{/* {item.lastPrice} */}
 				</AppText>
