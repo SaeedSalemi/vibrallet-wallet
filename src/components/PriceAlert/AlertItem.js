@@ -3,9 +3,11 @@ import React from 'react'
 import { View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { routes } from '../../config/routes'
+import { globalStyles } from '../../config/styles'
 import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import HR from '../common/HR/HR'
+import MarketIcon from '../common/MarketIcon/MarketIcon'
 
 export default function AlertItem({ item, index, length }) {
 	const { navigate } = useNavigation()
@@ -22,7 +24,9 @@ export default function AlertItem({ item, index, length }) {
 				}}
 			>
 				{/* <AppIcon name={item.icon} /> */}
-				{item.icon}
+				<MarketIcon size={50} color={globalStyles.Colors.inputColor2}>
+					{item.icon}
+				</MarketIcon>
 				<View style={{ flex: 1, paddingHorizontal: 12 }}>
 					<AppText bold typo="sm">
 						{item.title}
