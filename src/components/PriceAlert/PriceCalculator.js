@@ -114,9 +114,9 @@ export default function PriceCalculator({ coin, style }) {
 				></View>
 				<View style={{ alignItems: 'center' }}>
 					<View style={{ ...globalStyles.flex.row }}>
-						<AppText typo="xxl">{priceAlertValue}</AppText>
+						<AppText typo="xl">{priceAlertValue}</AppText>
 						<AppText
-							typo="xxl"
+							typo="xl"
 							style={{ marginLeft: 8, fontWeight: '300' }}
 							color="text3"
 						>
