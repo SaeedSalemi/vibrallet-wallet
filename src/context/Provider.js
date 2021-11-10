@@ -14,21 +14,9 @@ const MainProvider = props => {
 
 
   const { coins, setCoin } = useCoins()
-  const { list: FCASList } = useFCASRating()
+  const { FCASList } = useFCASRating()
 
   const dispatch = value => setState({ ...state, ...value })
-
-
-
-
-
-  useEffect(() => {
-
-  }, [])
-
-
-
-
 
   return (
     <Context.Provider value={{ ...state, coins, FCASList, setCoin, dispatch }}>
