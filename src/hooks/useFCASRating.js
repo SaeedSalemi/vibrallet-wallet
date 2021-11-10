@@ -3,10 +3,7 @@ import HttpService from '../services/HttpService'
 
 const useFCASRating = () => {
 
-  const [state, setState] = useState({
-    list: []
-  })
-  const { list } = state
+  const [state, setState] = useState([])
 
   useEffect(() => {
 
@@ -14,14 +11,14 @@ const useFCASRating = () => {
       "uniqueId": "123",
       "action": "fcasListing",
     }).Post(res => {
+      // setState(res)
       if (res.length > 0)
         setState(res)
-
     })
 
-  }, [list])
+  }, [state])
 
-  return { list }
+  return { FCASList: state }
 }
 
 export default useFCASRating
