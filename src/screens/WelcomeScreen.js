@@ -43,14 +43,14 @@ const WelcomeScreen = ({ navigation }) => {
 						resizeMethod="auto"
 						resizeMode="contain"
 					/>
-					<AppText style={styles.binrexText}>
+					<AppText typo="xs" style={styles.binrexText}>
 						The only crypto wallet yo can trust and manage your assets.
 					</AppText>
 				</View>
 
 				<View style={styles.buttons}>
 					<AppButton
-						typo="md"
+						typo="sm"
 						title="Create New Wallet"
 						onPress={handleCreateNewWallet}
 					/>
@@ -89,10 +89,8 @@ const styles = StyleSheet.create({
 	},
 	binrexText: {
 		textAlign: 'center',
-		fontWeight: 'bold',
 		padding: 10,
 		color: defaultStyles.Colors.textColor,
-		fontSize: defaultStyles.typo.xs,
 	},
 	buttons: {
 		// flex: 2,
