@@ -31,17 +31,17 @@ const useSVGChart = (coin = 'BNBUSDT', timeframe = "30m", limit = 336) => {
           "symbol": coin,
           "timeframe": timeframe,
           "limit": limit,
-          "responseType": "base64"
+          "responseType": "url"
         }
       }).Post(res => {
         if (res?.success === true) {
-          setState(res.data.base64)
+          setState(res.data.url)
         }
       })
   }, [state])
-
-  let base64ToString = Buffer.from(state, "base64").toString();
-  return base64ToString
+  // let base64ToString = Buffer.from(state, "base64").toString();
+  // return base64ToString
+  return state
 }
 
 export default useSVGChart
