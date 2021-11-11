@@ -5,7 +5,6 @@ import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
 import useSVGChart from '../../hooks/useSVGChart'
 import { coins } from '../../screens/app/HomeStack/CreatePriceAlertScreen'
-import AppIcon from './AppIcon'
 import AppSwitch from './AppSwitch'
 import AppText from './AppText'
 import HR from './HR/HR'
@@ -27,8 +26,7 @@ export default function Coin({
 	onHideHandler
 }) {
 	const { navigate } = useNavigation()
-	const SVGUri = useSVGChart(coin.symbol)
-	console.log('svg2', SVGUri)
+	const getSVGUri = useSVGChart(coin.symbol)
 	return (
 		<SwapableRow
 			leftItems={[
@@ -89,23 +87,33 @@ export default function Coin({
 
 						// 	},
 						// ]
-						<View style={{}}>
-							{/* <SvgUri
+						<View style={{
+							flex: 1,
+							flexDirection: 'row',
+							justifyContent: 'center',
+							alignItems: 'center',
+							marginVertical: 0,
+							marginLeft: 50,
+							maxHeight: 0,
+						}}>
+							<SvgUri
 								width={100}
 								style={{
+									// paddingBottom: 20,
+									// paddingTop: 20,
+									// marginTop: 80,
+									// marginBottom: 80,
+									alignItems: 'center',
+									flexDirection: 'row',
+									justifyContent: 'center',
 									// backgroundColor: 'yellow'
 								}}
+								// height={100}
+								// style={{ backgroundColor: 'yellow' }}
 								// uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
-								uri={SVGUri}
-							/> */}
-							{/* <SvgUri /> */}
-							{/* <Svg height="100%" width="100%"> */}
-							{/* <SvgNode /> */}
-							{/* </Svg> */}
-							{/* <SvgUri /> */}
-							{/* <Image source={{ uri: SVGUri }} /> */}
+								uri={getSVGUri}
+							/>
 
-							{/* <SvgXml xml={SVGUri} /> */}
 						</View>
 					)}
 					{hideDetails ? null : (
