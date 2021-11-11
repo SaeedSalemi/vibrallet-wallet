@@ -73,7 +73,6 @@ export default function SelectCoinScreen({ navigation, route }) {
 				let inx = coins.findIndex((itm) => itm.slug === item.slug)
 				state.coins[inx]['price'] = parseFloat(res.data.rate).toFixed(2)
 				state.coins[inx]['change'] = parseFloat(res.data.percentChange).toFixed(2)
-				console.log("coin 2", state.coins[inx])
 				setState({ ...state })
 			})
 		}
