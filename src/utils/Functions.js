@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Share, Platform } from 'react-native'
 const CryptoJS = require("crypto-js")
 
@@ -54,4 +55,13 @@ export function share(title = '', msg = '', url = 'https://app.vibrallet.com') {
   } catch (e) {
     console.error(e);
   }
+}
+
+export const setToStorage = async (item, data) => await AsyncStorage.setItem(item, data)
+
+export const getFromStorage = async (item) => {
+  const getData = await AsyncStorage.getItem(item)
+  if (getData !== null)
+    return getData
+  else return false
 }

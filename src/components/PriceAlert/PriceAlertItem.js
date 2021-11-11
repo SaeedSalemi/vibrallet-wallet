@@ -11,7 +11,6 @@ import AppText from '../common/AppText'
 import HR from '../common/HR/HR'
 
 export default function PPriceAlertItem({ item, index, length, initialOpen }) {
-	console.log('price alert', item)
 	const [isOpen, setIsOpen] = useState(initialOpen || false)
 
 	const [up, setUp] = useState(true)
