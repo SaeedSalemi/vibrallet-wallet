@@ -8,7 +8,7 @@ import { Context } from '../../../context/Provider'
 import MarketData from './MarketData'
 
 export default function MarketTabScreen() {
-	const { coins } = useContext(Context)
+	const { MarketListing: coins } = useContext(Context)
 	// const coins = useCoins()
 
 	return (
