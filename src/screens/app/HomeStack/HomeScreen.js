@@ -265,7 +265,8 @@ const HomeScreen = ({ navigation }) => {
 					<Carousel
 						ref={carouselRef}
 						sliderWidth={screenWidth}
-						itemWidth={screenWidth - 55}
+						// itemWidth={screenWidth - 55}
+						itemWidth={screenWidth - 40}
 						data={entries}
 						renderItem={renderItem}
 						onSnapToItem={index => setActive(index)}
