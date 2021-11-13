@@ -1,6 +1,6 @@
-import { useNavigation } from '@react-navigation/core'
 import React, { useContext } from 'react'
-import { FlatList, TouchableOpacity, View } from 'react-native'
+import { useNavigation } from '@react-navigation/core'
+import { FlatList, TouchableOpacity, View, Platform, RefreshControl } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
@@ -15,8 +15,11 @@ export default function MarketData({ items }) {
 			{items && <FlatList
 				data={items}
 				renderItem={({ item, index }) => <Marketitem item={item} index={index} />}
-				// keyExtractor={(_, i) => i.toString()}
 				keyExtractor={(item) => item.id.toString()}
+				refreshControl={
+					<RefreshControl refreshing={false} />
+				}
+				removeClippedSubviews={ }
 			/>}
 		</>
 	)
