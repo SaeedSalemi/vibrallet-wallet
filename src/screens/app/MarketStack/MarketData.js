@@ -14,7 +14,7 @@ export default function MarketData({ items }) {
 		<>
 			{items && <FlatList
 				data={items}
-				renderItem={({ item, index }) => <Marketitem item={item} index={index} />}
+				renderItem={({ item, index }) => <RenderMarketItem item={item} index={index} />}
 				keyExtractor={(item) => item.id.toString()}
 				refreshControl={
 					<RefreshControl refreshing={false} />
@@ -27,11 +27,10 @@ export default function MarketData({ items }) {
 	)
 }
 
-const Marketitem = React.memo((item, index) => {
+const RenderMarketItem = React.memo(({ item, index }) => {
 	const { navigate } = useNavigation()
 	const { dispatch } = useContext(Context)
 	return (
-
 		<SwapableRow
 			measure={75}
 			leftItems={[{
@@ -139,7 +138,7 @@ const Marketitem = React.memo((item, index) => {
 					</View>
 				</View>
 				<View style={{ marginVertical: 12 }}>
-					{index + 1 !== items.length ? <HR /> : null}
+					{/* {index + 1 !== items.length ? <HR /> : null} */}
 				</View>
 			</TouchableOpacity>
 		</SwapableRow>
