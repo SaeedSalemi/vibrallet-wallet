@@ -11,24 +11,36 @@ import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import HideKeyboard from './src/utils/HideKeyboard'
 import InAppNotificaiton from './src/components/common/AppNotification/InAppNotification'
 import MainProvider from './src/context/Provider'
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const { store, persistor } = configStore()
+
+const QueryConfigs = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: 0,
+		},
+	},
+})
+
 
 export default function App() {
 	return (
 		<Provider store={store}>
 			<PersistGate loading={<SplashScreen />} persistor={persistor}>
-				<MainProvider>
-					<SafeAreaProvider
-						style={{ backgroundColor: globalStyles.Colors.bckColor }}
-					>
-						<InAppNotificaiton />
-						<StatusBar backgroundColor={globalStyles.Colors.bckColor} barStyle="light-content" />
-						<HideKeyboard>
-							<RootNavigation />
-						</HideKeyboard>
-					</SafeAreaProvider>
-				</MainProvider>
+				<QueryClientProvider client={QueryConfigs}>
+					<MainProvider>
+						<SafeAreaProvider
+							style={{ backgroundColor: globalStyles.Colors.bckColor }}
+						>
+							<InAppNotificaiton />
+							<StatusBar backgroundColor={globalStyles.Colors.bckColor} barStyle="light-content" />
+							<HideKeyboard>
+								<RootNavigation />
+							</HideKeyboard>
+						</SafeAreaProvider>
+					</MainProvider>
+				</QueryClientProvider>
 			</PersistGate>
 		</Provider>
 	)
