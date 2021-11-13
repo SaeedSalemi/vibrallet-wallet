@@ -142,7 +142,6 @@ const HomeScreen = ({ navigation }) => {
 	useEffect(() => {
 
 		Network.getNetworkStateAsync().then(status => {
-			console.log("debug", status)
 			if (!status.isConnected) {
 				showMessage({
 					message: 'Network connection not detected , please connect your phone to the internet connection and try again',
