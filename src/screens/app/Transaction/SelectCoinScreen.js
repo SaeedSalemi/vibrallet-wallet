@@ -1,92 +1,43 @@
 import { useRoute } from '@react-navigation/core'
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ScrollView, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
-import AppIcon from '../../../components/common/AppIcon'
+// import { TouchableOpacity } from 'react-native-gesture-handler'
+// import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
+// import AppIcon from '../../../components/common/AppIcon'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import AppText from '../../../components/common/AppText'
 import Coin from '../../../components/common/Coin'
 import Screen from '../../../components/Screen'
 import { routes } from '../../../config/routes'
+import { useContext } from 'react'
+import { Context } from '../../../context/Provider'
 import HttpService from '../../../services/HttpService'
-import { coins } from '../HomeStack/CreatePriceAlertScreen'
 
 export default function SelectCoinScreen({ navigation, route }) {
-	const allCoins = useMemo(() => coins, [])
-
-	const BSCIcon = () => (
-		<AppIcon style={{ width: 25, height: 25 }} name="binance" />
-	)
-	const EthIcon = () => <FontAwesome5Icon size={25} color="#7037C9" name="ethereum" />
-
+	const { coins } = useContext(Context)
 	const [state, setState] = useState({
-		coins:
-			[
-				{
-					title: 'Ethereum',
-					slug: 'ETH',
-					symbol: "ETHUSDT",
-					price: '1,934',
-					currency: '$',
-					icon: <EthIcon />,
-					increase: false,
-					color: "purple",
-					changeAmount: '6.2%',
-					chart: 'sampleChart2',
-					amount: 0,
-					change: 0,
-					balance: 0.01,
-					vol: '2,300341',
-					lastPrice: '1764.23',
-				},
-				{
-					title: 'Binance',
-					slug: 'BSC',
-					change: 0,
-					price: '1.12',
-					currency: '$',
-					color: "yellow",
-					increase: true,
-					symbol: "BNBUSDT",
-					icon: <BSCIcon />,
-					changeAmount: '1.4%',
-					chart: 'sampleChart3',
-					amount: 0,
-					balance: 0.01,
-					vol: '1.34340023',
-					lastPrice: '489.27',
-				},
-			]
+		rate: 0,
+		percentChange: 0,
 	})
-
 	useEffect(() => {
-		for (let item of state.coins) {
+		for (let item of coins) {
 			new HttpService("", {
 				"uniqueId": "abc1",
 				"action": "quotedPrice",
 				"data": {
-					"symbol": item.symbol
+					"symbol": `${item.symbol}USDT`
 				}
 			}).Post(res => {
-				// console.log(res)
-				let inx = coins.findIndex((itm) => itm.slug === item.slug)
-				state.coins[inx]['price'] = parseFloat(res.data.rate).toFixed(2)
-				state.coins[inx]['change'] = parseFloat(res.data.percentChange).toFixed(2)
-				setState({ ...state })
+				setState(res.data)
 			})
 		}
-
-	}, [state.coins])
-
-	// const [filterdItems, setFilterItems] = useState(allCoins)
-	const [filterdItems, setFilterItems] = useState(state.coins)
-	// const arrayHolder = allCoins
-	const arrayHolder = state.coins
+	}, [])
+	const [filterdItems, setFilterItems] = useState(coins)
+	const arrayHolder = coins
 	const searchFilterFunction = text => {
 		const includes = str => str.toLowerCase().includes(text.toLowerCase())
 		const newData = arrayHolder.filter(item => {
-			if (includes(item.title) || includes(item.slug)) {
+			if (includes(item.name) || includes(item.name)) {
 				return item
 			}
 		})
@@ -143,7 +94,7 @@ export default function SelectCoinScreen({ navigation, route }) {
 								}
 								coin={coin}
 								index={i}
-								length={allCoins.length}
+								length={coins.length}
 								noChart
 								noPrice
 							/>
