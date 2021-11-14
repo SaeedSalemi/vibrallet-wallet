@@ -53,6 +53,7 @@ import AppItemPicker from '../components/common/AppItemPicker'
 import { TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { setModal } from '../redux/modules/appSettings'
+import SplashScreen from '../screens/SplashScreen'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -101,6 +102,12 @@ export function AppStackNavigation() {
 				},
 			})}
 		>
+
+			<AppTab.Screen
+				name={"splash"}
+				component={SplashScreen}
+				options={{ headerShown: false }}
+			/>
 			<AppTab.Screen
 				name={routes.appTab}
 				component={AppTabNavigation}
