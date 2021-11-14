@@ -27,11 +27,11 @@ export default function AddCoinItems({ coins }) {
 						<View style={{ ...globalStyles.flex.row }}>
 							<AppIcon name={item.icon} />
 							<View style={{ paddingStart: 8 }}>
-								<AppText bold typo="md">
-									{item.slug}
+								<AppText bold typo="sm">
+									{item.name}
 								</AppText>
 								<AppText typo="tiny" color="text3">
-									{item.title}
+									{item.symbol}
 								</AppText>
 							</View>
 						</View>
@@ -40,7 +40,7 @@ export default function AddCoinItems({ coins }) {
 							value={item.hide}
 							onValueChange={() => {
 								// setUp(!up)
-								const curr_coin = allCoins.findIndex((itm) => itm.slug === item.slug)
+								const curr_coin = allCoins.findIndex((itm) => itm.name === item.name)
 								allCoins[curr_coin].hide = !allCoins[curr_coin].hide
 								console.log(allCoins[curr_coin])
 								setCoin(allCoins)
