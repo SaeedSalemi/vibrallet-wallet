@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
@@ -8,12 +8,12 @@ import { coins } from '../../screens/app/HomeStack/CreatePriceAlertScreen'
 import AppSwitch from './AppSwitch'
 import AppText from './AppText'
 import HR from './HR/HR'
-import MarketIcon from './MarketIcon/MarketIcon'
-
 import SwapableRow from './Swapable/SwapableRow'
-import Svg from 'react-native-svg'
-import { SvgXml } from 'react-native-svg'
 import { SvgUri } from 'react-native-svg'
+import HttpService from '../../services/HttpService'
+
+import { useSelector } from 'react-redux'
+import { Context } from '../../context/Provider'
 export default function Coin({
 	coin,
 	index,
@@ -25,8 +25,54 @@ export default function Coin({
 	onPress,
 	onHideHandler
 }) {
+
+	const { coinManager } = useContext(Context)
 	const { navigate } = useNavigation()
-	const getSVGUri = useSVGChart(coin.symbol)
+	const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
+	const [state, setState] = useState({
+		rate: 0,
+		percentChange: 0,
+		amount: 0,
+		balance: 0
+	})
+	const wallet = useSelector(state =>
+		state.wallets.data ? state.wallets.data[0] : null
+	)
+	useEffect(() => {
+		new HttpService("", {
+			"uniqueId": "abc1",
+			"action": "quotedPrice",
+			"data": {
+				"symbol": `${coin.symbol}USDT`
+			}
+		}).Post(res => {
+			console.log('get coin info', res.data)
+			setState(res.data)
+		})
+	}, [])
+
+
+	useEffect(() => {
+
+		console.log('coin is here', coin)
+		// console.log(context_items)
+		let selectedCoin = coinManager[coin.symbol];
+		if (selectedCoin.getWalletFromMnemonic) {
+			selectedCoin.getWalletFromMnemonic(wallet.backup)
+				.then(wallet => {
+					// state.wallet = wallet;
+					// setState({ ...state });
+					selectedCoin.getBalance(wallet?.address, false).then(result => {
+						state.amount = parseFloat(result).toFixed(3)
+						state.balance = parseFloat(state.amount * state.rate)
+						setState({ ...state })
+					})
+				})
+				.catch(ex => console.error('balance wallet error', ex))
+		}
+
+
+	}, [])
 	return (
 		<SwapableRow
 			leftItems={[
@@ -53,20 +99,30 @@ export default function Coin({
 				<View style={{ flexDirection: 'row', zIndex: 9 }}>
 					<View style={{ flex: 1 }}>
 						<View style={{ flexDirection: 'row' }}>
-							<MarketIcon size={50} color={globalStyles.Colors.inputColor2}>
-								{coin.icon}
-							</MarketIcon>
-							<View style={{ paddingStart: 4 }}>
-								<AppText bold typo="sm">
-									{coin.slug}
+							<View style={{
+								backgroundColor: globalStyles.Colors.inputColor2,
+								height: 50,
+								...globalStyles.flex.center,
+								borderRadius: 8,
+								paddingHorizontal: 8,
+								paddingVertical: 0,
+								marginHorizontal: 4
+							}}>
+								<Image resizeMode={"stretch"}
+									style={{ width: 30, height: 30, }} source={{ uri: coin.logo }} />
+							</View>
+
+							<View style={{ paddingStart: 4, paddingTop: 2, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+								<AppText bold typo="tiny">
+									{coin.symbol}
 								</AppText>
-								<AppText typo="dot" color="text3">
-									{coin.title}
+								<AppText typo="dot" bold color="text3">
+									{coin.name}
 								</AppText>
 								{noPrice ? null : (
 									<AppText color="text2" bold style={{ marginTop: 2 }}>
-										{coin.currency}
-										{coin.price}
+										{/* {coin.currency} */}
+										{parseFloat(state.rate).toFixed(2)}
 									</AppText>
 								)}
 							</View>
@@ -99,40 +155,31 @@ export default function Coin({
 							<SvgUri
 								width={100}
 								style={{
-									// paddingBottom: 20,
-									// paddingTop: 20,
-									// marginTop: 80,
-									// marginBottom: 80,
 									alignItems: 'center',
 									flexDirection: 'row',
 									justifyContent: 'center',
-									// backgroundColor: 'yellow'
 								}}
-								// height={100}
-								// style={{ backgroundColor: 'yellow' }}
-								// uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
 								uri={getSVGUri}
 							/>
-
 						</View>
 					)}
 					{hideDetails ? null : (
 						<View style={{ flex: 1, alignItems: 'flex-end' }}>
 							<AppText typo="sm" bold>
-								{coin.amount}
+								{state.amount}
 							</AppText>
 							<AppText
 								typo="dot"
 								bold
-								color={coin.change > 0 ? 'success' : 'failure'}
+								color={state.percentChange > 0 ? 'success' : 'failure'}
 								style={{ marginVertical: 2 }}
 							>
-								{coin.change > 0 ? '+' : ''}
-								{coin.change}
+								{parseFloat(state.percentChange).toFixed(2) > 0 ? '+' : ''}
+								{parseFloat(state.percentChange).toFixed(2)}
 							</AppText>
 							{noPrice ? null : (
 								<AppText bold color="text2">
-									{coin.balance}
+									{state.balance}
 								</AppText>
 							)}
 						</View>
