@@ -46,22 +46,16 @@ export default function Coin({
 				"symbol": `${coin.symbol}USDT`
 			}
 		}).Post(res => {
-			console.log('get coin info', res.data)
 			setState(res.data)
 		})
 	}, [])
 
 
 	useEffect(() => {
-
-		console.log('coin is here', coin)
-		// console.log(context_items)
 		let selectedCoin = coinManager[coin.symbol];
 		if (selectedCoin.getWalletFromMnemonic) {
 			selectedCoin.getWalletFromMnemonic(wallet.backup)
 				.then(wallet => {
-					// state.wallet = wallet;
-					// setState({ ...state });
 					selectedCoin.getBalance(wallet?.address, false).then(result => {
 						state.amount = parseFloat(result).toFixed(3)
 						state.balance = parseFloat(state.amount * state.rate)
