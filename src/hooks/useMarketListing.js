@@ -4,6 +4,19 @@ const useMarketListing = () => {
 
   const [state, setState] = useState([])
 
+  // const { data } = useQuery('MarketListing', () => {
+  //   let data = []
+  //   new HttpService(
+  //     "", {
+  //     "uniqueId": "123",
+  //     "action": "marketListing",
+  //   }
+  //   ).Post(response => {
+  //     data = response
+  //   })
+  //   return data
+  // })
+
   useEffect(() => {
     new HttpService(
       "", {
