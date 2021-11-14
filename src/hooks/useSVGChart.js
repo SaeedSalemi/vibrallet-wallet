@@ -38,7 +38,7 @@ const useSVGChart = (coin = 'BNBUSDT', timeframe = "30m", limit = 336) => {
           setState(res.data.url)
         }
       })
-  }, [state])
+  }, [])
   // let base64ToString = Buffer.from(state, "base64").toString();
   // return base64ToString
   return state
