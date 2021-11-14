@@ -19,9 +19,9 @@ export default function MarketData({ items }) {
 				refreshControl={
 					<RefreshControl refreshing={false} />
 				}
-				removeClippedSubviews={
-					Platform.OS === "android"
-				}
+			// removeClippedSubviews={
+			// 	Platform.OS === "android"
+			// }
 			/>}
 		</>
 	)
