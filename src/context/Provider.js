@@ -1,4 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
+import bitcoinManager from '../blockchains/BitcoinManager';
+import bscManager from '../blockchains/BscManager';
+import ethManager from '../blockchains/EthManager';
 import useCoins from '../hooks/useCoins'
 import useFCASRating from '../hooks/useFCASRating'
 import useMarketListing from '../hooks/useMarketListing'
@@ -11,25 +14,23 @@ const MainProvider = props => {
   const [state, setState] = useState({
     user: {},
     wallet: {},
-    coins: []
+    coins: [],
+    coinManager: { ETH: ethManager, BNB: bscManager, BTC: bitcoinManager }
   })
-  const [render, setRender] = useState(false)
   // const { coins, setCoin } = useCoins()
   const { FCASList } = useFCASRating()
   const { MarketListing } = useMarketListing()
 
   useEffect(() => {
-    getCoins()
-  }, [])
-
-  const getCoins = () => {
     new HttpService("", {
       "uniqueId": "abc1",
       "action": "supportedCoins",
-    }).Post(res => {
-      setState({ ...state, coins: res })
+    }).Post(response => {
+      if (response.length > 0) {
+        setState({ ...state, coins: response })
+      }
     })
-  }
+  }, [])
 
   const setCoin = (value) => {
     setState({ ...state, coins: value })
