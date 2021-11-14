@@ -46,6 +46,9 @@ const Images = {
 	marketImage: require('./images/markets-image.png'),
 	marketChartImage: require('./images/market-coin-chart.png'),
 	volumeChart: require('./images/volume-chart.png'),
+	// starter
+	vib_starterLogo: require('./images/starter_large.png'),
+	vib_starterLogoSub: require('./images/starter_large_sub.png')
 }
 
 export default Images
