@@ -19,9 +19,9 @@ export default function RootNavigation() {
 
 	const appState = useAppState()
 
-	React.useEffect(() => {
-		RNSplashScreen.hide()
-	}, [])
+	// React.useEffect(() => {
+	// 	RNSplashScreen.hide()
+	// }, [])
 
 	React.useEffect(() => {
 		if (appState && password) {
