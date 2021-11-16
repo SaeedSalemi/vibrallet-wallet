@@ -12,6 +12,7 @@ import { routes } from '../../../config/routes'
 import { useContext } from 'react'
 import { Context } from '../../../context/Provider'
 import HttpService from '../../../services/HttpService'
+import AppLoader from '../../../components/common/AppLoader'
 
 export default function SelectCoinScreen({ navigation, route }) {
 	const { coins } = useContext(Context)
@@ -84,7 +85,7 @@ export default function SelectCoinScreen({ navigation, route }) {
 				<AppText typo="tiny" color="text2">
 					All Coins
 				</AppText>
-				<View style={{ flex: 1, paddingVertical: 16 }}>
+				<View style={{ flex: 1, paddingVertical: 18 }}>
 					<ScrollView>
 						{filterdItems.map((coin, i) => (
 							<Coin
