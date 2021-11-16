@@ -129,7 +129,7 @@ export default class SwapableRow extends Component {
 							color={globalStyles.Colors.text3}
 						/>
 					</View>
-					<AppText style={styles.actionText} typo="tiny">
+					<AppText style={styles.actionText} typo="dot">
 						{item.title}
 					</AppText>
 				</RectButton>
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 	},
 	actionText: {
 		backgroundColor: 'transparent',
-		padding: 10,
+		padding: 6,
 	},
 	rightAction: {
 		alignItems: 'center',
