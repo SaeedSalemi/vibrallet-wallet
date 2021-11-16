@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
 import useSVGChart from '../../hooks/useSVGChart'
@@ -29,6 +29,7 @@ export default function Coin({
 	const { coinManager } = useContext(Context)
 	const { navigate } = useNavigation()
 	const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
+	const [isLoading, setIsLoading] = useState(true)
 	const [state, setState] = useState({
 		rate: 0,
 		percentChange: 0,
@@ -47,6 +48,7 @@ export default function Coin({
 			}
 		}).Post(res => {
 			setState(res.data)
+			setIsLoading(false)
 		})
 	}, [])
 
@@ -114,9 +116,12 @@ export default function Coin({
 									{coin.name}
 								</AppText>
 								{noPrice ? null : (
+
 									<AppText color="text2" bold style={{ marginTop: 2 }}>
 										{/* {coin.currency} */}
-										{parseFloat(state.rate).toFixed(2)}
+										{isLoading ? <ActivityIndicator
+											size={15}
+											color={globalStyles.Colors.primaryColor} /> : parseFloat(state.rate).toFixed(2)}
 									</AppText>
 								)}
 							</View>
@@ -146,6 +151,7 @@ export default function Coin({
 							marginLeft: 50,
 							maxHeight: 0,
 						}}>
+
 							<SvgUri
 								width={100}
 								style={{
@@ -155,6 +161,7 @@ export default function Coin({
 								}}
 								uri={getSVGUri}
 							/>
+
 						</View>
 					)}
 					{hideDetails ? null : (
@@ -162,15 +169,18 @@ export default function Coin({
 							<AppText typo="sm" bold>
 								{state.amount}
 							</AppText>
-							<AppText
-								typo="dot"
-								bold
-								color={state.percentChange > 0 ? 'success' : 'failure'}
-								style={{ marginVertical: 2 }}
-							>
+							{isLoading ? <ActivityIndicator
+								size={15}
+								color={globalStyles.Colors.primaryColor} /> : <AppText
+									typo="dot"
+									bold
+									color={state.percentChange > 0 ? 'success' : 'failure'}
+									style={{ marginVertical: 2 }}
+								>
 								{parseFloat(state.percentChange).toFixed(2) > 0 ? '+' : ''}
 								{parseFloat(state.percentChange).toFixed(2)}
-							</AppText>
+							</AppText>}
+
 							{noPrice ? null : (
 								<AppText bold color="text2">
 									{state.balance}
