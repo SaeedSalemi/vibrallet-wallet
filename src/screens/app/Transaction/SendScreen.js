@@ -22,14 +22,18 @@ import ethManager from './../../../blockchains/EthManager'
 import bscManager from './../../../blockchains/BscManager'
 import AppLoader from './../../../components/common/AppLoader'
 import { showMessage } from 'react-native-flash-message'
-
-
+import { useContext } from 'react'
+import { Context } from '../../../context/Provider'
 
 export default function SendScreen({ navigation, route }) {
+	const { coinManager } = useContext(Context)
 	const [show, setShow] = useState(false)
 	// const [qr, setQr] = useState('')
 	const { coin } = route.params || {}
+
+	console.log('send screen', coin)
 	const [isloading, setIsLoading] = useState(true)
+
 	const [state, setState] = useState({
 		address: '',
 		amount: '',
@@ -40,28 +44,42 @@ export default function SendScreen({ navigation, route }) {
 
 
 	const wallet = useSelector(state => {
-		// console.log('debug 8', state)
 		state.wallets.data ? state.wallets.data[0] : null
 	}
 	)
 
 	useEffect(() => {
+
 		if (wallet) {
 
-			const coinSelector = { ETH: ethManager, BSC: bscManager }
-			let selectedCoin = coinSelector[coin.slug];
-
-			selectedCoin.getWalletFromMnemonic(wallet.backup)
-				.then(wallet => {
-					state.wallet = wallet;
-					setState({ ...state });
-
-					selectedCoin.getBalance(wallet?.address, false).then(result => {
-						setState({ ...state, balance: result })
-						setIsLoading(false)
+			let selectedCoin = coinManager[coin.symbol];
+			if (selectedCoin.getWalletFromMnemonic) {
+				selectedCoin.getWalletFromMnemonic(wallet.backup)
+					.then(wallet => {
+						selectedCoin.getBalance(wallet?.address, false).then(result => {
+							state.wallet = wallet
+							state.amount = parseFloat(result).toFixed(3)
+							state.balance = parseFloat(state.amount * state.rate)
+							setState({ ...state })
+						})
 					})
-				})
-				.catch(ex => console.error('balance wallet error', ex))
+					.catch(ex => console.error('balance wallet error', ex))
+			}
+
+			// const coinSelector = { ETH: ethManager, BSC: bscManager }
+			// let selectedCoin = coinSelector[coin.name];
+
+			// selectedCoin.getWalletFromMnemonic(wallet.backup)
+			// 	.then(wallet => {
+			// 		state.wallet = wallet;
+			// 		setState({ ...state });
+
+			// 		selectedCoin.getBalance(wallet?.address, false).then(result => {
+			// 			setState({ ...state, balance: result })
+			// 			setIsLoading(false)
+			// 		})
+			// 	})
+			// 	.catch(ex => console.error('balance wallet error', ex))
 
 		}
 	}, [wallet])
@@ -78,9 +96,9 @@ export default function SendScreen({ navigation, route }) {
 		() => {
 			return [
 				{
-					label: `${coin.slug} Address`,
+					label: `${coin.name} Address`,
 					endMessage: 'by Username',
-					placeholder: `Tap to paste ${coin.slug} address`,
+					placeholder: `Tap to paste ${coin.name} address`,
 					endIcon: 'qrcode',
 					value: `${state.address}`,
 					onChangeText: text => {
@@ -94,7 +112,7 @@ export default function SendScreen({ navigation, route }) {
 				},
 				{
 					label: 'Enter Amount',
-					placeholder: `Enter ${coin.slug} Amount`,
+					placeholder: `Enter ${coin.name} Amount`,
 					IconComponent: coin.icon,
 					iconColor: '#7037C9',
 					keybaordType: 'numeric',
@@ -124,13 +142,13 @@ export default function SendScreen({ navigation, route }) {
 	const infoItems = useMemo(
 		() => [
 			{
-				title: `${coin.title} Network Fee`,
-				value: `0.0034 ${coin.slug}`,
+				title: `${coin.name} Network Fee`,
+				value: `0.0034 ${coin.name}`,
 				amount: '$2.31',
 			},
 			{
 				title: 'Remaining Balance',
-				value: `${state.amount ? (state.balance - parseFloat(state.amount)) : ""} ${coin.slug}`,
+				value: `${state.amount ? (state.balance - parseFloat(state.amount)) : ""} ${coin.name}`,
 				amount: `1$`,
 			},
 		],
@@ -186,9 +204,9 @@ export default function SendScreen({ navigation, route }) {
 			<ScrollView>
 				<View style={{ marginVertical: 8 }}>
 					<CoinTitle
-						title={`${coin.title} Balance`}
-						icon={coin.title?.toLowerCase()}
-						value={`${state.balance} ${coin.slug}`}
+						title={`${coin.name} Balance`}
+						icon={coin.name?.toLowerCase()}
+						value={`${state.balance} ${coin.name}`}
 						amount={state.amount}
 					/>
 				</View>
