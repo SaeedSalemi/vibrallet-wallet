@@ -19,17 +19,19 @@ export default function AddressScreen({ route, navigation }) {
 	const wallet = useSelector(state =>
 		state.wallets.data ? state.wallets.data[0] : null
 	)
-	console.log("wallet address is  ", wallet)
+	// console.log("wallet address is  ", wallet)
 	const [walletInfo, setWalletInfo] = useState()
+	const [state, setState] = useState({
+		amount: 0
+	})
 
 	useEffect(() => {
 		const setWalletAsync = async () => {
 			if (wallet) {
-				console.log(coin)
-				if (coin.slug === 'ETH') {
+				if (coin.symbol === 'ETH') {
 					const info = await ethManager.getWalletFromMnemonic(wallet.backup)
 					setWalletInfo(info)
-				} else if (coin.slug === 'BSC') {
+				} else if (coin.symbol === 'BSC') {
 					const info = await bscManager.getWalletFromMnemonic(wallet.backup)
 					setWalletInfo(info, 'info after')
 				} else {
@@ -43,8 +45,21 @@ export default function AddressScreen({ route, navigation }) {
 	}, [])
 
 
-	const handleShare = () => {
-		share("Recive token", 'https://app.vibrallet.com/send?coin=BTC&address={toAddress}&amount={amount}')
+	const handleShare = (symbol, address, amount) => {
+		amount = parseFloat(amount)
+		if (amount > 0)
+			share("Recive token", `https://app.vibrallet.com/send?coin=${symbol}&address=${address}&amount=${amount}`)
+		else {
+			showMessage({
+				message: `Amount couldn't be 0 or less`,
+				description: null,
+				type: 'danger',
+				icon: null,
+				duration: 3000,
+				style: { backgroundColor: "#e74c3c" },
+				position: 'top'
+			})
+		}
 	}
 	return (
 		<View style={{ ...globalStyles.gapScreen }}>
@@ -95,7 +110,8 @@ export default function AddressScreen({ route, navigation }) {
 					endText="Set"
 					keyboardType="numeric"
 					label="Advanced"
-					placeholder={`Set ${coin.slug} amount`}
+					placeholder={`Set ${coin.name} amount`}
+					onChangeText={value => setState({ ...state, amount: value })}
 				/>
 			</ScrollView>
 			<View
@@ -104,7 +120,7 @@ export default function AddressScreen({ route, navigation }) {
 				<AppButton
 					bold
 					title="Share"
-					onPress={handleShare}
+					onPress={() => handleShare(coin.symbol, walletInfo.address, state.amount)}
 					customStyle={{
 						flex: 0.48,
 						fontWeight: 'bold',
