@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { Image, ScrollView, View } from 'react-native'
+import React, { useEffect, useState, useMemo, useContext } from 'react'
+import { Image, ScrollView, View, ActivityIndicator } from 'react-native'
 import MarketIcon from '../../../components/common/MarketIcon/MarketIcon'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
@@ -16,6 +16,8 @@ import { AreaChart } from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
 import HttpService from '../../../services/HttpService'
 import { SvgUri } from 'react-native-svg'
+import { Context } from '../../../context/Provider'
+
 
 const values = ['$1850', '$1750', '$1650', '$1550']
 const dates = ['5 Nov', '10 Nov', '15 Nov', '25 Nov', '30 Nov']
@@ -27,7 +29,10 @@ const chartItems = [
 	{ title: 'ALL' },
 ]
 export default function CoinDetailWithoutHistory({ route, navigation }) {
-	const { coin, slug } = route.params || {}
+	const { coin } = route.params || {}
+
+	const { coinManager } = useContext(Context)
+	const [isLoading, setIsLoading] = useState(true)
 
 	const [state, setState] = useState({
 		address: '',
@@ -37,68 +42,94 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		percentCoin: 0,
 		coin: {},
 		chartData: [],
-		chartTimeStamp: 1
+		chartTimeStamp: 1,
+		timeframe: '1d',
+		percentChange: 0,
 	})
 
 	const wallet = useSelector(state => {
 		state.wallets.data ? state.wallets.data[0] : null
 	}
 	)
+
+
 	useEffect(() => {
-		state.coin = coin.filter((itm) => itm.slug === slug)[0]
-
+		console.log('debug 5 before http service request', state.timeframe)
 		new HttpService("",
-
 			{
 				"uniqueId": "abc",
 				"action": "historicalPrice",
 				"data": {
-					"symbol": state.coin.slug,
-					"symbol": state.coin.symbol,
-					"timeframe": "1d",
+					"symbol": `${coin.symbol}USDT`,
+					"timeframe": state.timeframe,
 					"limit": 20
 				}
 			}).Post(res => {
-
 				const data = res.data.rates.map((d) => parseInt(d.value))
 				setState({ ...state, chartData: data })
+				setIsLoading(false)
 			})
+	}, [state.timeframe])
+
+
+	useEffect(() => {
+
+		new HttpService("", {
+			"uniqueId": "abc1",
+			"action": "quotedPrice",
+			"data": {
+				"symbol": `${coin.symbol}USDT`
+			}
+		}).Post(res => {
+			if (res)
+				setState({ ...state, percentChange: res.data.percentChange })
+		})
 
 		if (wallet) {
 
-			const coinSelector = { ETH: ethManager, BSC: bscManager }
-			let selectedCoin = coinSelector[coin.slug];
+			let selectedCoin = coinManager[coin.symbol];
+			if (selectedCoin.getWalletFromMnemonic) {
+				selectedCoin.getWalletFromMnemonic(wallet.backup)
+					.then(wallet => {
+						state.wallet = wallet;
+						setState({ ...state });
 
-			selectedCoin.getWalletFromMnemonic(wallet.backup)
-				.then(wallet => {
-					state.wallet = wallet;
-					setState({ ...state });
-
-					selectedCoin.getBalance(wallet?.address, false).then(result => {
-						setState({ ...state, balance: result })
-						setIsLoading(false)
+						selectedCoin.getBalance(wallet?.address, false).then(result => {
+							setState({ ...state, balance: result })
+						})
 					})
-				})
-				.catch(ex => console.error('balance wallet error', ex))
-
+					.catch(ex => console.error('balance wallet error', ex))
+			}
 		}
 
 	}, [wallet])
 
+	const handleSelectChange = (title) => {
+		if (title === "all")
+			title = "1y"
+		if (title === "1y")
+			title = "1m"
+		setState({ ...state, timeframe: title.toString().toLowerCase() })
+	}
+
 	return (
 		<ScrollView>
 			<View style={{ ...globalStyles.flex.center, marginVertical: 8 }}>
-				<MarketIcon
-					size={40}
-					style={{ marginVertical: 0 }}
-					color={globalStyles.Colors.ethereum}
-				>
-					{/* <MaterialCommunityIcons size={30} name="ethereum" color="#7037C9" /> */}
-					{state.coin.icon}
-				</MarketIcon>
-				<AppText color="text2">{state.coin.title} Balance</AppText>
+				<View style={{
+					backgroundColor: globalStyles.Colors.inputColor2,
+					height: 45,
+					...globalStyles.flex.center,
+					borderRadius: 8,
+					paddingHorizontal: 8,
+					paddingVertical: 0,
+					marginHorizontal: 2
+				}}>
+					<Image resizeMode={"stretch"}
+						style={{ width: 28, height: 28, }} source={{ uri: coin.logo }} />
+				</View>
+				<AppText color="text2">{coin.name} Balance</AppText>
 				<AppText bold typo="md">
-					{state.balance} {state.coin.title}
+					{state.balance} {coin.symbol}
 				</AppText>
 				<View
 					style={{
@@ -107,26 +138,29 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					}}
 				>
 					<AppText color="text3" typo="tiny">
-						{state.coin.change} Change
+						{state.timeframe} Change
 					</AppText>
-					<AppText color="success" typo="dot" style={{ marginHorizontal: 4 }}>
-						{/* +1.2% */}
+					<AppText
+						color={state.percentChange > 0 ? 'success' : 'failure'}
+						typo="dot"
+						style={{ marginHorizontal: 4 }}>
+						{state.percentChange}
 					</AppText>
 				</View>
 			</View>
 			<View style={{ ...globalStyles.flex.row, marginVertical: 24 }}>
-				{/* <Image style={{ flex: 0.98 }} source={Images.inlineChart} /> */}
+				{isLoading ? <ActivityIndicator
+					size={15}
+					color={globalStyles.Colors.primaryColor} /> :
+					<AreaChart
+						style={{ height: 200, flex: 0.98 }}
+						data={state.chartData}
+						contentInset={{ top: 30, bottom: 30 }}
+						curve={shape.curveNatural}
+						svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+					>
+					</AreaChart>}
 
-				<AreaChart
-					style={{ height: 200, flex: 0.98 }}
-					data={state.chartData}
-					// data={[50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]}
-					contentInset={{ top: 30, bottom: 30 }}
-					curve={shape.curveNatural}
-					svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-				>
-
-				</AreaChart>
 
 				<View style={{ justifyContent: 'space-between' }}>
 					{values.map((item, index) => (
@@ -165,6 +199,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 						key={index}
 						title={item.title}
 						active={item.active}
+						onSelectChange={handleSelectChange}
 					/>
 				))}
 			</View>
