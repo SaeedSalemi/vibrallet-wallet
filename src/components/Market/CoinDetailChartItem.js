@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from 'react-native'
 import { globalStyles } from '../../config/styles'
 import AppText from '../common/AppText'
 
-export default function CoinDetailChartItem({ title, active }) {
+export default function CoinDetailChartItem({ title, active, onSelectChange }) {
 	return (
 		<TouchableOpacity
 			style={{
@@ -15,8 +15,9 @@ export default function CoinDetailChartItem({ title, active }) {
 					? globalStyles.Colors.primaryColor
 					: globalStyles.Colors.inputColor,
 			}}
+			onPress={() => onSelectChange(title)}
 		>
-			<AppText typo="xs" bold color={active ?? 'text2'} bold>
+			<AppText typo="xs" color={active ?? 'text2'} bold>
 				{title}
 			</AppText>
 		</TouchableOpacity>
