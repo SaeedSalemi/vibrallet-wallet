@@ -82,7 +82,7 @@ const RenderMarketItem = React.memo(({ item, index }) => {
 							}}
 						>
 							<AppText bold typo="tiny">
-								{item.name}
+								{item.symbol}
 							</AppText>
 							<AppText typo="dot" color="text3">
 								/USDT
