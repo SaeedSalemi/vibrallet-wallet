@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useEffect, useState } from 'react'
 import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
@@ -6,6 +7,7 @@ import useCoins from '../hooks/useCoins'
 import useFCASRating from '../hooks/useFCASRating'
 import useMarketListing from '../hooks/useMarketListing'
 import HttpService from '../services/HttpService';
+import { setToStorage, getFromStorage } from '../utils/Functions';
 
 export const Context = createContext()
 
@@ -22,14 +24,27 @@ const MainProvider = props => {
   const { MarketListing } = useMarketListing()
 
   useEffect(() => {
-    new HttpService("", {
-      "uniqueId": "abc1",
-      "action": "supportedCoins",
-    }).Post(response => {
-      if (response.length > 0) {
-        setState({ ...state, coins: response })
-      }
-    })
+
+
+    AsyncStorage.getItem("supportedCoins")
+      .then(result => {
+        let supportedCoinData = JSON.parse(result)
+        if (supportedCoinData && supportedCoinData.length > 0) {
+          setState({ ...state, coins: response })
+        } else {
+          new HttpService("", {
+            "uniqueId": "abc1",
+            "action": "supportedCoins",
+          }).Post(response => {
+            if (response.length > 0) {
+              setState({ ...state, coins: response })
+              setToStorage("supportedCoins", JSON.stringify(response))
+            }
+          })
+        }
+
+      })
+      .catch(error => console.log('error', error))
   }, [])
 
   const setCoin = (value) => {
