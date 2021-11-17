@@ -47,7 +47,11 @@ export default function Coin({
 				"symbol": `${coin.symbol}USDT`
 			}
 		}).Post(res => {
-			setState(res.data)
+			setState({
+				...state,
+				rate: res.data.rate,
+				percentChange: res.data.percentChange
+			})
 			setIsLoading(false)
 		})
 	}, [])
@@ -119,9 +123,10 @@ export default function Coin({
 
 									<AppText color="text2" bold style={{ marginTop: 2 }}>
 										{/* {coin.currency} */}
-										{isLoading ? <ActivityIndicator
+										{/* {isLoading ? <ActivityIndicator
 											size={15}
-											color={globalStyles.Colors.primaryColor} /> : parseFloat(state.rate).toFixed(2)}
+											color={globalStyles.Colors.primaryColor} /> : } */}
+										{parseFloat(state.rate).toFixed(2)}
 									</AppText>
 								)}
 							</View>
