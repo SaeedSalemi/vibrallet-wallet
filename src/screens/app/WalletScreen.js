@@ -16,8 +16,6 @@ import BarChart from '../../components/BarChart/BarChart'
 import Feather from 'react-native-vector-icons/Feather'
 import { useNavigation } from '@react-navigation/core'
 import { useSelector } from 'react-redux'
-import ethManager from './../../blockchains/EthManager'
-import bscManager from './../../blockchains/BscManager'
 import { showMessage } from 'react-native-flash-message'
 import { Context } from '../../context/Provider'
 
@@ -48,67 +46,48 @@ const ChartItems = ({ iconColor, title, value }) => {
 export default function WalletScreen() {
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
-	const [state, setState] = useState({ coins: [] })
+	const [state, setState] = useState({ allSupportedCoins: [] })
 	const { coins, setCoin } = useContext(Context)
-	const wallet = useSelector(state =>
-		state.wallets.data ? state.wallets.data[0] : null
-	)
+	// const wallet = useSelector(state =>
+	// 	state.wallets.data ? state.wallets.data[0] : null
+	// )
 	useEffect(() => {
-		for (let item of coins) {
 
-			const coinSelector = { ETH: ethManager, BSC: bscManager }
-			let selectedCoin = coinSelector[item.slug];
-
-			selectedCoin.getWalletFromMnemonic(wallet.backup)
-				.then(wallet => {
-					state.wallet = wallet;
-					setState({ ...state });
-
-					// selectedCoin.getBalance(wallet?.address, false).then(result => {
-					// 	// setStat...state,e({ ...state, balance: result })
-					// 	// setIsLoading(false)
-					// 	let inx = coins.findIndex((itm) => itm.slug === item.slug)
-					// 	coins[inx]['amount'] = parseFloat(result).toFixed(3)
-					// 	coins[inx]['balance'] = parseFloat(coins[inx]['amount'] * coins[inx]['price'])
-					// 	setState({ ...state })
-					// })
-
-				})
-				.catch(ex => console.error('balance wallet error', ex))
-		}
+		setState({ ...state, allSupportedCoins: coins })
 
 
-	}, [coins])
-
+		// TODO: Generate nmonics, wallet, balance
+	}, [])
 
 
 	const totalBalance = useMemo(() => {
 		let balance = 0
-		coins.map((item, index) => {
-			balance += (parseFloat(item.amount) * parseFloat(item.price))
-		})
+		// coins.map((item, index) => {
+		// balance += (parseFloat(item.amount) * parseFloat(item.price))
+		// })
 		return balance
+		return 1
 	}, [state])
 
 
 	const pieData = useMemo(() => {
-		return coins.map((item, index) => {
-			const balance = ((parseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
-			return {
-				series: item.balance,
-				title: item.slug,
-				// value: '77.56%',
-				value: `${balance.toFixed(0)}%`,
-				color: item.color,
-				radius: 100,
-			}
-		})
+		// return coins.map((item, index) => {
+		// 	const balance = ((parseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
+		// 	return {
+		// 		series: item.balance,
+		// 		title: item.slug,
+		// 		// value: '77.56%',
+		// 		value: `${balance.toFixed(0)}%`,
+		// 		color: item.color,
+		// 		radius: 100,
+		// 	}
+		// })
 	}, [state, totalBalance])
 
 
 	const hideCoinHandler = coin => {
 		showMessage({
-			message: `${coin.slug} was hide successfully.`,
+			message: `${coin.name} was hide successfully.`,
 			description: null,
 			type: 'success',
 			icon: null,
@@ -117,62 +96,33 @@ export default function WalletScreen() {
 			position: 'top'
 		})
 		coins.map(item => {
-			if (item.slug === coin.slug) {
+			if (item.name === coin.name) {
 				item.hide = true
 			}
 		})
 		setCoin(coins)
-
-		// setState({ coins: coins })
 	}
-
-
-	// const pieData = [
-	// 	{
-	// 		series: 77,
-	// 		title: 'BTC',
-	// 		value: '77.56%',
-	// 		color: '#F47169',
-	// 		radius: 100,
-	// 	},
-	// 	{
-	// 		series: 59,
-	// 		title: 'ETH',
-	// 		value: '12%',
-	// 		color: '#512888',
-	// 		radius: 100,
-	// 	},
-	// 	{
-	// 		series: 30,
-	// 		title: 'XRP',
-	// 		value: '12.54%',
-	// 		color: '#047780',
-	// 		radius: 100,
-	// 	},
-	// 	{
-	// 		series: 47,
-	// 		title: 'Others',
-	// 		value: '1.23%',
-	// 		color: '#2196F3',
-	// 		radius: 100,
-	// 	},
-	// ]
 	const data = coins
-	const series = pieData.map(item => item.series)
-	const sliceColor = pieData.map(item => item.color)
+	// const series = pieData.map(item => item.series)
+	// const sliceColor = pieData.map(item => item.color)
 
 	const barData = {
 		labels: ['BTC', 'ETH', 'XRP', 'Others'],
 		datasets: [
 			{
-				data: pieData.map(item => item.series),
+				// data: pieData.map(item => item.series),
 			},
 		],
 	}
-	const filteredCoins = coins.filter(c => c.hide === false)
+
+	const filteredCoins = useMemo(() => {
+		return coins.filter(c => !c.hide)
+	}, [JSON.stringify(coins)])
+
 	return (
 		<Screen>
 			<Header route={routes.wallet} />
+
 			<View style={{ flex: 1, paddingHorizontal: 8, marginVertical: 24 }}>
 				<View
 					style={{
@@ -181,7 +131,7 @@ export default function WalletScreen() {
 						borderRadius: 8,
 					}}
 				>
-					{pie ? (
+					{/* {pie ? (
 						<View
 							style={{
 								...globalStyles.flex.row,
@@ -239,8 +189,8 @@ export default function WalletScreen() {
 							</View>
 							<BarChart data={pieData} />
 						</View>
-					)}
-					<TouchableOpacity
+					)} */}
+					{/* <TouchableOpacity
 						style={{
 							width: 32,
 							height: 32,
@@ -268,7 +218,7 @@ export default function WalletScreen() {
 								color={globalStyles.Colors.text1}
 							/>
 						</View>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</View>
 				<View style={{ flex: 2 }}>
 					<FlatList
@@ -280,7 +230,7 @@ export default function WalletScreen() {
 								index={index}
 								length={data.length}
 								onPress={() => {
-									navigate(routes.coinDetailWithoutHistory, { coin: coins, slug: item.slug })
+									navigate(routes.coinDetailWithoutHistory, { coin: item })
 								}}
 								onHideHandler={hideCoinHandler}
 							/>
