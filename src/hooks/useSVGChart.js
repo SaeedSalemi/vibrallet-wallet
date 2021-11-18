@@ -31,7 +31,8 @@ const useSVGChart = (coin = 'BNBUSDT', timeframe = "30m", limit = 336) => {
           "symbol": coin,
           "timeframe": timeframe,
           "limit": limit,
-          "responseType": "url"
+          "responseType": "url",
+          "height": 50
         }
       }).Post(res => {
         if (res?.success === true) {
