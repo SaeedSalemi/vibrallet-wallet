@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native'
+import { View, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
 import useSVGChart from '../../hooks/useSVGChart'
@@ -11,7 +11,6 @@ import HR from './HR/HR'
 import SwapableRow from './Swapable/SwapableRow'
 import { SvgUri } from 'react-native-svg'
 import HttpService from '../../services/HttpService'
-
 import { useSelector } from 'react-redux'
 import { Context } from '../../context/Provider'
 export default function Coin({
@@ -26,7 +25,7 @@ export default function Coin({
 	onHideHandler
 }) {
 
-	const { coinManager } = useContext(Context)
+	const { coinManager, getCoinBalance } = useContext(Context)
 	const { navigate } = useNavigation()
 	const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
 	const [isLoading, setIsLoading] = useState(true)
@@ -36,9 +35,7 @@ export default function Coin({
 		amount: 0,
 		balance: 0
 	})
-	const wallet = useSelector(state =>
-		state.wallets.data ? state.wallets.data[0] : null
-	)
+
 	useEffect(() => {
 		new HttpService("", {
 			"uniqueId": "abc1",
@@ -58,20 +55,9 @@ export default function Coin({
 
 
 	useEffect(() => {
-		let selectedCoin = coinManager[coin.symbol];
-		if (selectedCoin.getWalletFromMnemonic) {
-			selectedCoin.getWalletFromMnemonic(wallet.backup)
-				.then(wallet => {
-					selectedCoin.getBalance(wallet?.address, false).then(result => {
-						state.amount = parseFloat(result).toFixed(3)
-						state.balance = parseFloat(state.amount * state.rate)
-						setState({ ...state })
-					})
-				})
-				.catch(ex => console.error('balance wallet error', ex))
-		}
-
-
+		state.balance = getCoinBalance([coin.symbol])
+		state.amount = state.balance * state.rate
+		setState({ ...state })
 	}, [])
 	return (
 		<SwapableRow
@@ -155,6 +141,7 @@ export default function Coin({
 							marginVertical: 0,
 							marginLeft: 50,
 							maxHeight: 0,
+
 						}}>
 
 							<SvgUri
@@ -163,6 +150,7 @@ export default function Coin({
 									alignItems: 'center',
 									flexDirection: 'row',
 									justifyContent: 'center',
+									marginTop: 40
 								}}
 								uri={getSVGUri}
 							/>
