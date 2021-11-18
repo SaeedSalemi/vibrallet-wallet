@@ -29,10 +29,17 @@ const useSVGChart = (coin = 'BNBUSDT', timeframe = "30m", limit = 336) => {
         "action": "priceChart",
         "data": {
           "symbol": coin,
-          "timeframe": timeframe,
-          "limit": limit,
+          "timeframe": "30m",
+          "limit": 1440,
           "responseType": "url",
-          "height": 50
+          "height": 70,
+          "width": 200,
+
+          // "symbol": coin,
+          // "timeframe": timeframe,
+          // "limit": limit,
+          // "responseType": "url",
+          // "height": 50
         }
       }).Post(res => {
         if (res?.success === true) {
