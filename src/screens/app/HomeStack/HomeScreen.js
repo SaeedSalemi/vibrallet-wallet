@@ -100,44 +100,44 @@ const HomeScreen = ({ navigation }) => {
 	const carouselRef = useRef(null)
 
 
-	const wallet = useSelector(state =>
-		state.wallets.data ? state.wallets.data[0] : null
-	)
+	// const wallet = useSelector(state =>
+	// 	state.wallets.data ? state.wallets.data[0] : null
+	// )
 
-	const saveToStorage = async (title, data) => await AsyncStorage.setItem(title, data)
+	// const saveToStorage = async (title, data) => await AsyncStorage.setItem(title, data)
 
-	const _storeWalletData = () => {
-		const coinSelector = { ETH: ethManager, BSC: bscManager }
-		for (let selectCoin in coinSelector) {
-			coinSelector[selectCoin].getWalletFromMnemonic(wallet.backup)
-				.then(wallet => {
-					saveToStorage(selectCoin, JSON.stringify(wallet))
-				}).catch(ex => console.error('wallet', ex))
-		}
-	}
+	// const _storeWalletData = () => {
+	// 	const coinSelector = { ETH: ethManager, BSC: bscManager }
+	// 	for (let selectCoin in coinSelector) {
+	// 		coinSelector[selectCoin].getWalletFromMnemonic(wallet.backup)
+	// 			.then(wallet => {
+	// 				saveToStorage(selectCoin, JSON.stringify(wallet))
+	// 			}).catch(ex => console.error('wallet', ex))
+	// 	}
+	// }
 
 
 
 	// const balance = useMemo(() => useWallet('ETH').balance, [])
 	// console.log('calc balance', balance)
 
-	useEffect(() => {
+	// useEffect(() => {
 
-		async function checkWallet() {
-			try {
-				let value = await AsyncStorage.getItem('ETH');
-				if (value != null) {
-					_storeWalletData()
-				}
-				else {
-					// do something else
-				}
-			} catch (error) {
-				// Error retrieving data
-			}
-		}
-		checkWallet()
-	}, [])
+	// 	async function checkWallet() {
+	// 		try {
+	// 			let value = await AsyncStorage.getItem('ETH');
+	// 			if (value != null) {
+	// 				_storeWalletData()
+	// 			}
+	// 			else {
+	// 				// do something else
+	// 			}
+	// 		} catch (error) {
+	// 			// Error retrieving data
+	// 		}
+	// 	}
+	// 	checkWallet()
+	// }, [])
 
 	useEffect(() => {
 
