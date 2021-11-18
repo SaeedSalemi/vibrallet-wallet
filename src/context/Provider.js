@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux';
 import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
@@ -28,29 +28,41 @@ const MainProvider = props => {
   }
   )
 
-  useEffect(() => {
-    AsyncStorage.getItem("supportedCoins")
-      .then(result => {
-        if (result !== null) {
-          let supportedCoinData = JSON.parse(result)
-          if (supportedCoinData && supportedCoinData.length > 0) {
-            setState({ ...state, coins: supportedCoinData })
-          }
-        } else {
-          new HttpService("", {
-            "uniqueId": "abc1",
-            "action": "supportedCoins",
-          }).Post(response => {
-            if (response.length > 0) {
-              const setBalanceToResponse = response.forEach(coin => coin.balance = 0)
-              setState({ ...state, coins: setBalanceToResponse })
-              setToStorage("supportedCoins", JSON.stringify(setBalanceToResponse))
-            }
-          })
-        }
+  const supportedCoins = async () => {
+    try {
+      const result = await AsyncStorage.getItem("supportedCoins")
 
-      })
-      .catch(error => console.log('error', error))
+      if (result !== null) {
+        let supportedCoinData = JSON.parse(result)
+        if (supportedCoinData && supportedCoinData.length > 0) {
+          setState({ ...state, coins: supportedCoinData })
+        }
+      } else {
+
+        new HttpService("", {
+          "uniqueId": "abc1",
+          "action": "supportedCoins",
+        }).Post(response => {
+          if (response) {
+
+            const items = response
+            for (let item of items) {
+              item.balance = 0
+            }
+            setState({ ...state, coins: items })
+            setToStorage("supportedCoins", JSON.stringify(items))
+          }
+        })
+      }
+    }
+    catch (e) {
+      console.log(e)
+    }
+
+  }
+
+  useEffect(() => {
+    supportedCoins()
   }, [])
 
   const setCoin = (value) => {
