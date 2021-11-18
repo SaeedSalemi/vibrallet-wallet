@@ -57,11 +57,4 @@ export function share(title = '', msg = '', url = 'https://app.vibrallet.com') {
   }
 }
 
-export const setToStorage = async (item, data) => await AsyncStorage.setItem(item, data)
-
-export const getFromStorage = async (item) => {
-  const getData = await AsyncStorage.getItem(item)
-  if (getData !== null)
-    return getData
-  else return false
-}
+export const setToStorage = async (title, data) => await AsyncStorage.setItem(title, data)
