@@ -31,7 +31,7 @@ export default function ConfirmTransaction({ navigation, route }) {
 			},
 			{
 				title: 'Network Fee',
-				value: `0.002155 ${coin.slug} ($3.99)`,
+				value: `0.002155 ${coin.name} ($3.99)`,
 			},
 			{
 				title: 'Max Total',
@@ -46,7 +46,7 @@ export default function ConfirmTransaction({ navigation, route }) {
 		try {
 			setIsPosting(true)
 			const coinSelector = { ETH: ethManager, BSC: bscManager }
-			let selectedCoin = coinSelector[coin.slug];
+			let selectedCoin = coinSelector[coin.symbol];
 
 			const receipt = await selectedCoin.transfer(
 				null,
@@ -80,10 +80,10 @@ export default function ConfirmTransaction({ navigation, route }) {
 			<ScrollView>
 				<View>
 					<CoinTitle
-						value={`-${amount} ${coin.slug}`}
+						value={`-${amount} ${coin.name}`}
 						failureTitle
 						amount="$15,432"
-						icon={coin.title?.toLowerCase()}
+						icon={coin.name?.toLowerCase()}
 					/>
 				</View>
 				<View style={{ flex: 1, marginVertical: 18 }}>
