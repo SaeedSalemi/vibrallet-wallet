@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/core'
-import { FlatList, TouchableOpacity, View, Platform, RefreshControl } from 'react-native'
+import { FlatList, TouchableOpacity, View, Platform, RefreshControl, Image } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
@@ -70,15 +70,28 @@ const RenderMarketItem = React.memo(({ item, index }) => {
 			>
 				<View
 					style={{
-						paddingVertical: 8,
+						paddingVertical: 4,
 						flexDirection: 'row',
 					}}
 				>
-					<View style={{ flex: 1 }}>
+					<View style={{ flex: 1, flexDirection: 'row' }}>
+
+						<View style={{
+							backgroundColor: globalStyles.Colors.inputColor2,
+							height: 40,
+							...globalStyles.flex.center,
+							borderRadius: 8,
+							paddingHorizontal: 8,
+							paddingVertical: 0,
+							marginHorizontal: 4
+						}}>
+							<Image resizeMode={"stretch"}
+								style={{ width: 30, height: 30, }} source={{ uri: item.logo }} />
+						</View>
 						<View
 							style={{
 								flexDirection: 'row',
-								alignItems: 'flex-end',
+								alignItems: 'center',
 							}}
 						>
 							<AppText bold typo="tiny">
@@ -88,9 +101,9 @@ const RenderMarketItem = React.memo(({ item, index }) => {
 								/USDT
 							</AppText>
 						</View>
-						<AppText typo="tiny" color="text3">
+						{/* <AppText typo="tiny" color="text3" >
 							Vol. {parseFloat(item.volume_24h).toFixed(3)}
-						</AppText>
+						</AppText> */}
 					</View>
 					<View
 						style={{
