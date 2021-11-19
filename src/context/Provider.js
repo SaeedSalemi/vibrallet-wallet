@@ -13,11 +13,13 @@ export const Context = createContext()
 
 const MainProvider = props => {
 
+
   const [state, setState] = useState({
     user: {},
     wallet: {},
     coins: [],
-    coinManager: { ETH: ethManager, BNB: bscManager, BTC: bitcoinManager }
+    coinManager: { ETH: ethManager, BNB: bscManager, BTC: bitcoinManager },
+    preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
   })
   // const { coins, setCoin } = useCoins()
   const { FCASList } = useFCASRating()
@@ -48,7 +50,9 @@ const MainProvider = props => {
             const items = response
             for (let item of items) {
               item.balance = 0
+              item.color = state.preDefinedCoinsColors[item.symbol]
             }
+            console.log('debug 3', items)
             setState({ ...state, coins: items })
             setToStorage("supportedCoins", JSON.stringify(items))
           }
