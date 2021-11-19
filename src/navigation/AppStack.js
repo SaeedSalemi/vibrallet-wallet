@@ -479,7 +479,7 @@ export function AppStackNavigation() {
 					return {
 						headerTitle: () => (
 							<AppText bold typo="md">
-								{coin.slug}/USDT
+								{coin.symbol}/USDT
 							</AppText>
 						),
 						headerRight: () => (
