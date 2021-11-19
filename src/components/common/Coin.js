@@ -100,11 +100,11 @@ export default function Coin({
 
 							<View style={{ paddingStart: 4, paddingTop: 2, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
 								<AppText bold typo="tiny">
-									{coin.symbol}
-								</AppText>
-								<AppText typo="dot" bold color="text3">
 									{coin.name}
 								</AppText>
+								{/* <AppText typo="dot" bold color="text3">
+									{coin.name}
+								</AppText> */}
 								{noPrice ? null : (
 
 									<AppText color="text2" bold style={{ marginTop: 2 }}>
@@ -150,7 +150,7 @@ export default function Coin({
 									alignItems: 'center',
 									flexDirection: 'row',
 									justifyContent: 'center',
-									marginTop: 40
+									marginTop: 50
 								}}
 								uri={getSVGUri}
 							/>
@@ -159,8 +159,8 @@ export default function Coin({
 					)}
 					{hideDetails ? null : (
 						<View style={{ flex: 1, alignItems: 'flex-end' }}>
-							<AppText typo="sm" bold>
-								{state.amount}
+							<AppText typo="tiny">
+								{state.amount} 	{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
 								size={15}
@@ -176,7 +176,7 @@ export default function Coin({
 
 							{noPrice ? null : (
 								<AppText bold color="text2">
-									{state.balance}
+									{state.balance} $
 								</AppText>
 							)}
 						</View>
