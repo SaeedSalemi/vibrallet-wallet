@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
 	Image,
 	Modal,
@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setModal } from '../../../redux/modules/appSettings'
 import SetAlert from '../../../components/Market/SerAlert'
 import { useNavigation } from '@react-navigation/core'
+import TradingViewWidget from '../../../components/TradingViewWidget/TradingViewWidget'
 
 const greenItem = '#14331d'
 const redItem = '#4d181a'
@@ -46,15 +47,23 @@ const performanceItems = [
 	{ value: '+1.42%', duration: 'YTD', bgColor: greenItem, color: 'success' },
 	{ value: '+1.42%', duration: '1Y', bgColor: redItem, color: 'failure' },
 ]
-const keysItems = [
-	{ title: 'Market Cap:', value: '$1.23B' },
-	{ title: 'Max Supply:', value: 'Unlimited Supply' },
-	{ title: 'Minable:', value: 'Yes' },
-	{ title: 'Type', value: 'Coin' },
-	{ title: 'All Time High:', value: '2,111.34 USD (30 Dec, 2020)' },
-]
+// const keysItems = [
+// 	{ title: 'Market Cap:', value: `$${parseFloat(coin.market_cap).toFixed(5)}` },
+// 	{ title: 'Max Supply:', value: 'Unlimited Supply' },
+// 	{ title: 'Minable:', value: 'Yes' },
+// 	{ title: 'Type', value: 'Coin' },
+// 	{ title: 'All Time High:', value: '2,111.34 USD (30 Dec, 2020)' },
+// ]
 export default function MarketCoinDetailScreen({ route, navigation }) {
 	const { coin } = route.params || {}
+	const [keyItems, setKeyItems] = useState([
+		{ title: 'Market Cap:', value: `$${parseFloat(coin.market_cap).toFixed(5)}` },
+		{ title: 'Max Supply:', value: 'Unlimited Supply' },
+		{ title: 'Minable:', value: 'Yes' },
+		{ title: 'Type', value: 'Coin' },
+		{ title: 'All Time High:', value: '2,111.34 USD (30 Dec, 2020)' },
+	])
+	console.log('coin item', coin)
 	const { navigate } = useNavigation()
 	const dispatch = useDispatch()
 	const handleCloseModal = () => {
@@ -71,11 +80,13 @@ export default function MarketCoinDetailScreen({ route, navigation }) {
 			<ScrollView>
 				<View style={{ ...globalStyles.flex.center, marginVertical: 32 }}>
 					<AppText bold typo="xxl">
-						$1,842.21
+						${parseFloat(coin.price).toFixed(3)}
 					</AppText>
 					<View style={{ ...globalStyles.flex.row }}>
-						<AppText color="success" typo="tiny">
-							+$100.2
+						<AppText
+							color={coin.percent_change_24h > 0 ? 'success' : 'failure'}
+							typo="tiny">
+							{parseFloat(coin.percent_change_24h).toFixed(2)}
 						</AppText>
 						<AppText color="text2" typo="tiny" style={{ marginHorizontal: 4 }}>
 							(+1.5%)
@@ -188,7 +199,8 @@ export default function MarketCoinDetailScreen({ route, navigation }) {
 					</View>
 				</View>
 				<View style={{ marginVertical: 16 }}>
-					<Image source={Images.marketChartImage} />
+					{/* <Image source={Images.marketChartImage} /> */}
+					<TradingViewWidget symbol={`${coin.symbol}USDT`} />
 				</View>
 				<View>
 					<View
@@ -241,7 +253,7 @@ export default function MarketCoinDetailScreen({ route, navigation }) {
 								Key Stats
 							</AppText>
 							<View style={{ marginVertical: 24 }}>
-								{keysItems.map((item, index) => (
+								{keyItems.map((item, index) => (
 									<View
 										key={index}
 										style={{ ...globalStyles.flex.row, marginVertical: 4 }}
