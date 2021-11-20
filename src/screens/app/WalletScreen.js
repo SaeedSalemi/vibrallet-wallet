@@ -44,6 +44,9 @@ const ChartItems = ({ iconColor, title, value }) => {
 }
 
 export default function WalletScreen() {
+
+	// TODO:
+	// Get the latest coin balance from the storage and wallet information.
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
 	const [state, setState] = useState({ allSupportedCoins: [] })
@@ -52,10 +55,7 @@ export default function WalletScreen() {
 	// 	state.wallets.data ? state.wallets.data[0] : null
 	// )
 	useEffect(() => {
-
 		setState({ ...state, allSupportedCoins: coins })
-
-
 		// TODO: Generate nmonics, wallet, balance
 	}, [])
 
@@ -66,23 +66,59 @@ export default function WalletScreen() {
 		// balance += (parseFloat(item.amount) * parseFloat(item.price))
 		// })
 		return balance
-		return 1
+	}, [state])
+
+	const pieData = useMemo(() => {
+		const length = state.allSupportedCoins.length
+
+		let counter = 0
+		for (let item of state.allSupportedCoins) {
+			if (item.balance === 0) {
+				counter++
+			}
+		}
+
+		if (counter === length) {
+			return []
+		} else {
+			return coins.map((item, index) => {
+				// const balance = ((aparseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
+				const balance = 1
+				return {
+					series: 1, // item.balance TODO: handle 0
+					title: item.symbol,
+					value: '77.56%',
+					// value: `${balance.toFixed(0)}%`,
+					color: item.color,
+					radius: 100,
+				}
+			})
+		}
+
+
+		// totalBalance
 	}, [state])
 
 
-	const pieData = useMemo(() => {
-		// return coins.map((item, index) => {
-		// 	const balance = ((parseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
-		// 	return {
-		// 		series: item.balance,
-		// 		title: item.slug,
-		// 		// value: '77.56%',
-		// 		value: `${balance.toFixed(0)}%`,
-		// 		color: item.color,
-		// 		radius: 100,
-		// 	}
-		// })
-	}, [state, totalBalance])
+	const data = coins
+	// calculate the pie chart series
+	const series = []
+	// const series = pieData.map(item => item.series)
+	const sliceColor = pieData.map(item => item.color)
+
+
+	const barData = {
+		labels: ['BTC', 'ETH', 'XRP', 'Others'],
+		datasets: [
+			{
+				// data: pieData.map(item => item.series),
+			},
+		],
+	}
+
+	const filteredCoins = useMemo(() => {
+		return coins.filter(c => !c.hide)
+	}, [JSON.stringify(coins)])
 
 
 	const hideCoinHandler = coin => {
@@ -102,28 +138,15 @@ export default function WalletScreen() {
 		})
 		setCoin(coins)
 	}
-	const data = coins
-	// const series = pieData.map(item => item.series)
-	// const sliceColor = pieData.map(item => item.color)
 
-	const barData = {
-		labels: ['BTC', 'ETH', 'XRP', 'Others'],
-		datasets: [
-			{
-				// data: pieData.map(item => item.series),
-			},
-		],
-	}
-
-	const filteredCoins = useMemo(() => {
-		return coins.filter(c => !c.hide)
-	}, [JSON.stringify(coins)])
 
 	return (
 		<Screen>
 			<Header route={routes.wallet} />
 
 			<View style={{ flex: 1, paddingHorizontal: 8, marginVertical: 24 }}>
+
+				{/* =============== Charts ================= */}
 				<View
 					style={{
 						backgroundColor: globalStyles.Colors.inputColor,
@@ -131,7 +154,7 @@ export default function WalletScreen() {
 						borderRadius: 8,
 					}}
 				>
-					{/* {pie ? (
+					{pie ? (
 						<View
 							style={{
 								...globalStyles.flex.row,
@@ -141,7 +164,8 @@ export default function WalletScreen() {
 							}}
 						>
 							<View style={{ flex: 2, justifyContent: 'space-around' }}>
-								{pieData.map((item, index) => (
+
+								{pieData.length > 0 ? pieData.map((item, index) => (
 									<ChartItems
 										key={index}
 										iconColor={item.color}
@@ -149,7 +173,16 @@ export default function WalletScreen() {
 										value={item.value}
 										index={index}
 									/>
+								)) : state.allSupportedCoins.map((item, index) => (
+									<ChartItems
+										key={index}
+										iconColor={item.color}
+										title={item.symbol}
+										value={`0%`}
+										index={index}
+									/>
 								))}
+
 							</View>
 							<View
 								style={{
@@ -158,14 +191,23 @@ export default function WalletScreen() {
 									flex: 2,
 								}}
 							>
-								<PieChart
+
+								{pieData.length > 0 ? <PieChart
 									widthAndHeight={170}
 									series={series}
 									sliceColor={sliceColor}
 									doughnut={true}
 									coverRadius={0.88}
 									coverFill={globalStyles.Colors.inputColor}
-								/>
+								/> : <PieChart
+									widthAndHeight={170}
+									series={[100]}
+									sliceColor={[globalStyles.Colors.text2]}
+									doughnut={true}
+									coverRadius={0.88}
+									coverFill={globalStyles.Colors.inputColor}
+								/>}
+
 								<View
 									style={{ position: 'absolute', ...globalStyles.flex.center }}
 								>
@@ -189,8 +231,8 @@ export default function WalletScreen() {
 							</View>
 							<BarChart data={pieData} />
 						</View>
-					)} */}
-					{/* <TouchableOpacity
+					)}
+					<TouchableOpacity
 						style={{
 							width: 32,
 							height: 32,
@@ -218,8 +260,12 @@ export default function WalletScreen() {
 								color={globalStyles.Colors.text1}
 							/>
 						</View>
-					</TouchableOpacity> */}
+					</TouchableOpacity>
 				</View>
+
+
+				{/* =============== Coins ==================== */}
+
 				<View style={{ flex: 2 }}>
 					<FlatList
 						style={{ marginVertical: 16 }}
