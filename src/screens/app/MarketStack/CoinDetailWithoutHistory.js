@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useContext } from 'react'
 import { Image, ScrollView, View, ActivityIndicator } from 'react-native'
-import MarketIcon from '../../../components/common/MarketIcon/MarketIcon'
+// import MarketIcon from '../../../components/common/MarketIcon/MarketIcon'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -10,8 +10,6 @@ import CoinDetailChartItem from '../../../components/Market/CoinDetailChartItem'
 import AppButton from '../../../components/common/AppButton'
 import { routes } from '../../../config/routes'
 import { useSelector } from 'react-redux'
-import ethManager from '../../../blockchains/EthManager'
-import bscManager from '../../../blockchains/BscManager'
 import { AreaChart } from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
 import HttpService from '../../../services/HttpService'
@@ -54,25 +52,23 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 
 	useEffect(() => {
-		console.log('debug 5 before http service request', state.timeframe)
+
+
 		new HttpService("",
 			{
 				"uniqueId": "abc",
 				"action": "historicalPrice",
 				"data": {
 					"symbol": `${coin.symbol}USDT`,
-					"timeframe": state.timeframe,
+					"timeframe": state.timeframe || '1d',
 					"limit": 20
 				}
 			}).Post(res => {
 				const data = res.data.rates.map((d) => parseInt(d.value))
 				setState({ ...state, chartData: data })
-				setIsLoading(false)
+
 			})
-	}, [state.timeframe])
 
-
-	useEffect(() => {
 
 		new HttpService("", {
 			"uniqueId": "abc1",
@@ -84,25 +80,31 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 			if (res)
 				setState({ ...state, percentChange: res.data.percentChange })
 		})
+		setState({ ...state, balance: 0 })
+		// if (wallet) {
 
-		if (wallet) {
+		// 	let selectedCoin = coinManager[coin.symbol];
+		// 	if (selectedCoin.getWalletFromMnemonic) {
+		// 		selectedCoin.getWalletFromMnemonic(wallet.backup)
+		// 			.then(wallet => {
+		// 				state.wallet = wallet;
+		// 				setState({ ...state });
 
-			let selectedCoin = coinManager[coin.symbol];
-			if (selectedCoin.getWalletFromMnemonic) {
-				selectedCoin.getWalletFromMnemonic(wallet.backup)
-					.then(wallet => {
-						state.wallet = wallet;
-						setState({ ...state });
+		// 				selectedCoin.getBalance(wallet?.address, false).then(result => {
+		// 					setState({ ...state, balance: result })
+		// 				})
+		// 			})
+		// 			.catch(ex => console.error('balance wallet error', ex))
+		// 	}
+		// }
+		setIsLoading(false)
+	}, [state.timeframe])
 
-						selectedCoin.getBalance(wallet?.address, false).then(result => {
-							setState({ ...state, balance: result })
-						})
-					})
-					.catch(ex => console.error('balance wallet error', ex))
-			}
-		}
 
-	}, [wallet])
+	// useEffect(() => {
+
+
+	// }, [])
 
 	const handleSelectChange = (title) => {
 		if (title === "all")
@@ -129,7 +131,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				</View>
 				<AppText color="text2">{coin.name} Balance</AppText>
 				<AppText bold typo="md">
-					{state.balance} {coin.symbol}
+					{coin.balance} {coin.symbol}
 				</AppText>
 				<View
 					style={{
@@ -150,7 +152,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 			</View>
 			<View style={{ ...globalStyles.flex.row, marginVertical: 24 }}>
 				{isLoading ? <ActivityIndicator
-					size={15}
+					size={25}
 					color={globalStyles.Colors.primaryColor} /> :
 					<AreaChart
 						style={{ height: 200, flex: 0.98 }}
