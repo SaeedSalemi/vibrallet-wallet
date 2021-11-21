@@ -20,3 +20,11 @@ Object.defineProperty(String.prototype, "isPhone", {
     return true
   }
 })
+
+
+
+Object.defineProperty(Object.prototype, "isEmpty", {
+  value: function () {
+    return Object.keys(this).length === 0
+  }
+})
