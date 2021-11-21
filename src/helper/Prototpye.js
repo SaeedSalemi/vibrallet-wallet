@@ -28,3 +28,17 @@ Object.defineProperty(Object.prototype, "isEmpty", {
     return Object.keys(this).length === 0
   }
 })
+
+
+Object.defineProperty(Number.prototype, "moneyFormat", {
+  value: function (n, x) {
+    try {
+      const re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+      return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+    } catch (e) {
+      // exeption(e);
+      return '';
+    }
+  }
+})
+
