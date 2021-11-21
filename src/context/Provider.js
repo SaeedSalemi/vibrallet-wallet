@@ -52,7 +52,6 @@ const MainProvider = props => {
               item.balance = 0
               item.color = state.preDefinedCoinsColors[item.symbol]
             }
-            console.log('debug 3', items)
             setState({ ...state, coins: items })
             setToStorage("supportedCoins", JSON.stringify(items))
           }
