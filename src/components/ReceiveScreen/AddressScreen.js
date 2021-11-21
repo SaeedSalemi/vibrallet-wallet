@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useContext } from 'react'
 import { View, Image, ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
-import { Images } from '../../assets'
 import ethManager from '../../blockchains/EthManager'
 import { globalStyles } from '../../config/styles'
 import AppButton from '../common/AppButton'
@@ -12,9 +11,12 @@ import bscManager from '../../blockchains/BscManager'
 import Clipboard from '@react-native-community/clipboard'
 import { showMessage } from "react-native-flash-message";
 import { share } from '../../utils/Functions'
+import { Context } from '../../context/Provider'
 
 export default function AddressScreen({ route, navigation }) {
 	const { coin } = route.params || {}
+
+	const { coinManager } = useContext(Context)
 
 	const wallet = useSelector(state =>
 		state.wallets.data ? state.wallets.data[0] : null
@@ -51,7 +53,7 @@ export default function AddressScreen({ route, navigation }) {
 			share("Recive token", `https://app.vibrallet.com/send?coin=${symbol}&address=${address}&amount=${amount}`)
 		else {
 			showMessage({
-				message: `Amount couldn't be 0 or less`,
+				message: `Amount couldn't be 0 or less.`,
 				description: null,
 				type: 'danger',
 				icon: null,
