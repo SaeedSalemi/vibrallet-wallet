@@ -7,3 +7,16 @@ Object.defineProperty(String.prototype, "isEmail", {
   }
 })
 
+Object.defineProperty(String.prototype, "isPhone", {
+  value: function () {
+    const text = String(this)
+    if (isNaN(text)) {
+      return false
+    }
+    if (text.length > 12) {
+      return false
+    }
+
+    return true
+  }
+})
