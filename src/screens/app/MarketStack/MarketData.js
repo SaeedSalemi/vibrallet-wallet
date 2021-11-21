@@ -17,8 +17,13 @@ export default function MarketData({ items }) {
 				renderItem={({ item, index }) => <RenderMarketItem item={item} index={index} />}
 				keyExtractor={(item) => item.id.toString()}
 				refreshControl={
-					<RefreshControl refreshing={false} />
+					<RefreshControl refreshing={false} onRefresh={() => {
+
+					}} />
 				}
+			// onEndReachedThreshold={0.8}
+			// onEndReached={() => {}}
+
 			// removeClippedSubviews={
 			// 	Platform.OS === "android"
 			// }
@@ -26,6 +31,9 @@ export default function MarketData({ items }) {
 		</>
 	)
 }
+
+
+
 
 const RenderMarketItem = React.memo(({ item, index }) => {
 	const { navigate } = useNavigation()
