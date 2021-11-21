@@ -1,17 +1,28 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { View } from 'react-native'
 import AppButton from '../common/AppButton'
 import AppInput from '../common/AppInput/AppInput'
 import { globalStyles } from '../../config/styles'
+import * as yup from 'yup';
+import { showMessage } from 'react-native-flash-message'
 
 export default function EditProfileForm() {
+
+
+	let schema = yup.object().shape({
+		username: yup.string().required(),
+		email: yup.string().email(),
+		phonenumber: yup.string(),
+	});
+
+
 	const items = useMemo(() => {
 		return [
 			{
 				label: 'Username',
 				placeholder: 'Enter your username',
 				icon: 'user',
-				message: 'It can not be changed while it’s chosen',
+				// message: 'It can not be changed while it’s chosen',
 				alertIcon: 'info-circle',
 				alertIconColor: globalStyles.Colors.failure,
 			},
@@ -34,6 +45,23 @@ export default function EditProfileForm() {
 			},
 		]
 	}, [])
+
+
+	const handleSubmitProfile = () => {
+		schema.isValid({}).then(valid => {
+			// submit the form
+		}).catch(err => {
+			showMessage({
+				message: `Please check`,
+				description: null,
+				type: 'success',
+				icon: null,
+				duration: 1000,
+				style: { backgroundColor: "#6BC0B1" },
+				position: 'top'
+			})
+		})
+	}
 
 	return (
 		<View>
