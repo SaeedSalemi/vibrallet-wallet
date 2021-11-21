@@ -14,7 +14,7 @@ export default function EditProfileScreen() {
 			</View>
 			<View style={{ ...globalStyles.flex.center, paddingBottom: 18 }}>
 				<AppText typo="xs" color="text1">
-					Dear SamJones
+					Dear User
 				</AppText>
 				<AppText typo="tiny" color="text2" style={{ marginVertical: 2 }}>
 					Complete identity fields blow to earn 100
