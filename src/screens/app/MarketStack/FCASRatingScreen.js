@@ -7,7 +7,7 @@ import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import RatingSortHeader from '../../../components/Market/RatingSortHeader'
 import { globalStyles } from '../../../config/styles'
 // import { coins } from '../HomeStack/CreatePriceAlertScreen'
-import { Context } from '../../../context/Provider'
+import { Context } from '../../../context/MarketProvider'
 export default function FCASRatingScreen() {
 
 	const { FCASList } = useContext(Context)
