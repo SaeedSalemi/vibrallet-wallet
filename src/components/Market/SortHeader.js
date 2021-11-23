@@ -1,26 +1,46 @@
-import React from 'react'
-import { View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { View, TouchableOpacity } from 'react-native'
 import { globalStyles } from '../../config/styles'
 import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import MarketHeaderContainer from './MarketHeaderContainer'
+import { Context } from '../../context/MarketProvider'
+
+// 
+
+
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
+import Feather from 'react-native-vector-icons/Feather'
 
 export default function SortHeader() {
+	const { changeMarketSort, MarketListingSort } = useContext(Context)
+	const DEFAULT_COLOR = '#615F69';
+	const PRIMARY_COLOR = '#FF9901';
 	return (
 		<MarketHeaderContainer>
 			<View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-				<AppText color="text2" typo="tiny">
-					Name
-				</AppText>
-				<AppIcon name="arrowDownSm" style={{ marginHorizontal: 2 }} />
+				<TouchableOpacity onPress={() => {
+					MarketListingSort === 'symbol' ? changeMarketSort('-symbol') : changeMarketSort('symbol')
+				}}>
+					<AppText color={MarketListingSort === 'symbol' || MarketListingSort === "-symbol" ? 'primaryColor' : 'text3'} typo="tiny">
+						Name <MaterialCommunityIcons name={MarketListingSort === 'symbol' ? 'arrow-up' : 'arrow-down'}
+							color={MarketListingSort === 'symbol' || MarketListingSort === "-symbol" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
+					</AppText>
+				</TouchableOpacity>
 				<AppText typo="tiny" color="text3" style={{ marginHorizontal: 1 }}>
 					/
 				</AppText>
+				<TouchableOpacity onPress={() => {
+					MarketListingSort === 'volume_24h' ? changeMarketSort('-volume_24h') : changeMarketSort('volume_24h')
+				}}>
 
-				<AppText color="text2" typo="tiny" style={{ marginHorizontal: 2 }}>
-					Vol
-				</AppText>
-				<AppIcon name="arrowDownSm" />
+					<AppText color={MarketListingSort === 'volume_24h' || MarketListingSort === "-volume_24h" ? 'primaryColor' : 'text3'} typo="tiny">
+						Vol <MaterialCommunityIcons name={MarketListingSort === 'volume_24h' ? 'arrow-up' : 'arrow-down'}
+							color={MarketListingSort === 'volume_24h' || MarketListingSort === "-volume_24h" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
+					</AppText>
+				</TouchableOpacity>
 			</View>
 			<View
 				style={{
@@ -29,10 +49,14 @@ export default function SortHeader() {
 					flex: 1,
 				}}
 			>
-				<AppText color="text2" typo="tiny" style={{ paddingEnd: 4 }}>
-					Last Price
-				</AppText>
-				<AppIcon name="arrowDownSm2" />
+				<TouchableOpacity onPress={() => {
+					MarketListingSort === 'price' ? changeMarketSort('-price') : changeMarketSort('price')
+				}}>
+					<AppText color={MarketListingSort === 'price' || MarketListingSort === "-price" ? 'primaryColor' : 'text3'} typo="tiny">
+						Last Price <MaterialCommunityIcons name={MarketListingSort === 'price' ? 'arrow-up' : 'arrow-down'}
+							color={MarketListingSort === 'price' || MarketListingSort === "-price" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
+					</AppText>
+				</TouchableOpacity>
 			</View>
 			<View
 				style={{
@@ -42,10 +66,15 @@ export default function SortHeader() {
 					justifyContent: 'flex-end',
 				}}
 			>
-				<AppText color="primaryColor" typo="tiny" style={{ paddingEnd: 4 }}>
-					24 Chg%
-				</AppText>
-				<AppIcon name="arrowDownSm2" />
+				<TouchableOpacity onPress={() => {
+					MarketListingSort === 'percent_change_24h' ? changeMarketSort('-percent_change_24h') : changeMarketSort('percent_change_24h')
+				}}>
+					<AppText color={MarketListingSort === 'percent_change_24h' || MarketListingSort === "-percent_change_24h" ? 'primaryColor' : 'text3'} typo="tiny">
+						24h Chg% <MaterialCommunityIcons name={MarketListingSort === 'percent_change_24h' ? 'arrow-up' : 'arrow-down'}
+							color={MarketListingSort === 'percent_change_24h' || MarketListingSort === "-percent_change_24h" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
+					</AppText>
+				</TouchableOpacity>
+
 			</View>
 		</MarketHeaderContainer>
 	)
