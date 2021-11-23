@@ -8,9 +8,14 @@ import RatingSortHeader from '../../../components/Market/RatingSortHeader'
 import { globalStyles } from '../../../config/styles'
 // import { coins } from '../HomeStack/CreatePriceAlertScreen'
 import { Context } from '../../../context/MarketProvider'
+import { SvgUri } from 'react-native-svg'
+import useSVGChart from '../../../hooks/useSVGChart'
+
 export default function FCASRatingScreen() {
 
+
 	const { FCASList } = useContext(Context)
+
 	const colors = {
 		'S': '#67B010',
 		'A': '#4ED69D',
@@ -22,6 +27,7 @@ export default function FCASRatingScreen() {
 
 	const data = FCASList
 	const renderFCASItem = ({ item, index }) => {
+		// const getSVGUri = useSVGChart(`${item.symbol}USDT`)
 		return (
 			<SwapableRow leftItems={[{ title: 'Favorite', icon: 'star' }]}>
 				<View
@@ -67,10 +73,22 @@ export default function FCASRatingScreen() {
 						</AppText>
 					</View>
 					<View style={{ flex: 2 }}>
-						<Image
+						{/* <Image
 							source={Images[item.chart]}
 							style={{ maxWidth: '100%' }}
+						/> */}
+
+						<SvgUri
+							width={100}
+							style={{
+								alignItems: 'center',
+								flexDirection: 'row',
+								justifyContent: 'center',
+								// marginTop: 50
+							}}
+							uri={getSVGUri}
 						/>
+
 					</View>
 				</View>
 				<View style={{ marginVertical: 12 }}>
