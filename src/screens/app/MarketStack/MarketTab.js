@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View } from 'react-native'
 import SortHeader from '../../../components/Market/SortHeader'
 import { globalStyles } from '../../../config/styles'
