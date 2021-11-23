@@ -7,9 +7,11 @@ const MarketProvider = props => {
 
   const [state, setState] = useState({
     FCASList: [],
+    FCASSort: 'name',
+
     MarketListing: [],
     MarketListingSort: 'symbol',
-    MarketListingPageSize: 20,
+    MarketListingPageSize: 15,
     MarketListingPageNumber: 1
   })
 
@@ -19,7 +21,24 @@ const MarketProvider = props => {
 
   useEffect(() => {
     fetchData()
+    fetchFCASData()
   }, [])
+
+  const marketPagination = (page) => {
+    setState((state) => {
+      state.MarketListingPageNumber = page
+      return { ...state }
+    })
+    fetchData()
+  }
+
+  const changeFCASSort = (sort) => {
+    setState((state) => {
+      state.FCASSort = sort
+      return { ...state }
+    })
+    fetchData()
+  }
 
   const changeMarketSort = (sort) => {
     setState((state) => {
@@ -29,6 +48,8 @@ const MarketProvider = props => {
     fetchData()
   }
 
+
+
   const fetchData = useCallback(() => {
     new HttpService(
       "", {
@@ -37,7 +58,8 @@ const MarketProvider = props => {
       "data": {
         "pageSize": state.MarketListingPageSize,
         "pageNumber": state.MarketListingPageNumber,
-        "sort": state.MarketListingSort
+        "sort": state.MarketListingSort,
+        "filter": "btc"
       }
     }
     ).Post(response => {
@@ -51,19 +73,30 @@ const MarketProvider = props => {
     })
   }, [state])
 
-  useEffect(() => {
-    new HttpService("", {
+
+  const fetchFCASData = useCallback(() => {
+    new HttpService(
+      "", {
       "uniqueId": "123",
       "action": "fcasListing",
-    }).Post(res => {
-      if (res.length > 0) {
-        state.FCASList = res
-        setState({ ...state })
+      "data": {
+        "pageSize": 1000,
+        "pageNumber": 1,
+        "sort": state.FCASSort
+      }
+    }
+    ).Post(response => {
+      if (response) {
+        setState((state) => {
+          state.FCASList = response
+          return { ...state }
+        })
+
       }
     })
-  }, [state.FCASList])
+  }, [state])
 
-  return <Context.Provider value={{ ...state, dispatch, changeMarketSort }}>
+  return <Context.Provider value={{ ...state, dispatch, changeMarketSort, marketPagination, changeFCASSort }}>
     {props.children}
   </Context.Provider>
 
