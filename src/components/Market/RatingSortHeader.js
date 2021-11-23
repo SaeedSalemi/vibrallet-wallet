@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { globalStyles } from '../../config/styles'
-import AppIcon from '../common/AppIcon'
+// import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import MarketHeaderContainer from './MarketHeaderContainer'
 import { Context } from '../../context/MarketProvider'
