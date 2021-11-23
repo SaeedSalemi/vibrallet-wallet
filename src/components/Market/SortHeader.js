@@ -1,18 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { globalStyles } from '../../config/styles'
-import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import MarketHeaderContainer from './MarketHeaderContainer'
 import { Context } from '../../context/MarketProvider'
-
-// 
-
-
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-
-import Feather from 'react-native-vector-icons/Feather'
 
 export default function SortHeader() {
 	const { changeMarketSort, MarketListingSort } = useContext(Context)
