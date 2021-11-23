@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useState } from 'react'
 import HttpService from '../services/HttpService'
 
 export const Context = createContext()
@@ -8,41 +8,48 @@ const MarketProvider = props => {
   const [state, setState] = useState({
     FCASList: [],
     MarketListing: [],
-    MarketListingSort: {
-      p_symbol: 'symbol',
-      n_symbol: '-symbol',
-
-      p_percent_change_24h: 'percent_change_24h',
-      n_percent_change_24h: '-percent_change_24h',
-
-      p_price: 'price',
-      n_price: '-price',
-    },
+    MarketListingSort: 'symbol',
+    MarketListingPageSize: 20,
+    MarketListingPageNumber: 1
   })
 
-  const dispatch = value => setState({ ...state, ...value })
+  const dispatch = value => {
+    setState({ ...state, ...value })
+  }
 
   useEffect(() => {
+    fetchData()
+  }, [])
 
+  const changeMarketSort = (sort) => {
+    setState((state) => {
+      state.MarketListingSort = sort
+      return { ...state }
+    })
+    fetchData()
+  }
+
+  const fetchData = useCallback(() => {
     new HttpService(
       "", {
       "uniqueId": "123",
       "action": "marketListing",
       "data": {
-        "pageSize": 10,
-        "pageNumber": 1,
-        "sort": `${state.MarketListingSort.p_symbol}`
+        "pageSize": state.MarketListingPageSize,
+        "pageNumber": state.MarketListingPageNumber,
+        "sort": state.MarketListingSort
       }
     }
     ).Post(response => {
-      console.log('market listing', response)
       if (response) {
-        state.MarketListing = response
-        setState({ ...state })
+        setState((state) => {
+          state.MarketListing = response
+          return { ...state }
+        })
+
       }
     })
-
-  }, [])
+  }, [state])
 
   useEffect(() => {
     new HttpService("", {
@@ -56,7 +63,7 @@ const MarketProvider = props => {
     })
   }, [state.FCASList])
 
-  return <Context.Provider value={{ ...state, dispatch }}>
+  return <Context.Provider value={{ ...state, dispatch, changeMarketSort }}>
     {props.children}
   </Context.Provider>
 
