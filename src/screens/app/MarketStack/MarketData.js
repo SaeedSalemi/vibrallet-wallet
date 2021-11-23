@@ -1,15 +1,32 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/core'
-import { FlatList, TouchableOpacity, View, Platform, RefreshControl, Image } from 'react-native'
+import { FlatList, TouchableOpacity, View, Platform, RefreshControl, Image, ActivityIndicator } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
-import { Context } from '../../../context/Provider'
+import { Context } from '../../../context/MarketProvider'
+// TODO: Activity Indicator
+
 
 export default function MarketData({ items }) {
+
+	//items
+	const [data, setData] = useState([])
+	const [page, setPage] = useState(1)
+	const [is_end, setIsEnd] = useState(false)
+
+	const { MarketListingPageSize, MarketListingPageNumber, dispatch, marketPagination } = useContext(Context)
+
+
+	useEffect(() => {
+		// if (items.length === 0) {
+		// 	setIsEnd(true)
+		// }
+	}, [])
+
 	return (
 		<>
 			{items && <FlatList
@@ -17,12 +34,19 @@ export default function MarketData({ items }) {
 				renderItem={({ item, index }) => <RenderMarketItem item={item} index={index} />}
 				keyExtractor={(item) => item.id.toString()}
 				refreshControl={
-					<RefreshControl refreshing={false} onRefresh={() => {
-
-					}} />
+					<RefreshControl
+						refreshing={false}
+						onRefresh={() => {
+							marketPagination(1)
+						}} />
 				}
-			// onEndReachedThreshold={0.8}
-			// onEndReached={() => {}}
+				onEndReachedThreshold={0.8}
+				onEndReached={() => {
+					if (!is_end) {
+						setPage(page + 1)
+						marketPagination(page + 1)
+					}
+				}}
 
 			// removeClippedSubviews={
 			// 	Platform.OS === "android"
