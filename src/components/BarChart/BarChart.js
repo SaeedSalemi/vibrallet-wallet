@@ -3,13 +3,15 @@ import { View } from 'react-native'
 import { globalStyles } from '../../config/styles'
 import AppText from '../common/AppText'
 import Bar from './components/Bar'
-const percent = [100, 75, 50, 25, 0]
+// const percent = [100, 75, 50, 25, 0]
 import { BarChart, Grid, YAxis, XAxis } from 'react-native-svg-charts'
 
 const _BarChart = ({ data }) => {
   const fill = 'rgb(134, 65, 244)'
-  const _data = [50, 10, 40]
-  const contentInset = { top: 0, bottom: 0 }
+  const _data = [0, 0, 0]
+  const contentInset = { top: 5, bottom: 10 }
+  const x = ['ETH', 'BTC', 'BNB']
+  const percent = [0, 25, 50, 75, 100]
 
   return (
     <View style={{ flexDirection: 'column' }}>
@@ -23,24 +25,26 @@ const _BarChart = ({ data }) => {
             fontSize: 10,
           }}
           numberOfTicks={percent.length}
-          formatLabel={(value) => `${value}`}
+          // formatLabel={(value, index) => `${percent[index] === undefined ? '' : percent[index]}`}
+          formatLabel={(value, index) => `${percent[index] === undefined ? '' : `${percent[index]}%`}`}
         />
         <BarChart
           // spacingInner={.8}
           style={{ flex: 1, marginLeft: 16 }} data={_data} svg={{ fill }} contentInset={contentInset}>
-          {/* <Grid /> */}
+          <Grid />
         </BarChart>
       </View>
 
       <XAxis
-        data={['ETH', 'BTC', 'BNB']}
+        data={x}
         contentInset={contentInset}
         svg={{
           fill: 'grey',
           fontSize: 10,
         }}
-        style={{ height: 20, paddingTop: 5 }}
-        formatLabel={(value, index) => value}
+        style={{ height: 20, paddingTop: 5, }}
+        // formatLabel={(value, index) => value}
+        formatLabel={(value, index) => x[index]}
         numberOfTicks={3}
       // formatLabel={(value) => `${value}`}
       />
