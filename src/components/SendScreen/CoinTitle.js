@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Image } from 'react-native'
 import { globalStyles } from '../../config/styles'
 import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
@@ -15,13 +15,16 @@ export default function CoinTitle({
 }) {
 	return (
 		<View style={{ ...globalStyles.flex.center }}>
-			<MarketIcon size={42} color={globalStyles.Colors.ethereum}>
+			{/* <MarketIcon size={42} color={globalStyles.Colors.ethereum}>
 				{icon === 'ethereum' ? (
 					<MaterialCommunityIcons name={icon} size={24} color="#7037C9" />
 				) : (
 					<AppIcon name={icon} style={{ width: 24, height: 24 }} />
 				)}
-			</MarketIcon>
+			</MarketIcon> */}
+
+			<Image resizeMode={"stretch"}
+				style={{ width: 30, height: 30, }} source={{ uri: icon }} />
 			<View style={{ marginVertical: 4 }}></View>
 			{title ? (
 				<AppText color="text2" typo="tiny">

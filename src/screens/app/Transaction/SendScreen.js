@@ -205,7 +205,8 @@ export default function SendScreen({ navigation, route }) {
 				<View style={{ marginVertical: 8 }}>
 					<CoinTitle
 						title={`${coin.name} Balance`}
-						icon={coin.name?.toLowerCase()}
+						// icon={coin.name?.toLowerCase()}
+						icon={coin.logo}
 						value={`${state.balance} ${coin.name}`}
 						amount={state.amount}
 					/>
