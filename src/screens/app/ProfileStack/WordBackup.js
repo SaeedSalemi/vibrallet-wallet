@@ -21,6 +21,7 @@ export default function WordBackup({ navigation }) {
 	}, [])
 
 	const handleAddWallet = () => {
+		//TODO: Go to the home screen.
 		dispatch(finalCreateWallet(backup))
 		showMessage({
 			message: 'Your wallet has been created successfully',
@@ -71,18 +72,46 @@ export default function WordBackup({ navigation }) {
 						))}
 					</View>
 					<HR />
-					<TouchableOpacity
-						style={{ ...globalStyles.flex.center }}
-						onPress={handleCopy}
-					>
-						<AppText
-							bold
-							color="secondaryColor"
-							style={{ paddingVertical: 12 }}
+
+					<View style={{
+						flexDirection: 'row',
+						justifyContent: 'space-around',
+						alignItems: 'center',
+						paddingHorizontal: 22,
+						paddingVertical: 2
+					}}>
+						<TouchableOpacity
+							style={{ ...globalStyles.flex.center }}
+							onPress={handleCopy}
 						>
-							Copy to clipboard
-						</AppText>
-					</TouchableOpacity>
+							<AppText
+								bold
+								color="secondaryColor"
+								style={{ paddingVertical: 12 }}
+							>
+								Copy
+							</AppText>
+						</TouchableOpacity>
+
+						<View style={{ height: '100%', borderStyle: 'solid', borderColor: '#272627', borderRightWidth: 1 }} />
+
+						<TouchableOpacity
+							style={{ ...globalStyles.flex.center }}
+							onPress={handleCopy}
+						>
+							<AppText
+								bold
+								color="secondaryColor"
+								style={{ paddingVertical: 12 }}
+							>
+								Backup
+							</AppText>
+						</TouchableOpacity>
+					</View>
+
+
+
+
 				</View>
 				<View style={{ ...globalStyles.flex.center, marginVertical: 24 }}>
 					<AppText
