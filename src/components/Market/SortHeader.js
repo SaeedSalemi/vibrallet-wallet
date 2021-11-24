@@ -12,7 +12,7 @@ export default function SortHeader() {
 	const PRIMARY_COLOR = '#FF9901';
 	return (
 		<MarketHeaderContainer>
-			<View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+			<View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
 				<TouchableOpacity onPress={() => {
 					MarketListingSort === 'symbol' ? changeMarketSort('-symbol') : changeMarketSort('symbol')
 				}}>
@@ -21,10 +21,11 @@ export default function SortHeader() {
 							color={MarketListingSort === 'symbol' || MarketListingSort === "-symbol" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
 					</AppText>
 				</TouchableOpacity>
-				<AppText typo="tiny" color="text3" style={{ marginHorizontal: 1 }}>
+
+				{/* <AppText typo="tiny" color="text3" style={{ marginHorizontal: 1 }}>
 					/
-				</AppText>
-				<TouchableOpacity onPress={() => {
+				</AppText> */}
+				{/* <TouchableOpacity onPress={() => {
 					MarketListingSort === 'volume_24h' ? changeMarketSort('-volume_24h') : changeMarketSort('volume_24h')
 				}}>
 
@@ -32,7 +33,7 @@ export default function SortHeader() {
 						Vol <MaterialCommunityIcons name={MarketListingSort === 'volume_24h' ? 'arrow-up' : 'arrow-down'}
 							color={MarketListingSort === 'volume_24h' || MarketListingSort === "-volume_24h" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
 					</AppText>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 			</View>
 			<View
 				style={{
