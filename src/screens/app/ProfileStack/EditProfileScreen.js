@@ -16,9 +16,9 @@ export default function EditProfileScreen() {
 				<AppText typo="xs" color="text1">
 					Dear User
 				</AppText>
-				<AppText typo="tiny" color="text2" style={{ marginVertical: 2 }}>
+				{/* <AppText typo="tiny" color="text2" style={{ marginVertical: 2 }}>
 					Complete identity fields blow to earn 100
-				</AppText>
+				</AppText> */}
 				<View style={{ ...globalStyles.flex.center }}>
 					<Image source={Images.progress} />
 					<AppText typo="dot" color="text3">
