@@ -223,9 +223,9 @@ export default function WalletScreen() {
 						</View>
 					) : (
 						<View style={{ paddingHorizontal: 16, paddingVertical: 4 }}>
-							<View style={{ ...globalStyles.flex.center, marginVertical: 8 }}>
+							<View style={{ ...globalStyles.flex.center, marginVertical: 6 }}>
 								<AppText color="text3">Portfolio Value</AppText>
-								<AppText color="text1" bold typo="lg">
+								<AppText color="text2" bold typo="md">
 									${totalBalance}
 								</AppText>
 							</View>

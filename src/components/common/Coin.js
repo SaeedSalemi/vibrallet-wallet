@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { View, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
-import useSVGChart from '../../hooks/useSVGChart'
+// import useSVGChart from '../../hooks/useSVGChart'
 import { coins } from '../../screens/app/HomeStack/CreatePriceAlertScreen'
 import AppSwitch from './AppSwitch'
 import AppText from './AppText'
@@ -27,7 +27,7 @@ export default function Coin({
 
 	const { coinManager, getCoinBalance } = useContext(Context)
 	const { navigate } = useNavigation()
-	const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
+	// const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
 	const [isLoading, setIsLoading] = useState(true)
 	const [state, setState] = useState({
 		rate: 0,
@@ -35,6 +35,34 @@ export default function Coin({
 		amount: 0,
 		balance: 0
 	})
+
+	const [coinLogo, setCoinLogo] = useState('')
+
+	useEffect(() => {
+		try {
+			new HttpService("",
+				{
+					"uniqueId": "123",
+					"action": "priceChart",
+					"data": {
+						"symbol": `${coin.symbol}USDT`,
+						"timeframe": "30m",
+						"limit": 1440,
+						"responseType": "url",
+						"height": 26,
+						"width": 250,
+					}
+				}).Post(res => {
+					if (res?.success === true) {
+						// setState(res.data.url)
+						setCoinLogo(res.data.url)
+					}
+				})
+		} catch (error) {
+			console.log('error to load coin svg', error)
+			setCoinLogo('')
+		}
+	}, [])
 
 	useEffect(() => {
 		new HttpService("", {
@@ -152,7 +180,7 @@ export default function Coin({
 									justifyContent: 'center',
 									marginTop: 50
 								}}
-								uri={getSVGUri}
+								uri={coinLogo}
 							/>
 
 						</View>
