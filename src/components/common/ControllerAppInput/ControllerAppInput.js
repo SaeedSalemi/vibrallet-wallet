@@ -21,7 +21,8 @@ export default function ControllerAppInput({
 					onBlur={onBlur}
 					onChangeText={onChange}
 					value={value}
-					message={errors?.[name]?.message ?? message}
+					// message={errors?.[name]?.message ?? message}
+					message={errors ? 'Required' : ''}
 					{...restProps}
 				/>
 			)}
