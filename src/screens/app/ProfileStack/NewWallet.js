@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { View } from 'react-native'
@@ -25,7 +25,7 @@ const walletNameSchema = yup.object({
 
 export default function NewWallet({ navigation, route }) {
 	const dispatch = useDispatch()
-	console.log("test", route)
+	const [suggestedName, setSuggestedName] = useState('')
 	const { no_back } = route.params || {}
 	const walletName = useSelector(state => state.wallets?.create?.name)
 	const items = useMemo(() => [
@@ -56,6 +56,11 @@ export default function NewWallet({ navigation, route }) {
 		navigation.navigate(routes.wordBackup)
 	}
 
+
+	const handleSelectName = title => {
+		setSuggestedName(title)
+	}
+
 	return (
 		<Screen
 			edges={['bottom']}
@@ -72,6 +77,8 @@ export default function NewWallet({ navigation, route }) {
 							defaultValue={walletName}
 							placeholder="Type your wallet name"
 							onSubmitEditing={handleSubmit(onSubmit)}
+							value={suggestedName}
+							onChangeText={text => setSuggestedName(text)}
 						/>
 						<View
 							style={{
@@ -82,12 +89,13 @@ export default function NewWallet({ navigation, route }) {
 								borderRadius: 10,
 							}}
 						>
+							{/* TODO: Suggested name should be working by selecting */}
 							<AppText bold style={{ padding: 18 }}>
 								Suggested Names:
 							</AppText>
 							{items.map((item, i) => (
 								<View key={i}>
-									<NewWalletListItem title={item} />
+									<NewWalletListItem onSelect={handleSelectName} title={item} />
 									{i + 1 === items.length ? null : <HR />}
 								</View>
 							))}
