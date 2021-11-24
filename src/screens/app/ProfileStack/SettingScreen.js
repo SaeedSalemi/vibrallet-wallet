@@ -51,7 +51,7 @@ export default function SettingScreen() {
 		},
 		{
 			title: 'Language',
-			detail: 'Change your Binrex Wallets language from this section',
+			detail: 'Change your Vibranium Wallets language from this section',
 			icon: <Entypo name="language" size={25} color="#9299C2" />,
 			route: routes.language,
 		},

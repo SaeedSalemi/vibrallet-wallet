@@ -6,7 +6,7 @@ export default function ExchangeScreen() {
 	return (
 		<Screen edges={['bottom']}>
 			<ComingSoon
-				details="You can exchanges all your assets in Binrex Wallet at:"
+				details="You can exchanges all your assets in Vibranium Wallet at:"
 				time="78:12:42:05"
 				imageName="exchange"
 			/>

@@ -34,7 +34,7 @@ export default function UsernameScreen({ route }) {
 						<AppText color="text2">
 							You can recieve and send coins from other
 						</AppText>
-						<AppText color="text2">Binrex wallets.</AppText>
+						<AppText color="text2">Vibranium wallets.</AppText>
 					</View>
 				</View>
 				<View style={{ ...globalStyles.flex.center }}>

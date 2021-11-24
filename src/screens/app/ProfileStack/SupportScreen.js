@@ -17,12 +17,12 @@ const items = [
 	},
 	{
 		title: 'Rate US',
-		detail: 'Rate Binrex so we can solve our issues quickly',
+		detail: 'Rate Vibranium so we can solve our issues quickly',
 		// icon: 'rateUs',
 	},
 	{
 		title: 'Share Us',
-		detail: 'Share Binrex with your friends',
+		detail: 'Share Vibranium with your friends',
 		// icon: 'shareUs',
 	},
 	{

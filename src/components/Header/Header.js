@@ -152,7 +152,7 @@ export default function Header({ route = routes.home, children }) {
 							@SamJones
 						</AppText>
 						<AppText typo="dot" color="text3">
-							Binrex Evagelist
+							Vibranium Evagelist
 						</AppText>
 					</View>
 				</TouchableOpacity>

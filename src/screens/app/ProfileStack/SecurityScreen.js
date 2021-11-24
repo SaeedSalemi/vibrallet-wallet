@@ -39,7 +39,7 @@ export default function SecurityScreen() {
 		},
 		{
 			title: 'Secure With Fingerprint',
-			detail: 'Use fingerprint authentication for logging to Binrex Wallet',
+			detail: 'Use fingerprint authentication for logging to Vibranium Wallet',
 			icon: (
 				<View
 					style={{
@@ -61,7 +61,7 @@ export default function SecurityScreen() {
 		},
 		{
 			title: 'Restore',
-			detail: 'Overwrite your current Binrex wallet using a secret phrase',
+			detail: 'Overwrite your current Vibranium wallet using a secret phrase',
 			icon: (
 				<FontAwesome5
 					name="file-download"

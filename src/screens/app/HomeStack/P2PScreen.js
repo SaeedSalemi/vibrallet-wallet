@@ -6,7 +6,7 @@ export default function P2PScreen() {
 	return (
 		<Screen edges={['bottom']}>
 			<ComingSoon
-				details="You can trade privately at any time with anybody in Binrex Wallet at:"
+				details="You can trade privately at any time with anybody in Vibranium Wallet at:"
 				time="65:12:42:05"
 				imageName="p2p"
 			/>

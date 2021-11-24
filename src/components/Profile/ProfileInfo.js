@@ -31,7 +31,7 @@ const ProfileInfo = () => {
 							@SamJones
 						</AppText>
 						<AppText color="text3" bold typo="dot">
-							Binrex Evangelist
+							Vibranium Evangelist
 						</AppText>
 					</View>
 					<TouchableOpacity onPress={() => navigate(routes.editProfile)}>
