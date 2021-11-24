@@ -26,6 +26,7 @@ const walletNameSchema = yup.object({
 export default function NewWallet({ navigation, route }) {
 	const dispatch = useDispatch()
 	const [suggestedName, setSuggestedName] = useState('')
+	const [error, setError] = useState(false)
 	const { no_back } = route.params || {}
 	const walletName = useSelector(state => state.wallets?.create?.name)
 	const items = useMemo(() => [
@@ -34,6 +35,8 @@ export default function NewWallet({ navigation, route }) {
 		'ETH Wallet',
 		'HODI Wallet',
 	])
+
+
 	const {
 		control,
 		handleSubmit,
@@ -51,14 +54,37 @@ export default function NewWallet({ navigation, route }) {
 	}, [])
 
 	const onSubmit = value => {
-		dispatch(initCreateWallet(value.walletName))
+		// console.log('on submit', value)
+		console.log('debug submit 2', suggestedName)
+		console.log('debug submit 3', value)
+		// alert('A1 ' + value.walletName)
+		// console.log('on submit 3', value.walletName)
+
+		// dispatch(initCreateWallet(value.walletName))
 		// navigation.navigate(routes.setPincode)
-		navigation.navigate(routes.wordBackup)
+		// navigation.navigate(routes.wordBackup)
 	}
 
 
 	const handleSelectName = title => {
 		setSuggestedName(title)
+	}
+
+	const submitHandler = () => {
+
+		if (suggestedName.length === 0) {
+			setError(true)
+			return
+		}
+		else {
+			dispatch(initCreateWallet(suggestedName))
+			navigation.navigate(routes.wordBackup)
+		}
+
+		// console.log('final input', suggestedName)
+		// dispatch(initCreateWallet(value.walletName))
+		// navigation.navigate(routes.setPincode)
+		// navigation.navigate(routes.wordBackup)
 	}
 
 	return (
@@ -71,14 +97,18 @@ export default function NewWallet({ navigation, route }) {
 					<View style={{ flex: 1 }}>
 						<ControllerAppInput
 							name="walletName"
-							errors={errors}
+							errors={error}
 							control={control}
 							icon="wallet"
-							defaultValue={walletName}
+							defaultValue={suggestedName}
 							placeholder="Type your wallet name"
-							onSubmitEditing={handleSubmit(onSubmit)}
+							// onSubmitEditing={handleSubmit(onSubmit)}
+							onSubmitEditing={submitHandler}
 							value={suggestedName}
-							onChangeText={text => setSuggestedName(text)}
+							onChangeText={text => {
+								setSuggestedName(text)
+								setError(false)
+							}}
 						/>
 						<View
 							style={{
@@ -104,7 +134,8 @@ export default function NewWallet({ navigation, route }) {
 					<AppButton
 						title={'Next'}
 						style={{ fontWeight: 'bold' }}
-						onPress={handleSubmit(onSubmit)}
+						// onPress={handleSubmit(onSubmit)}
+						onPress={submitHandler}
 					/>
 				</View>
 			</HideKeyboard>
