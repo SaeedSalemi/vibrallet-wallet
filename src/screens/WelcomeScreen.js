@@ -39,7 +39,7 @@ const WelcomeScreen = ({ navigation }) => {
 					<Image
 						fadeDuration={300}
 						style={styles.binrexLogo}
-						source={defaultStyles.Images.binrexLogo}
+						source={defaultStyles.Images.vib_starterLogoSub}
 						resizeMethod="auto"
 						resizeMode="contain"
 					/>
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
 	binrexLogo: {
 		marginTop: 10,
 		alignSelf: 'center',
+		height: 50,
 	},
 	binrexText: {
 		textAlign: 'center',
