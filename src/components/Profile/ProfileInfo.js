@@ -48,9 +48,9 @@ const ProfileInfo = () => {
 							<AppText color="secondaryColor" typo="tiny">
 								Edit Profile
 							</AppText>
-							<AppText color="text3" typo="dot">
+							{/* <AppText color="text3" typo="dot">
 								& Get Earned
-							</AppText>
+							</AppText> */}
 						</View>
 					</TouchableOpacity>
 				</View>
