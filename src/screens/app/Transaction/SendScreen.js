@@ -124,7 +124,7 @@ export default function SendScreen({ navigation, route }) {
 							setState({ ...state })
 						}
 					},
-					message: 'Estimated Value ~ $123,342.43',
+					message: 'Estimated Value ~ $0',
 				},
 			]
 		},
@@ -144,7 +144,7 @@ export default function SendScreen({ navigation, route }) {
 			{
 				title: `${coin.name} Network Fee`,
 				value: `0.0034 ${coin.name}`,
-				amount: '$2.31',
+				amount: '$0',
 			},
 			{
 				title: 'Remaining Balance',
@@ -196,15 +196,13 @@ export default function SendScreen({ navigation, route }) {
 		})
 	}
 
-
-
 	//TODO: calculate the state amount into the coin title
 	return (
 		<Screen style={{ ...globalStyles.gapScreen }}>
 			<ScrollView>
 				<View style={{ marginVertical: 8 }}>
 					<CoinTitle
-						title={`${coin.name} Balance`}
+						title={`${coin.symbol} Balance`}
 						// icon={coin.name?.toLowerCase()}
 						icon={coin.logo}
 						value={`${state.balance} ${coin.name}`}
