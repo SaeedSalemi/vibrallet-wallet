@@ -226,7 +226,9 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 						flex: 0.48,
 						backgroundColor: globalStyles.Colors.success,
 					}}
-					onPress={() => navigation.navigate(routes['receive'], { coin: state.coin })}
+					onPress={() => {
+						navigation.navigate(routes['receive'], { coin: coin })
+					}}
 				/>
 				<AppButton
 					title="Send"
@@ -235,7 +237,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 						flex: 0.48,
 						backgroundColor: globalStyles.Colors.failure,
 					}}
-					onPress={() => navigation.navigate(routes['send'], { coin: state.coin })}
+					onPress={() => navigation.navigate(routes['send'], { coin: coin })}
 				/>
 			</View>
 		</ScrollView>
