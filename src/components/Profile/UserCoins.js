@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useContext } from 'react'
 import { View, Image, Dimensions } from 'react-native'
 import AppText from '../common/AppText'
 import { Images } from '../../assets'
@@ -9,6 +9,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MarketIcon from '../common/MarketIcon/MarketIcon'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { SvgUri } from 'react-native-svg'
+import { Context } from '../../context/Provider'
+import HttpService from '../../services/HttpService'
 
 const slideShowItems = [
 	{
@@ -43,6 +45,39 @@ const { width: screenWidth } = Dimensions.get('window')
 export default function UserCoins() {
 	const carouselRef = useRef(null)
 	const [active, setActive] = useState(0)
+	const { coins, hideCoinHandler } = useContext(Context)
+
+	const [data, setData] = useState([])
+	useEffect(() => {
+		for (let item of coins) {
+			try {
+				new HttpService("",
+					{
+						"uniqueId": "123",
+						"action": "priceChart",
+						"data": {
+							"symbol": `${item.symbol}USDT`,
+							"timeframe": "30m",
+							"limit": 440,
+							"responseType": "url",
+							"height": 50,
+							"width": 250,
+						}
+					}).Post(res => {
+						if (res?.success === true) {
+							// setState(res.data.url)
+							// setCoinLogo(res.data.url)
+							item.svgUri = res.data.url
+						}
+					})
+			} catch (error) {
+				console.log('error to load coin svg', error)
+				item.svgUri = ""
+			}
+		}
+
+		setData(coins)
+	}, [])
 
 	const renderItem = ({ item }) => {
 		return (
@@ -57,13 +92,19 @@ export default function UserCoins() {
 				<View
 					style={{ ...globalStyles.flex.between, ...globalStyles.flex.row }}
 				>
-					<View>{item.icon}</View>
+					{/* <View>{item.icon}</View> */}
+					<View>
+						<Image resizeMode={"stretch"}
+							style={{ width: 30, height: 30, }} source={{ uri: item.logo }} />
+					</View>
 					<View style={{ alignSelf: 'center' }}>
-						<FontAwesome5
-							name="eye-slash"
-							color={globalStyles.Colors.text2}
-							size={25}
-						/>
+						<TouchableOpacity onPress={() => { hideCoinHandler(item.symbol) }}>
+							<FontAwesome5
+								name={item.hide ? 'eye-slash' : 'eye'}
+								color={globalStyles.Colors.text2}
+								size={25}
+							/>
+						</TouchableOpacity>
 					</View>
 				</View>
 				<View>
@@ -76,20 +117,20 @@ export default function UserCoins() {
 						}}
 					>
 						<View>
-							<AppText typo="xs">{item.title}</AppText>
+							<AppText typo="xs">{item.name}</AppText>
 							<AppText
 								color="text2"
 								style={{ marginVertical: 2 }}
 								bold
-								typo="md"
+								typo="sm"
 							>
-								{item.value}
+								{item.balance} {item.symbol}
 							</AppText>
 						</View>
 						<View>
 							<SvgUri
 								width={100}
-								uri="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/6758.svg"
+								uri={item.svgUri}
 							/>
 						</View>
 					</View>
@@ -111,7 +152,8 @@ export default function UserCoins() {
 					lockScrollWhileSnapping
 					itemWidth={330}
 					onSnapToItem={index => setActive(index)}
-					data={slideShowItems}
+					// data={slideShowItems}
+					data={data}
 					renderItem={renderItem}
 				/>
 			</View>
