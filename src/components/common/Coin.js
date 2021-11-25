@@ -47,9 +47,9 @@ export default function Coin({
 					"data": {
 						"symbol": `${coin.symbol}USDT`,
 						"timeframe": "30m",
-						"limit": 1440,
+						"limit": 440,
 						"responseType": "url",
-						"height": 26,
+						"height": 50,
 						"width": 250,
 					}
 				}).Post(res => {
@@ -169,7 +169,6 @@ export default function Coin({
 							marginVertical: 0,
 							marginLeft: 50,
 							maxHeight: 0,
-
 						}}>
 
 							<SvgUri
@@ -178,7 +177,7 @@ export default function Coin({
 									alignItems: 'center',
 									flexDirection: 'row',
 									justifyContent: 'center',
-									marginTop: 50
+									marginTop: 50,
 								}}
 								uri={coinLogo}
 							/>
