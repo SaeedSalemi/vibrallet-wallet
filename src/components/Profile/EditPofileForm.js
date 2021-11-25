@@ -80,7 +80,7 @@ export default function EditProfileForm() {
 			))}
 			<View style={{ marginVertical: 8 }}>
 				<AppButton
-					title="Save & Get Reward"
+					title="Save"
 					textStyle={{ fontWeight: 'bold' }}
 					typo="sm"
 					z
