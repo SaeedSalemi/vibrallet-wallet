@@ -120,7 +120,7 @@ export default function MarketCoinDetailScreen({ route, navigation }) {
 						/>
 					</View>
 				</View>
-				<View
+				{/* <View
 					style={{
 						...globalStyles.flex.row,
 						marginVertical: 8,
@@ -197,7 +197,7 @@ export default function MarketCoinDetailScreen({ route, navigation }) {
 							/>
 						</TouchableOpacity>
 					</View>
-				</View>
+				</View> */}
 				<View style={{ marginVertical: 16 }}>
 					{/* <Image source={Images.marketChartImage} /> */}
 					<TradingViewWidget symbol={`${coin.symbol}USDT`} />
