@@ -51,6 +51,7 @@ const MainProvider = props => {
             for (let item of items) {
               item.balance = 0
               item.color = state.preDefinedCoinsColors[item.symbol]
+              item.hide = false
             }
             setState({ ...state, coins: items })
             setToStorage("supportedCoins", JSON.stringify(items))
@@ -73,6 +74,15 @@ const MainProvider = props => {
   }
   const dispatch = value => setState({ ...state, ...value })
 
+  const hideCoinHandler = (symbol) => {
+    let coins = state.coins.map(item => {
+      if (item.symbol === symbol) {
+        item.hide = !item.hide
+      }
+      return item
+    })
+    setState({ ...state, coins })
+  }
 
   const getCoinBalance = coinSymbol => {
     if (!coinSymbol)
@@ -111,7 +121,7 @@ const MainProvider = props => {
 
   // FCASList, MarketListing,
   return (
-    <Context.Provider value={{ ...state, getCoinBalance, setCoin, dispatch }}>
+    <Context.Provider value={{ ...state, getCoinBalance, setCoin, hideCoinHandler, dispatch }}>
       {props.children}
     </Context.Provider>
   )
