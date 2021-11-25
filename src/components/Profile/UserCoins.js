@@ -56,7 +56,7 @@ export default function UserCoins() {
 						"uniqueId": "123",
 						"action": "priceChart",
 						"data": {
-							"symbol": `${item.symbol}USDT`,
+							"symbol": `${item.symbol}`,
 							"timeframe": "30m",
 							"limit": 440,
 							"responseType": "url",
