@@ -41,7 +41,7 @@ const TradingViewWidget = (props) => {
         "locale": "en",
         "toolbar_bg": "#f1f3f6",
         "enable_publishing": false,
-        "allow_symbol_change": true,
+        "allow_symbol_change": false,
         "container_id": "tradingview_815e8"
         }
         );
