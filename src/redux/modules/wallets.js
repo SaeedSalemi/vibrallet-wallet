@@ -82,12 +82,11 @@ export default function reducer(state = initialState, action) {
 
 export function* watchFinalCreateWallet() {
 	const wallet = yield select(state => state.wallets.create)
-	console.log('wallet modules', wallet)
 	yield put(addWallet(wallet))
-	yield reset({
-		index: 1,
-		routes: [{ name: routes.appTab }, { name: routes.profileWallet }],
-	})
+	// yield reset({
+	// 	index: 1,
+	// 	routes: [{ name: routes.appTab }, { name: routes.profileWallet }],
+	// })
 }
 
 export function* watchWalletsSagas() {
