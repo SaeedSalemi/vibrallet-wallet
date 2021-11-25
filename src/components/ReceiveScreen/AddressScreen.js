@@ -15,7 +15,6 @@ import { Context } from '../../context/Provider'
 
 export default function AddressScreen({ route, navigation }) {
 	const { coin } = route.params || {}
-
 	const { coinManager } = useContext(Context)
 
 	const wallet = useSelector(state =>
@@ -86,7 +85,7 @@ export default function AddressScreen({ route, navigation }) {
 						</View>
 					) : null}
 					<AppText typo="tiny" style={{ alignItems: 'center' }}>
-						Your {coin.title} Address
+						Your {coin.name} Address
 					</AppText>
 				</View>
 				{walletInfo?.address ? (
