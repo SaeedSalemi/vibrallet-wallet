@@ -18,7 +18,7 @@ import HttpService from '../services/HttpService'
 
 // getasvgdata("btc").then(data=>{})
 
-const useSVGChart = (coin = 'BNBUSDT', timeframe = "30m", limit = 336) => {
+const useSVGChart = (coin = 'BNB', timeframe = "30m", limit = 336) => {
 
   const [state, setState] = useState('')
 
