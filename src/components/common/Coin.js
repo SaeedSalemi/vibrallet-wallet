@@ -45,7 +45,7 @@ export default function Coin({
 					"uniqueId": "123",
 					"action": "priceChart",
 					"data": {
-						"symbol": `${coin.symbol}USDT`,
+						"symbol": `${coin.symbol}`,
 						"timeframe": "30m",
 						"limit": 440,
 						"responseType": "url",
