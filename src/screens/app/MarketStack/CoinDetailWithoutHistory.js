@@ -1,16 +1,14 @@
-import React, { useEffect, useState, useMemo, useContext } from 'react'
-import { Image, ScrollView, View, ActivityIndicator } from 'react-native'
-// import MarketIcon from '../../../components/common/MarketIcon/MarketIcon'
+import React, { useEffect, useState } from 'react'
+import { Image, ScrollView, View } from 'react-native'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AppText from '../../../components/common/AppText'
 import { Images } from '../../../assets'
 import CoinDetailChartItem from '../../../components/Market/CoinDetailChartItem'
 import AppButton from '../../../components/common/AppButton'
 import { routes } from '../../../config/routes'
 import { useSelector } from 'react-redux'
-import { AreaChart } from 'react-native-svg-charts'
+import { AreaChart, YAxis, XAxis } from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
 import HttpService from '../../../services/HttpService'
 import { SvgUri } from 'react-native-svg'
@@ -20,39 +18,41 @@ import { Context } from '../../../context/Provider'
 const values = ['$1850', '$1750', '$1650', '$1550']
 const dates = ['5 Nov', '10 Nov', '15 Nov', '25 Nov', '30 Nov']
 const chartItems = [
-	{ title: '1D', active: true },
+	{ title: '1D' },
 	{ title: '1W' },
 	{ title: '1M' },
 	{ title: '1Y' },
 	{ title: 'ALL' },
 ]
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 export default function CoinDetailWithoutHistory({ route, navigation }) {
 	const { coin } = route.params || {}
 
-	const { coinManager } = useContext(Context)
-	const [isLoading, setIsLoading] = useState(true)
+	// const { coinManager, getACoin } = useContext(Context)
+	// const [isLoading, setIsLoading] = useState(true)
 
 	const [state, setState] = useState({
 		address: '',
 		amount: '',
 		wallet: {},
-		balance: 0,
 		percentCoin: 0,
 		coin: {},
 		chartData: [],
 		chartTimeStamp: 1,
-		timeframe: '1d',
+		timeframe: "1d",
 		percentChange: 0,
+		// 
+		coinHistory: []
 	})
 
-	const wallet = useSelector(state => {
-		state.wallets.data ? state.wallets.data[0] : null
-	}
-	)
 
 
 	useEffect(() => {
+		console.log('timer', state.coinHistory)
+	}, [])
 
+
+	useEffect(() => {
 
 		new HttpService("",
 			{
@@ -60,15 +60,25 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				"action": "historicalPrice",
 				"data": {
 					"symbol": `${coin.symbol}USDT`,
-					"timeframe": state.timeframe || '1d',
-					"limit": 20
+					"timeframe": state.timeframe,
+					"limit": 5
 				}
 			}).Post(res => {
-				const data = res.data.rates.map((d) => parseInt(d.value))
-				setState({ ...state, chartData: data })
+				const items = res.data.rates.map(item => {
+					let _date = new Date(item.key * 1000)
+					return {
+						date: months[_date.getMonth()],
+						value: parseInt(item.value)
+					}
+				})
+				state.coinHistory = items
+				setState({ ...state })
 
 			})
+	}, [state.timeframe])
 
+
+	useEffect(() => {
 
 		new HttpService("", {
 			"uniqueId": "abc1",
@@ -80,36 +90,13 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 			if (res)
 				setState({ ...state, percentChange: res.data.percentChange })
 		})
-		setState({ ...state, balance: 0 })
-		// if (wallet) {
-
-		// 	let selectedCoin = coinManager[coin.symbol];
-		// 	if (selectedCoin.getWalletFromMnemonic) {
-		// 		selectedCoin.getWalletFromMnemonic(wallet.backup)
-		// 			.then(wallet => {
-		// 				state.wallet = wallet;
-		// 				setState({ ...state });
-
-		// 				selectedCoin.getBalance(wallet?.address, false).then(result => {
-		// 					setState({ ...state, balance: result })
-		// 				})
-		// 			})
-		// 			.catch(ex => console.error('balance wallet error', ex))
-		// 	}
-		// }
-		setIsLoading(false)
-	}, [state.timeframe])
-
-
-	// useEffect(() => {
-
-
-	// }, [])
+	}, [])
 
 	const handleSelectChange = (title) => {
-		if (title === "all")
-			title = "1y"
-		if (title === "1y")
+		console.log('clicked title', title)
+		if (title === "all" || title === "ALL")
+			title = "1m"
+		else if (title === "1y" || title === "1Y")
 			title = "1m"
 		setState({ ...state, timeframe: title.toString().toLowerCase() })
 	}
@@ -151,21 +138,33 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				</View>
 			</View>
 			<View style={{ ...globalStyles.flex.row, marginVertical: 24 }}>
-				{isLoading ? <ActivityIndicator
-					size={25}
-					color={globalStyles.Colors.primaryColor} /> :
-					<AreaChart
-						style={{ height: 200, flex: 0.98 }}
-						data={state.chartData}
-						contentInset={{ top: 30, bottom: 30 }}
-						curve={shape.curveNatural}
-						svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-					>
-					</AreaChart>}
-
-
-				<View style={{ justifyContent: 'space-between' }}>
-					{values.map((item, index) => (
+				<AreaChart
+					animate={true}
+					style={{ height: 210, flex: 0.98 }}
+					data={state.coinHistory.map(item => item.value)}
+					contentInset={{ top: 30, bottom: 30 }}
+					curve={shape.curveNatural}
+					// svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+					svg={{ fill: 'rgba(112, 55, 201, 0.6)' }}
+					curve={shape.curveBasis}
+				>
+				</AreaChart>
+				{/* style={{ justifyContent: 'space-between' }} */}
+				<View>
+					<YAxis
+						data={state.coinHistory.map(item => item.value)}
+						// contentInset={{ bottom: 30, top: -20 }}
+						// style={{ height: "100%" }}
+						style={{ height: 210, flex: 1, paddingLeft: 10 }}
+						// contentInset={{ left: 5, right: 5 }}
+						svg={{
+							fill: 'grey',
+							fontSize: 10,
+						}}
+						numberOfTicks={state.coinHistory.length}
+						formatLabel={(value, index) => `$${value}`}
+					/>
+					{/* {values.map((item, index) => (
 						<AppText
 							style={{ paddingHorizontal: 8 }}
 							color="text3"
@@ -174,11 +173,13 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 						>
 							{item}
 						</AppText>
-					))}
+					))} */}
 				</View>
 			</View>
-			<View style={{ ...globalStyles.flex.row }}>
-				{dates.map((item, index) => (
+			<View style={{ height: 10, justifyContent: 'center', paddingLeft: 5, paddingRight: 50 }}>
+
+
+				{/* {dates.map((item, index) => (
 					<AppText
 						style={{ marginHorizontal: 16 }}
 						color="text3"
@@ -187,7 +188,19 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					>
 						{item}
 					</AppText>
-				))}
+				))} */}
+
+
+				<XAxis
+					// style={{ marginHorizontal: -10 }}
+					data={state.coinHistory.map(item => item.date)}
+					formatLabel={(value, index) => state.coinHistory.map(item => item.date)[value]}
+					contentInset={{ left: 10, right: 10 }}
+					// contentInset={{ left: 10, right: 10 }}
+					svg={{ fontSize: 10, fill: 'gray' }}
+				/>
+
+
 			</View>
 			<View
 				style={{
