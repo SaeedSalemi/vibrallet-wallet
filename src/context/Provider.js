@@ -22,13 +22,20 @@ const MainProvider = props => {
     preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
   })
   // const { coins, setCoin } = useCoins()
-  // const { FCASList } = useFCASRating()
-  // const { MarketListing } = useMarketListing()
+
 
   const wallet = useSelector(state => {
     state.wallets.data ? state.wallets.data[0] : null
   }
   )
+
+
+
+  const getACoin = symbol => {
+    return state.coins.find(coin => coin.symbol === symbol)
+  }
+
+
 
   const supportedCoins = async () => {
     try {
@@ -121,7 +128,7 @@ const MainProvider = props => {
 
   // FCASList, MarketListing,
   return (
-    <Context.Provider value={{ ...state, getCoinBalance, setCoin, hideCoinHandler, dispatch }}>
+    <Context.Provider value={{ ...state, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin }}>
       {props.children}
     </Context.Provider>
   )
