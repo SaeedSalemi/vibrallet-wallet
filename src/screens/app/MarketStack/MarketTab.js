@@ -7,11 +7,11 @@ import { Context } from '../../../context/MarketProvider'
 import MarketData from './MarketData'
 
 export default function MarketTabScreen() {
-	const { MarketListing: coins } = useContext(Context)
+	const { MarketListing } = useContext(Context)
 	return (
 		<View style={globalStyles.screen}>
 			<SortHeader />
-			<MarketData items={coins} />
+			<MarketData type="market" items={MarketListing} />
 		</View>
 	)
 }
