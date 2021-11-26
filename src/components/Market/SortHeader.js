@@ -14,11 +14,11 @@ export default function SortHeader() {
 		<MarketHeaderContainer>
 			<View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
 				<TouchableOpacity onPress={() => {
-					MarketListingSort === 'symbol' ? changeMarketSort('-symbol') : changeMarketSort('symbol')
+					MarketListingSort === 'name' ? changeMarketSort('-name') : changeMarketSort('name')
 				}}>
-					<AppText color={MarketListingSort === 'symbol' || MarketListingSort === "-symbol" ? 'primaryColor' : 'text3'} typo="tiny">
-						Name <MaterialCommunityIcons name={MarketListingSort === 'symbol' ? 'arrow-up' : 'arrow-down'}
-							color={MarketListingSort === 'symbol' || MarketListingSort === "-symbol" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
+					<AppText color={MarketListingSort === 'name' || MarketListingSort === "-name" ? 'primaryColor' : 'text3'} typo="tiny">
+						Name <MaterialCommunityIcons name={MarketListingSort === 'name' ? 'arrow-up' : 'arrow-down'}
+							color={MarketListingSort === 'name' || MarketListingSort === "-name" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
 					</AppText>
 				</TouchableOpacity>
 
