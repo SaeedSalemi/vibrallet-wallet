@@ -160,7 +160,7 @@ export default function WalletScreen() {
 								...globalStyles.flex.row,
 								...globalStyles.flex.between,
 								paddingHorizontal: 16,
-								paddingVertical: 12,
+								paddingVertical: 22,
 							}}
 						>
 							<View style={{ flex: 2, justifyContent: 'space-around' }}>
@@ -229,7 +229,7 @@ export default function WalletScreen() {
 									${totalBalance}
 								</AppText>
 							</View>
-							<BarChart data={pieData} />
+							<BarChart data={coins} />
 						</View>
 					)}
 					<TouchableOpacity
