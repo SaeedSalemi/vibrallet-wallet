@@ -10,7 +10,7 @@ const MarketProvider = props => {
     FCASSort: 'name',
 
     MarketListing: [],
-    MarketListingSort: 'symbol',
+    MarketListingSort: 'name',
     MarketListingPageSize: 15,
     MarketListingPageNumber: 1
   })
@@ -57,7 +57,7 @@ const MarketProvider = props => {
       "action": "marketListing",
       "data": {
         "pageSize": state.MarketListingPageSize,
-        "pageNumber": state.MarketListingPageNumber,
+        "pageNumber": 1,
         "sort": state.MarketListingSort,
         "filter": "btc"
       }
@@ -80,19 +80,52 @@ const MarketProvider = props => {
       "uniqueId": "123",
       "action": "fcasListing",
       "data": {
-        "pageSize": 1000,
+        "pageSize": 15,
         "pageNumber": 1,
         "sort": state.FCASSort
       }
     }
     ).Post(response => {
       if (response) {
+
+        const items = response.map(item => {
+
+          new HttpService("",
+            {
+              "uniqueId": "123",
+              "action": "priceChart",
+              "data": {
+                "symbol": `${item.symbol}`,
+                "timeframe": "30m",
+                "limit": 440,
+                "responseType": "url",
+                "height": 50,
+                "width": 250,
+              }
+            }).Post(res => {
+              if (res?.success === true) {
+                item.svgUri = res.data.url
+                console.log('item of fcas chart', item)
+              }
+            })
+          return item
+        })
+
         setState((state) => {
-          state.FCASList = response
+          state.FCASList = items
           return { ...state }
         })
 
+
       }
+
+      // if (response) {
+      //   setState((state) => {
+      //     state.FCASList = response
+      //     return { ...state }
+      //   })
+
+      // }
     })
   }, [state])
 

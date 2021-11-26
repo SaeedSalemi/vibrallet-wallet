@@ -1,20 +1,47 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 import SortHeader from '../../../components/Market/SortHeader'
 import { globalStyles } from '../../../config/styles'
-import useCoins from '../../../hooks/useCoins'
-// import { coins } from '../HomeStack/CreatePriceAlertScreen'
+import HttpService from '../../../services/HttpService'
 import MarketData from './MarketData'
-import { Context } from '../../../context/Provider'
+// import { Context } from '../../../context/MarketProvider'
 
 export default function FavTabScreen() {
-	// const coins = useCoins()
-	const { coins } = useContext(Context)
-	const filteredFavCoins = coins.filter(coin => coin.fav === true)
+
+	// const { coins } = useContext(Context)
+	const [state, setState] = useState([])
+
+	useEffect(() => {
+		new HttpService(
+			"", {
+			"uniqueId": "abc",
+			"action": "getFavoriteCurrencies",
+			"data": {
+				"kind": "MARKET"
+			}
+		}
+		).Post(response => {
+			if (response) {
+				// console.log('response from the fav')
+				// TODO: develop the FAV for fcas with API
+				// showMessage({
+				// 	message: `In order to add coin to your favorite list you have sign in`,
+				// 	description: null,
+				// 	type: 'success',
+				// 	icon: null,
+				// 	duration: 8000,
+				// 	style: { backgroundColor: "#e74c3c" },
+				// 	position: 'top'
+				// })
+			}
+		})
+	}, [])
+
 	return (
 		<View style={globalStyles.screen}>
 			<SortHeader />
-			<MarketData items={filteredFavCoins} />
+			<MarketData type="fav" items={state} />
 		</View>
 	)
 }

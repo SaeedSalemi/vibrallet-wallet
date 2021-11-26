@@ -100,44 +100,27 @@ const HomeScreen = ({ navigation }) => {
 	const carouselRef = useRef(null)
 
 
+	useEffect(() => {
+		// checkExistsWallet()
+	}, [])
+
+
+	const checkExistsWallet = async () => {
+		const persist = await AsyncStorage.getItem('persist:root')
+		if (persist !== null) {
+			let item = JSON.parse(persist)
+			if (item !== null) {
+				let wallets = JSON.parse(item["wallets"])
+				if (wallets["data"] === null) {
+					navigation.replace(routes.newWallet, { no_back: true })
+				}
+			}
+		}
+	}
+
 	// const wallet = useSelector(state =>
 	// 	state.wallets.data ? state.wallets.data[0] : null
 	// )
-
-	// const saveToStorage = async (title, data) => await AsyncStorage.setItem(title, data)
-
-	// const _storeWalletData = () => {
-	// 	const coinSelector = { ETH: ethManager, BSC: bscManager }
-	// 	for (let selectCoin in coinSelector) {
-	// 		coinSelector[selectCoin].getWalletFromMnemonic(wallet.backup)
-	// 			.then(wallet => {
-	// 				saveToStorage(selectCoin, JSON.stringify(wallet))
-	// 			}).catch(ex => console.error('wallet', ex))
-	// 	}
-	// }
-
-
-
-	// const balance = useMemo(() => useWallet('ETH').balance, [])
-	// console.log('calc balance', balance)
-
-	// useEffect(() => {
-
-	// 	async function checkWallet() {
-	// 		try {
-	// 			let value = await AsyncStorage.getItem('ETH');
-	// 			if (value != null) {
-	// 				_storeWalletData()
-	// 			}
-	// 			else {
-	// 				// do something else
-	// 			}
-	// 		} catch (error) {
-	// 			// Error retrieving data
-	// 		}
-	// 	}
-	// 	checkWallet()
-	// }, [])
 
 	useEffect(() => {
 
@@ -196,7 +179,7 @@ const HomeScreen = ({ navigation }) => {
 		{
 			id: 1,
 			title: 'Refer your friends',
-			subTitle: 'Invite your friends to Binrex wallet.',
+			subTitle: 'Invite your friends to Vibranium wallet.',
 			icon: (
 				<FontAwesome5
 					name="users"
@@ -296,13 +279,13 @@ const HomeScreen = ({ navigation }) => {
 				<View style={styles.servicesContainer}>
 					<View style={styles.ourService}>
 						<AppText bold>Our Services</AppText>
-						<View style={styles.more}>
+						{/* <View style={styles.more}>
 							<Feather
 								name="more-horizontal"
 								size={18}
 								color={defaultStyles.Colors.text2}
 							/>
-						</View>
+						</View> */}
 					</View>
 					<View style={styles.servicesButtons}>
 						{SERVICES.map(service => (

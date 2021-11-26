@@ -66,35 +66,8 @@ const RenderMarketItem = React.memo(({ item, index, type }) => {
 			leftItems={[{
 				title: 'Favorite', icon: 'star', onPress: function () {
 
-
 					if (type === "fav") {
 
-						new HttpService(
-							"", {
-							"uniqueId": "abc",
-							"action": "addFavoriteCurrency",
-							"data": {
-								"kind": "MARKET",
-								"currency": item.symbol
-							}
-						}
-						).Post(response => {
-							if (response) {
-								showMessage({
-									message: `${item.name} is added to the favorite list.`,
-									description: null,
-									type: 'success',
-									icon: null,
-									duration: 1000,
-									style: { backgroundColor: "#6BC0B1" },
-									position: 'top'
-								})
-							}
-						})
-
-					}
-
-					else {
 
 						new HttpService(
 							"", {
@@ -106,9 +79,60 @@ const RenderMarketItem = React.memo(({ item, index, type }) => {
 							}
 						}
 						).Post(response => {
-							if (response) {
+							const { success, code } = response
+							if (success === false && code === 5010) {
+								showMessage({
+									message: `In order to add coin to your favorite list you have sign in`,
+									description: null,
+									type: 'success',
+									icon: null,
+									duration: 8000,
+									style: { backgroundColor: "#e74c3c" },
+									position: 'top'
+								})
+							} else
 								showMessage({
 									message: `${item.name} is removed from the favorite list.`,
+									description: null,
+									type: 'success',
+									icon: null,
+									duration: 1000,
+									style: { backgroundColor: "#6BC0B1" },
+									position: 'top'
+								})
+
+						})
+
+
+					}
+
+					else if (type === "market") {
+
+
+						new HttpService(
+							"", {
+							"uniqueId": "abc",
+							"action": "addFavoriteCurrency",
+							"data": {
+								"kind": "MARKET",
+								"currency": item.symbol
+							}
+						}
+						).Post(response => {
+							const { success, code } = response
+							if (success === false && code === 5010) {
+								showMessage({
+									message: `In order to add coin to your favorite list you have sign in`,
+									description: null,
+									type: 'success',
+									icon: null,
+									duration: 8000,
+									style: { backgroundColor: "#e74c3c" },
+									position: 'top'
+								})
+							} else {
+								showMessage({
+									message: `${item.name} is added to the favorite list.`,
 									description: null,
 									type: 'success',
 									icon: null,
