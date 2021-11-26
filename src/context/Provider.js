@@ -106,7 +106,7 @@ const MainProvider = props => {
             } else {
 
               if (wallet) {
-                let selectedCoin = state.coinManager[coinSymbolxxz];
+                let selectedCoin = state.coinManager[coinSymbol];
                 if (typeof selectedCoin.getWalletFromMnemonic === "function") {
                   selectedCoin.getWalletFromMnemonic(wallet.backup)
                     .then(wallet => {
