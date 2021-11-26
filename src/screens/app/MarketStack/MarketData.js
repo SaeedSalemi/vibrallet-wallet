@@ -8,45 +8,47 @@ import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/MarketProvider'
+import HttpService from '../../../services/HttpService'
 // TODO: Activity Indicator
 
 
-export default function MarketData({ items }) {
+export default function MarketData(props) {
 
-	//items
 	const [data, setData] = useState([])
 	const [page, setPage] = useState(1)
-	const [is_end, setIsEnd] = useState(false)
-
-	const { MarketListingPageSize, MarketListingPageNumber, dispatch, marketPagination } = useContext(Context)
 
 
-	useEffect(() => {
-		// if (items.length === 0) {
-		// 	setIsEnd(true)
-		// }
-	}, [])
+	// const {
+	// 	MarketListing: items,
+	// 	MarketListingPageSize,
+	// 	MarketListingPageNumber,
+	// 	marketPagination } = useContext(Context)
 
 	return (
 		<>
-			{items && <FlatList
-				data={items}
-				renderItem={({ item, index }) => <RenderMarketItem item={item} index={index} />}
+			{props.items && <FlatList
+				data={props.items}
+				renderItem={({ item, index }) => <RenderMarketItem item={item} index={index} type={props.type} />}
 				keyExtractor={(item) => item.id.toString()}
 				refreshControl={
 					<RefreshControl
 						refreshing={false}
 						onRefresh={() => {
-							marketPagination(1)
+							// alert('refreshing')
+							// setRender(true)
+							// console.log('refreshing', render)
+							// // setRender(true)
+							// console.log('refreshing 2', render)
 						}} />
 				}
-				onEndReachedThreshold={0.8}
-				onEndReached={() => {
-					if (!is_end) {
-						setPage(page + 1)
-						marketPagination(page + 1)
-					}
-				}}
+
+			// onEndReachedThreshold={0.8}
+			// onEndReached={() => {
+			// 	if (!is_end) {
+			// 		setPage(page + 1)
+			// 		marketPagination(page + 1)
+			// 	}
+			// }}
 
 			// removeClippedSubviews={
 			// 	Platform.OS === "android"
@@ -56,41 +58,70 @@ export default function MarketData({ items }) {
 	)
 }
 
-
-
-
-const RenderMarketItem = React.memo(({ item, index }) => {
+const RenderMarketItem = React.memo(({ item, index, type }) => {
 	const { navigate } = useNavigation()
-	const { dispatch } = useContext(Context)
 	return (
 		<SwapableRow
 			measure={75}
 			leftItems={[{
 				title: 'Favorite', icon: 'star', onPress: function () {
-					// item.fav = !item.fav
-					if (item.fav) {
-						showMessage({
-							message: `${item.slug} added to your favorite list.`,
-							description: null,
-							type: 'success',
-							icon: null,
-							duration: 1000,
-							style: { backgroundColor: "#6BC0B1" },
-							position: 'top'
+
+
+					if (type === "fav") {
+
+						new HttpService(
+							"", {
+							"uniqueId": "abc",
+							"action": "addFavoriteCurrency",
+							"data": {
+								"kind": "MARKET",
+								"currency": item.symbol
+							}
+						}
+						).Post(response => {
+							if (response) {
+								showMessage({
+									message: `${item.name} is added to the favorite list.`,
+									description: null,
+									type: 'success',
+									icon: null,
+									duration: 1000,
+									style: { backgroundColor: "#6BC0B1" },
+									position: 'top'
+								})
+							}
 						})
+
 					}
+
 					else {
-						showMessage({
-							message: `${item.slug} removed to your favorite list.`,
-							description: null,
-							type: 'danger',
-							icon: null,
-							duration: 1000,
-							style: { backgroundColor: "#e74c3c" },
-							position: 'top'
+
+						new HttpService(
+							"", {
+							"uniqueId": "abc",
+							"action": "removeFavoriteCurrency",
+							"data": {
+								"kind": "MARKET",
+								"currency": item.symbol
+							}
+						}
+						).Post(response => {
+							if (response) {
+								showMessage({
+									message: `${item.name} is removed from the favorite list.`,
+									description: null,
+									type: 'success',
+									icon: null,
+									duration: 1000,
+									style: { backgroundColor: "#6BC0B1" },
+									position: 'top'
+								})
+							}
 						})
 					}
-					dispatch({ item })
+
+
+
 				}
 			}]}
 		>
