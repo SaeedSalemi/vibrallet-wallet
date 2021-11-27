@@ -54,6 +54,8 @@ import { TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { setModal } from '../redux/modules/appSettings'
 import SplashScreen from '../screens/SplashScreen'
+import BackupScreen from '../screens/app/ProfileStack/BackupScreen'
+import RestoreScreen from '../screens/authentication/RestoreModalScreen'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -106,6 +108,17 @@ export function AppStackNavigation() {
 			<AppTab.Screen
 				name={"splash"}
 				component={SplashScreen}
+				options={{ headerShown: false }}
+			/>
+
+			<AppTab.Screen
+				name={"RestoreScreen"}
+				component={RestoreScreen}
+				options={{ headerShown: false }}
+			/>
+			<AppTab.Screen
+				name={"backup"}
+				component={BackupScreen}
 				options={{ headerShown: false }}
 			/>
 			<AppTab.Screen
