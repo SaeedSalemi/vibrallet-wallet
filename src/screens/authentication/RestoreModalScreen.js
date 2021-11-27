@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import Screen from '../../components/Screen'
 import AppText from '../../components/common/AppText'
 import AppButton from '../../components/common/AppButton'
@@ -11,6 +11,8 @@ import { setUser } from '../../utils/storage'
 import Feather from 'react-native-vector-icons/Feather'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn } from '../../redux/modules/appSettings'
+import { DocumentPicker } from 'expo';
+
 
 const defaultStyles = globalStyles()
 
@@ -20,9 +22,38 @@ const RestoreModalScreen = ({ navigation }) => {
 
 	const handleToggle = () => setIsFile(!isFile)
 
-	const handleRestore = () => {
-		setUser({ username: true })
-		dispatch(setLoggedIn(true))
+	const [fileUri, setFileUri] = useState('')
+
+	const handleFilePicker = async () => {
+
+		// import DocumentPicker from 'react-native-document-picker'
+
+		// Pick a single file
+		try {
+
+			let result = await DocumentPicker.getDocumentAsync({});
+			alert(result.uri);
+			console.log(result);
+			// const res = await DocumentPicker.pick({
+			// 	type: [DocumentPicker.types.allFiles],
+			// })
+			// console.log(
+			// 	res.uri,
+			// 	res.type, // mime type
+			// 	res.name,
+			// 	res.size,
+			// )
+		} catch (err) {
+
+		}
+	}
+
+	const handleRestore = async () => {
+
+		alert(fileUri)
+
+		// setUser({ username: true })
+		// dispatch(setLoggedIn(true))
 	}
 
 	return (
@@ -41,14 +72,16 @@ const RestoreModalScreen = ({ navigation }) => {
 					</View>
 					<View style={[styles.modeWrapper, defaultStyles.flex.center]}>
 						{isFile ? (
-							<View style={[defaultStyles.flex.row, defaultStyles.flex.center]}>
-								<Feather
-									name="file-text"
-									color={defaultStyles.Colors.text3}
-									size={20}
-								/>
-								<AppText style={styles.restoreText}>Restore from file</AppText>
-							</View>
+							<TouchableOpacity onPress={handleFilePicker}>
+								<View style={[defaultStyles.flex.row, defaultStyles.flex.center]}>
+									<Feather
+										name="file-text"
+										color={defaultStyles.Colors.text3}
+										size={20}
+									/>
+									<AppText style={styles.restoreText}>Restore from file</AppText>
+								</View>
+							</TouchableOpacity>
 						) : (
 							<View
 								style={[

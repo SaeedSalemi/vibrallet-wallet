@@ -17,16 +17,25 @@ import { Context } from '../../../context/Provider'
 
 const values = ['$1850', '$1750', '$1650', '$1550']
 const dates = ['5 Nov', '10 Nov', '15 Nov', '25 Nov', '30 Nov']
-const chartItems = [
-	{ title: '1D' },
-	{ title: '1W' },
-	{ title: '1M' },
-	{ title: '1Y' },
-	{ title: 'ALL' },
-]
+// const chartItems = [
+// 	{ title: '1D' },
+// 	{ title: '1W' },
+// 	{ title: '1M' },
+// 	{ title: '1Y' },
+// 	{ title: 'ALL' },
+// ]
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 export default function CoinDetailWithoutHistory({ route, navigation }) {
 	const { coin } = route.params || {}
+
+	const [chartItems, setChartItems] = useState([
+		{ title: '1D', active: true },
+		{ title: '1W' },
+		{ title: '1M' },
+		{ title: '1Y' },
+		{ title: 'ALL' },
+	])
+
 
 	// const { coinManager, getACoin } = useContext(Context)
 	// const [isLoading, setIsLoading] = useState(true)
@@ -42,15 +51,9 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		timeframe: "1d",
 		percentChange: 0,
 		// 
-		coinHistory: []
+		coinHistory: [],
+		limit: 6
 	})
-
-
-
-	useEffect(() => {
-		console.log('timer', state.coinHistory)
-	}, [])
-
 
 	useEffect(() => {
 
@@ -60,22 +63,24 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				"action": "historicalPrice",
 				"data": {
 					"symbol": `${coin.symbol}USDT`,
-					"timeframe": state.timeframe,
-					"limit": 5
+					// "timeframe": state.timeframe,
+					"timeframe": '1h',
+					"limit": state.limit
 				}
 			}).Post(res => {
 				const items = res.data.rates.map(item => {
 					let _date = new Date(item.key * 1000)
 					return {
 						date: months[_date.getMonth()],
-						value: parseInt(item.value)
+						value: parseInt(item.value),
+						day: _date.getDay()
 					}
 				})
 				state.coinHistory = items
 				setState({ ...state })
 
 			})
-	}, [state.timeframe])
+	}, [state.limit])
 
 
 	useEffect(() => {
@@ -93,12 +98,39 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 	}, [])
 
 	const handleSelectChange = (title) => {
-		console.log('clicked title', title)
-		if (title === "all" || title === "ALL")
-			title = "1m"
-		else if (title === "1y" || title === "1Y")
-			title = "1m"
-		setState({ ...state, timeframe: title.toString().toLowerCase() })
+		let limit = 6
+		switch (title.toLowerCase()) {
+			case '1d':
+				limit = 30
+				break
+			case '1w':
+				limit = 24
+				break
+			case '1m':
+				limit = 168
+				break
+			case '1y':
+				limit = 365
+				break
+			case 'all':
+				limit = 365
+				break
+			default:
+				limit = 6
+				break
+		}
+		const items = chartItems.map(item => {
+			if (item.title === title) {
+				item.active = true
+			}
+			else {
+				item.active = false
+			}
+			return item
+		})
+		setChartItems(items)
+		// timeframe: title
+		setState({ ...state, limit: limit })
 	}
 
 	return (
@@ -144,61 +176,46 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					data={state.coinHistory.map(item => item.value)}
 					contentInset={{ top: 30, bottom: 30 }}
 					curve={shape.curveNatural}
-					// svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-					svg={{ fill: 'rgba(112, 55, 201, 0.6)' }}
+					svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
 					curve={shape.curveBasis}
 				>
 				</AreaChart>
-				{/* style={{ justifyContent: 'space-between' }} */}
-				<View>
-					<YAxis
-						data={state.coinHistory.map(item => item.value)}
-						// contentInset={{ bottom: 30, top: -20 }}
-						// style={{ height: "100%" }}
-						style={{ height: 210, flex: 1, paddingLeft: 10 }}
-						// contentInset={{ left: 5, right: 5 }}
-						svg={{
-							fill: 'grey',
-							fontSize: 10,
-						}}
-						numberOfTicks={state.coinHistory.length}
-						formatLabel={(value, index) => `$${value}`}
-					/>
-					{/* {values.map((item, index) => (
+				<View style={{ height: 210, justifyContent: 'space-between' }}>
+					{state.coinHistory.slice(0, 6).map((item, index) => (
 						<AppText
-							style={{ paddingHorizontal: 8 }}
+							style={{ paddingHorizontal: 6 }}
 							color="text3"
 							typo="dot"
 							key={index}
 						>
-							{item}
+							${item.value}
 						</AppText>
-					))} */}
+					))}
 				</View>
 			</View>
-			<View style={{ height: 10, justifyContent: 'center', paddingLeft: 5, paddingRight: 50 }}>
+			{/* <View style={{ height: 10, justifyContent: 'center', paddingLeft: 5, paddingRight: 50 }}> */}
 
-
-				{/* {dates.map((item, index) => (
+			<View style={{ ...globalStyles.flex.row }}>
+				{state.coinHistory.map((item, index) => (
 					<AppText
 						style={{ marginHorizontal: 16 }}
 						color="text3"
 						typo="dot"
 						key={index}
 					>
-						{item}
+						{item.day === 0 ? '' : item.day} {item.date}
 					</AppText>
-				))} */}
+				))}
 
 
-				<XAxis
+				{/* <XAxis
 					// style={{ marginHorizontal: -10 }}
 					data={state.coinHistory.map(item => item.date)}
 					formatLabel={(value, index) => state.coinHistory.map(item => item.date)[value]}
 					contentInset={{ left: 10, right: 10 }}
 					// contentInset={{ left: 10, right: 10 }}
 					svg={{ fontSize: 10, fill: 'gray' }}
-				/>
+				/> */}
 
 
 			</View>
