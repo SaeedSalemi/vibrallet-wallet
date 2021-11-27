@@ -22,7 +22,7 @@ export default function SecurityScreen() {
 			title: 'BackUp',
 			detail:
 				'Your secret 12-word recovery phrase is the ONLY way to recover your funds if you loose access to wallet.',
-			route: routes.profile,
+			route: routes.backup,
 			icon: <FontAwesome5 name="file-upload" size={25} color="#1496F3" />,
 		},
 		{
@@ -69,7 +69,7 @@ export default function SecurityScreen() {
 					color={globalStyles.Colors.success}
 				/>
 			),
-			route: routes.profile,
+			route: routes.restoreScreen,
 		},
 	]
 

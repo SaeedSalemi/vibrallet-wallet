@@ -58,4 +58,6 @@ export const routes = {
 	coinDetailWithoutHistory: 'CoinDetailWithoutHistory',
 	marketCoinDetail: 'MarketCoinDetail',
 	itemPicker: 'itemPicker',
+	backup: 'backup',
+	restoreScreen: 'RestoreScreen'
 }
