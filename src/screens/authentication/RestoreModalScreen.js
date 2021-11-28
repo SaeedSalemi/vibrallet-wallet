@@ -11,49 +11,96 @@ import { setUser } from '../../utils/storage'
 import Feather from 'react-native-vector-icons/Feather'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn } from '../../redux/modules/appSettings'
-import { DocumentPicker } from 'expo';
-
+import DocumentPicker from 'react-native-document-picker'
+import { decrypt } from '../../utils/Functions'
+import RNFS from 'react-native-fs'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { showMessage } from 'react-native-flash-message'
+import { routes } from '../../config/routes'
+import { useNavigation } from '@react-navigation/core'
 
 const defaultStyles = globalStyles()
 
 const RestoreModalScreen = ({ navigation }) => {
 	const [isFile, setIsFile] = useState(true)
 	const dispatch = useDispatch()
+	const { navigate } = useNavigation()
 
 	const handleToggle = () => setIsFile(!isFile)
 
 	const [fileUri, setFileUri] = useState('')
 
 	const handleFilePicker = async () => {
-
-		// import DocumentPicker from 'react-native-document-picker'
-
-		// Pick a single file
 		try {
-
-			let result = await DocumentPicker.getDocumentAsync({});
-			alert(result.uri);
-			console.log(result);
-			// const res = await DocumentPicker.pick({
-			// 	type: [DocumentPicker.types.allFiles],
-			// })
-			// console.log(
-			// 	res.uri,
-			// 	res.type, // mime type
-			// 	res.name,
-			// 	res.size,
-			// )
+			const res = await DocumentPicker.pickSingle({
+				type: [DocumentPicker.types.allFiles],
+			})
+			setFileUri(res)
 		} catch (err) {
-
+			if (DocumentPicker.isCancel(err)) {
+				console.log('error', err)
+			} else {
+				throw err
+			}
 		}
+
 	}
 
-	const handleRestore = async () => {
+	const handleRestore = () => {
 
-		alert(fileUri)
 
-		// setUser({ username: true })
-		// dispatch(setLoggedIn(true))
+		if (fileUri !== "") {
+			RNFS.readFile(fileUri.uri, 'utf8').then(content => {
+				const key = "persist:root"
+				let decode = decrypt(JSON.parse(content))
+				AsyncStorage.getItem(key).then(persist => {
+					if (persist !== null) {
+						let item = JSON.parse(persist)
+
+						const clonePersist = JSON.parse(persist);
+						if (item !== null) {
+							let wallets = JSON.parse(item["wallets"])
+							if (wallets["data"] === null) {
+								clonePersist
+								const _walletData = {
+									create: null,
+									data: [
+										{ name: 'vibrallet_backup', backup: decode }
+									]
+								}
+								clonePersist["wallets"] = JSON.stringify(_walletData)
+								AsyncStorage.removeItem(key).then(result => {
+
+									AsyncStorage.setItem(key, JSON.stringify(clonePersist))
+									showMessage({
+										message: 'Your wallet has been restored.',
+										description: null,
+										type: 'success',
+										icon: null,
+										duration: 3000,
+										style: { backgroundColor: "#16a085" },
+										position: 'top'
+									})
+									setUser({ username: true })
+									dispatch(setLoggedIn(true))
+								})
+							}
+						}
+
+
+					} else {
+
+					}
+
+				})
+			}).catch(error => {
+				console.log('error read file', error)
+			})
+		}
+
+
+
+
 	}
 
 	return (

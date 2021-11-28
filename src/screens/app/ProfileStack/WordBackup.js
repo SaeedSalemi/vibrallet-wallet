@@ -13,6 +13,7 @@ import Clipboard from '@react-native-community/clipboard'
 import { showMessage } from "react-native-flash-message";
 import { routes } from '../../../config/routes'
 import RNFS from 'react-native-fs'
+import { encrypt } from '../../../utils/Functions'
 
 export default function WordBackup({ navigation }) {
 	const dispatch = useDispatch()
@@ -47,7 +48,7 @@ export default function WordBackup({ navigation }) {
 
 	const handleBackup = () => {
 		const path = RNFS.DownloadDirectoryPath + '/vibranium-backup.json';
-		RNFS.writeFile(path, JSON.stringify(backup), 'utf8')
+		RNFS.writeFile(path, JSON.stringify(encrypt(backup)), 'utf8')
 			.then((success) => {
 				showMessage({
 					message: 'Your wallet backup has been created in your downloads',
