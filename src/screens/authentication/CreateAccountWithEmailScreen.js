@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
@@ -10,10 +10,43 @@ import globalStyles from '../../config/styles'
 import CreateBottom from './CreateBottom'
 import { routes } from '../../config/routes'
 import AppInput from '../../components/common/AppInput/AppInput'
+import AppButton from '../../components/common/AppButton'
+import { useDispatch } from 'react-redux'
+// import { setLoggedIn } from '../redux/modules/appSettings'
+import { setLoggedIn } from '../../redux/modules/appSettings'
+import { showMessage } from 'react-native-flash-message'
 const defaultStyles = globalStyles()
+import { Context } from '../../context/Provider'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 const CreateAccountWithEmailScreen = ({ navigation }) => {
 	const [email, setEmail] = useState('')
+	const dispatch = useDispatch()
+
+	const handleRegisterWithEmail = () => {
+		// regiter email in the async storage and provider
+
+		if (email === "") {
+			showMessage({
+				message: `Please add your email address`,
+				description: null,
+				type: 'success',
+				icon: null,
+				duration: 1000,
+				style: { backgroundColor: "#e74c3c" },
+				position: 'top'
+			})
+			return
+		}
+
+		const user = {
+			email
+		}
+		AsyncStorage.setItem("user", JSON.stringify(user))
+		dispatch(setLoggedIn(true, true))
+		navigation.navigate(routes.newWallet)
+	}
 
 	return (
 		<Screen style={styles.container} edges={['top', 'bottom']}>
@@ -21,10 +54,10 @@ const CreateAccountWithEmailScreen = ({ navigation }) => {
 				<View style={styles.topTexts}>
 					<AppText typo="xs">Enter your Email Address to continue</AppText>
 					<AppText typo="tiny" style={styles.topTextSub}>
-						We will send you a link to your
+						By enetring your email address
 					</AppText>
 					<AppText typo="tiny" style={styles.topTextSub}>
-						email address.
+						you can create your own vibranium wallet.
 					</AppText>
 				</View>
 				<View style={styles.formGroup}>
@@ -43,22 +76,41 @@ const CreateAccountWithEmailScreen = ({ navigation }) => {
 						onChangeText={text => setEmail(text)}
 						value={email}
 					/>
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						style={styles.back}
 						onPress={() => navigation.goBack()}
 					>
 						<AppText style={styles.backToPhone} typo="tiny">
 							Back to phone number!
 						</AppText>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</View>
 			</View>
-			<CreateBottom screenName={routes.verifyEmail} />
+			{/* <CreateBottom screenName={routes.verifyEmail} /> */}
+			{/* <CreateBottom screenName={routes.newWallet} /> */}
+			<View>
+				<View style={styles.continueButton}>
+					<AppButton
+						title="Continue"
+						typo="sm"
+						onPress={handleRegisterWithEmail}
+					/>
+				</View>
+				<View style={styles.terms}>
+					<AppText style={styles.termsText} typo="dot">
+						By continuing, you agree to our Terms and Privacy Policy
+					</AppText>
+				</View>
+			</View>
 		</Screen>
 	)
 }
 
 const styles = StyleSheet.create({
+
+
+
+	//
 	container: {
 		flex: 1,
 		backgroundColor: defaultStyles.Colors.bckColor,
@@ -117,6 +169,26 @@ const styles = StyleSheet.create({
 		width: 144,
 		alignSelf: 'center',
 	},
+
+
+	continueButton: {
+		justifyContent: 'flex-end',
+		alignItems: 'flex-end',
+		paddingHorizontal: 20,
+		width: '100%',
+
+	},
+	terms: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginBottom: 8,
+
+	},
+	termsText: {
+		color: defaultStyles.Colors.darkTextColor,
+		textAlign: 'center',
+	},
+
 })
 
 export default CreateAccountWithEmailScreen
