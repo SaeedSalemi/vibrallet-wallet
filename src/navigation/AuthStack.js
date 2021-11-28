@@ -35,15 +35,15 @@ export function AuthStackNavigation() {
 			})}
 		>
 
-			<AuthStack.Screen
+			{/* <AuthStack.Screen
 				name={routes.createWalletEmail}
 				options={{
 					headerTitle: () => <HeaderTitle>Create With Email</HeaderTitle>,
 				}}
 				component={CreateAccountWithEmailScreen}
 			>
+			</AuthStack.Screen> */}
 
-			</AuthStack.Screen>
 			<AuthStack.Screen
 				name={routes.welcome}
 				options={{ headerShown: false }}
