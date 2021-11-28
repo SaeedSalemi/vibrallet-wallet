@@ -43,6 +43,7 @@ export default function MarketData(props) {
 	// 		setFavCoins(favCoins.splice(index, 1))
 	// 	}
 	// }
+	const { marketPagination, MarketListingPageSize } = useContext(Context)
 	return (
 		<>
 			{props.items && <FlatList
@@ -63,10 +64,7 @@ export default function MarketData(props) {
 
 			// onEndReachedThreshold={0.8}
 			// onEndReached={() => {
-			// 	if (!is_end) {
-			// 		setPage(page + 1)
-			// 		marketPagination(page + 1)
-			// 	}
+			// 	marketPagination(MarketListingPageSize + 5)
 			// }}
 
 			// removeClippedSubviews={
