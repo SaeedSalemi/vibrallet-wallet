@@ -30,9 +30,12 @@ const MarketProvider = props => {
   }, [])
 
   useEffect(() => {
-    if (favCoins.length) {
-      AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
+    if (favCoins) {
+      if (favCoins.length) {
+        AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
+      }
     }
+
   }, [favCoins])
 
 
