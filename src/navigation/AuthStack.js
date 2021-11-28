@@ -34,6 +34,16 @@ export function AuthStackNavigation() {
 				headerLeft: props => <BackButton navigation={navigation} {...props} />,
 			})}
 		>
+
+			<AuthStack.Screen
+				name={routes.createWalletEmail}
+				options={{
+					headerTitle: () => <HeaderTitle>Create With Email</HeaderTitle>,
+				}}
+				component={CreateAccountWithEmailScreen}
+			>
+
+			</AuthStack.Screen>
 			<AuthStack.Screen
 				name={routes.welcome}
 				options={{ headerShown: false }}
@@ -46,23 +56,23 @@ export function AuthStackNavigation() {
 				}}
 				component={CreateAccountWithPhoneScreen}
 			/>
-			<AuthStack.Screen
+			{/* <AuthStack.Screen
 				name={routes.createWalletEmail}
 				options={{
 					headerTitle: () => <HeaderTitle>Create With Email</HeaderTitle>,
 				}}
 				component={CreateAccountWithEmailScreen}
-			/>
+			/> */}
 			<AuthStack.Screen
 				name={routes.verifyPhone}
 				options={{ headerTitle: () => <HeaderTitle>Verify Phone</HeaderTitle> }}
 				component={VerifyPhoneScreen}
 			/>
-			<AuthStack.Screen
+			{/* <AuthStack.Screen
 				name={routes.verifyEmail}
 				options={{ headerTitle: () => <HeaderTitle>Verify Email</HeaderTitle> }}
 				component={VerifyEmailScreen}
-			/>
+			/> */}
 			<AuthStack.Screen
 				name={routes.restore}
 				options={{
