@@ -8,22 +8,41 @@ import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/MarketProvider'
-import HttpService from '../../../services/HttpService'
-// TODO: Activity Indicator
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function MarketData(props) {
-
-	const [data, setData] = useState([])
-	const [page, setPage] = useState(1)
+	// const [favCoins, setFavCoins] = useState([])
 
 
-	// const {
-	// 	MarketListing: items,
-	// 	MarketListingPageSize,
-	// 	MarketListingPageNumber,
-	// 	marketPagination } = useContext(Context)
+	// useEffect(() => {
+	// 	AsyncStorage.getItem("marketFavCoins").then(res => {
+	// 		setFavCoins(JSON.parse(res))
+	// 	})
+	// }, [])
 
+	// useEffect(() => {
+	// 	if (favCoins.length) {
+	// 		AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
+	// 	}
+	// }, [favCoins])
+
+
+	// const adder = async (item) => {
+	// 	const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
+	// 	if (index < 0) {
+	// 		setFavCoins([...favCoins, item])
+	// 	} else {
+	// 		setFavCoins(favCoins.splice(index, 1))
+	// 	}
+	// }
+
+	// const deleteFav = (item) => {
+	// 	const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
+	// 	alert(index)
+	// 	if (index >= 0) {
+	// 		setFavCoins(favCoins.splice(index, 1))
+	// 	}
+	// }
 	return (
 		<>
 			{props.items && <FlatList
@@ -58,8 +77,10 @@ export default function MarketData(props) {
 	)
 }
 
-const RenderMarketItem = React.memo(({ item, index, type }) => {
+const RenderMarketItem = ((props) => {
+	let { item, index, type } = props
 	const { navigate } = useNavigation()
+	const { adder, deleteFav } = useContext(Context)
 	return (
 		<SwapableRow
 			measure={75}
@@ -67,85 +88,119 @@ const RenderMarketItem = React.memo(({ item, index, type }) => {
 				title: 'Favorite', icon: 'star', onPress: function () {
 
 					if (type === "fav") {
+						item.favorite = false
+						deleteFav(item)
+						// new HttpService(
+						// 	"", {
+						// 	"uniqueId": "abc",
+						// 	"action": "removeFavoriteCurrency",
+						// 	"data": {
+						// 		"kind": "MARKET",
+						// 		"currency": item.symbol
+						// 	}
+						// }
+						// ).Post(response => {
+						// 	const { success, code } = response
+						// 	if (success === false && code === 5010) {
+						// 		showMessage({
+						// 			message: `In order to add coin to your favorite list you have sign in`,
+						// 			description: null,
+						// 			type: 'success',
+						// 			icon: null,
+						// 			duration: 8000,
+						// 			style: { backgroundColor: "#e74c3c" },
+						// 			position: 'top'
+						// 		})
+						// 	} else
+						// 		showMessage({
+						// 			message: `${item.name} is removed from the favorite list.`,
+						// 			description: null,
+						// 			type: 'success',
+						// 			icon: null,
+						// 			duration: 1000,
+						// 			style: { backgroundColor: "#6BC0B1" },
+						// 			position: 'top'
+						// 		})
 
-
-						new HttpService(
-							"", {
-							"uniqueId": "abc",
-							"action": "removeFavoriteCurrency",
-							"data": {
-								"kind": "MARKET",
-								"currency": item.symbol
-							}
-						}
-						).Post(response => {
-							const { success, code } = response
-							if (success === false && code === 5010) {
-								showMessage({
-									message: `In order to add coin to your favorite list you have sign in`,
-									description: null,
-									type: 'success',
-									icon: null,
-									duration: 8000,
-									style: { backgroundColor: "#e74c3c" },
-									position: 'top'
-								})
-							} else
-								showMessage({
-									message: `${item.name} is removed from the favorite list.`,
-									description: null,
-									type: 'success',
-									icon: null,
-									duration: 1000,
-									style: { backgroundColor: "#6BC0B1" },
-									position: 'top'
-								})
-
-						})
+						// })
 
 
 					}
 
 					else if (type === "market") {
 
+						item.favorite = true
+						adder(item)
 
-						new HttpService(
-							"", {
-							"uniqueId": "abc",
-							"action": "addFavoriteCurrency",
-							"data": {
-								"kind": "MARKET",
-								"currency": item.symbol
-							}
-						}
-						).Post(response => {
-							const { success, code } = response
-							if (success === false && code === 5010) {
-								showMessage({
-									message: `In order to add coin to your favorite list you have sign in`,
-									description: null,
-									type: 'success',
-									icon: null,
-									duration: 8000,
-									style: { backgroundColor: "#e74c3c" },
-									position: 'top'
-								})
-							} else {
-								showMessage({
-									message: `${item.name} is added to the favorite list.`,
-									description: null,
-									type: 'success',
-									icon: null,
-									duration: 1000,
-									style: { backgroundColor: "#6BC0B1" },
-									position: 'top'
-								})
-							}
-						})
+						// item.favorite = true
+						// setFavcoins(prevCoins => [...prevCoins, item])
+						// // console.log(`'list' ${favcoins.length}`, favcoins)
+						// // 
+						// CoinMap.set(item.symbol, item)
+
+						// console.log('entries', CoinMap.size)
+						// console.log('entries', CoinMap.entries())
+						// console.log('to json', CoinMap.toJSON())
+
+
+						// store.set('market', item)
+						// console.log('store', store)
+						// AsyncStorage.setItem('favCoins', JSON.stringify(store))
+
+
+
+						// AsyncStorage.getItem('favCoins').then(favCoins => {
+						// 	if (favCoins !== null) {
+						// 		console.log('bekhon va beriz toi map')
+						// 	}
+						// 	else {
+
+						// 	}
+						// }).catch(error => {
+						// 	console.log('error hichi tosh nist')
+						// })
+
+
+
+						// const itemsInStore = store.get('market')
+						// console.log('items in store', itemsInStore)
+
+						// AsyncStorage.setItem('market', JSON.stringify(store))
+
+						// new HttpService(
+						// 	"", {
+						// 	"uniqueId": "abc",
+						// 	"action": "addFavoriteCurrency",
+						// 	"data": {
+						// 		"kind": "MARKET",
+						// 		"currency": item.symbol
+						// 	}
+						// }
+						// ).Post(response => {
+						// 	const { success, code } = response
+						// 	if (success === false && code === 5010) {
+						// 		showMessage({
+						// 			message: `In order to add coin to your favorite list you have sign in`,
+						// 			description: null,
+						// 			type: 'success',
+						// 			icon: null,
+						// 			duration: 8000,
+						// 			style: { backgroundColor: "#e74c3c" },
+						// 			position: 'top'
+						// 		})
+						// 	} else {
+						// 		showMessage({
+						// 			message: `${item.name} is added to the favorite list.`,
+						// 			description: null,
+						// 			type: 'success',
+						// 			icon: null,
+						// 			duration: 1000,
+						// 			style: { backgroundColor: "#6BC0B1" },
+						// 			position: 'top'
+						// 		})
+						// 	}
+						// })
 					}
-
-
-
 				}
 			}]}
 		>

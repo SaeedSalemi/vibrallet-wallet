@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { createContext, useCallback, useEffect, useState } from 'react'
 import HttpService from '../services/HttpService'
 
@@ -14,10 +15,47 @@ const MarketProvider = props => {
     MarketListingPageSize: 15,
     MarketListingPageNumber: 1
   })
+  const [favCoins, setFavCoins] = useState([])
 
   const dispatch = value => {
     setState({ ...state, ...value })
   }
+
+
+
+  useEffect(() => {
+    AsyncStorage.getItem("marketFavCoins").then(res => {
+      setFavCoins(JSON.parse(res))
+    })
+  }, [])
+
+  useEffect(() => {
+    if (favCoins.length) {
+      AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
+    }
+  }, [favCoins])
+
+
+
+  const adder = async (item) => {
+    const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
+    if (index < 0) {
+      setFavCoins([...favCoins, item])
+    } else {
+      setFavCoins(favCoins.splice(index, 1))
+    }
+  }
+
+  const deleteFav = (item) => {
+    const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
+    if (index >= 0) {
+      setFavCoins(favCoins.splice(index, 1))
+    }
+  }
+
+
+
+  // ==================
 
   useEffect(() => {
     fetchData()
@@ -80,7 +118,7 @@ const MarketProvider = props => {
       "uniqueId": "123",
       "action": "fcasListing",
       "data": {
-        "pageSize": 15,
+        "pageSize": 50,
         "pageNumber": 1,
         "sort": state.FCASSort
       }
@@ -105,7 +143,6 @@ const MarketProvider = props => {
             }).Post(res => {
               if (res?.success === true) {
                 item.svgUri = res.data.url
-                console.log('item of fcas chart', item)
               }
             })
           return item
@@ -129,7 +166,7 @@ const MarketProvider = props => {
     })
   }, [state])
 
-  return <Context.Provider value={{ ...state, dispatch, changeMarketSort, marketPagination, changeFCASSort }}>
+  return <Context.Provider value={{ ...state, adder, deleteFav, favCoins, dispatch, changeMarketSort, marketPagination, changeFCASSort }}>
     {props.children}
   </Context.Provider>
 
