@@ -168,7 +168,7 @@ export default function Header({ route = routes.home, children }) {
 						style={{ justifyContent: 'space-evenly', paddingHorizontal: 16 }}
 					>
 						<AppText bold typo="tiny">
-							{!user.email ? 'Register' : 'Login'}
+							{!user.email ? 'Login' : 'Register'}
 						</AppText>
 						<AppText typo="dot" color="text3">
 							Vibranium Evagelist
