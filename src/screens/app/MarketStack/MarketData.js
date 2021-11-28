@@ -207,7 +207,8 @@ const RenderMarketItem = ((props) => {
 			<TouchableOpacity
 				style={{ paddingHorizontal: 20 }}
 				onPress={() => {
-					navigate(routes.marketCoinDetail, { coin: item })
+
+					navigate(routes.marketWebview, { coin: item })
 				}}
 			>
 				<View
