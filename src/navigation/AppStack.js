@@ -56,6 +56,7 @@ import { setModal } from '../redux/modules/appSettings'
 import SplashScreen from '../screens/SplashScreen'
 import BackupScreen from '../screens/app/ProfileStack/BackupScreen'
 import RestoreScreen from '../screens/authentication/RestoreModalScreen'
+import MarketWebView from '../screens/app/MarketStack/MarketWebView'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -111,9 +112,20 @@ export function AppStackNavigation() {
 				options={{ headerShown: false }}
 			/>
 
+
+			<AppTab.Screen
+				name={"MarketWebView"}
+				component={MarketWebView}
+				options={({ route }) => ({
+					headerTitle: () => (
+						<AppText typo="sm">{route.params?.coin.name}</AppText>
+					),
+				})}
+			/>
+
 			<AppTab.Screen
 				name={"RestoreScreen"}
-				component={RestoreScreen}
+				component={RewardsScreen}
 				options={{ headerShown: false }}
 			/>
 			<AppTab.Screen
@@ -190,7 +202,7 @@ export function AppStackNavigation() {
 				component={NewCoinAlertScreen}
 				options={({ route }) => ({
 					headerTitle: () => (
-						<AppText typo="sm">New {route.params?.coin.slug} Alert</AppText>
+						<AppText typo="sm">New {route.params?.coin.name} Alert</AppText>
 					),
 				})}
 			/>
