@@ -5,12 +5,13 @@ import { Images } from '../../../assets'
 import AppText from '../../../components/common/AppText'
 import EditProfileForm from '../../../components/Profile/EditPofileForm'
 import { globalStyles } from '../../../config/styles'
-
+import Entypo from 'react-native-vector-icons/Entypo'
 export default function EditProfileScreen() {
 	return (
 		<ScrollView style={globalStyles.gapScreen}>
 			<View style={{ ...globalStyles.flex.center, marginVertical: 30 }}>
-				<Image source={Images.avatar2} />
+				{/* <Image source={Images.avatar2} /> */}
+				<Entypo name="user" size={65} color="#9299C2" />
 			</View>
 			<View style={{ ...globalStyles.flex.center, paddingBottom: 18 }}>
 				<AppText typo="xs" color="text1">

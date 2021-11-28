@@ -8,6 +8,7 @@ import AppIcon from '../common/AppIcon'
 import HR from '../common/HR/HR'
 import { useNavigation } from '@react-navigation/core'
 import { routes } from '../../config/routes'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 const ProfileInfo = () => {
 	const { navigate } = useNavigation()
@@ -16,7 +17,8 @@ const ProfileInfo = () => {
 		<>
 			<HR style={{ marginVertical: 4 }} />
 			<View style={{ flexDirection: 'row' }}>
-				<Image source={Images.avatar} />
+				{/* <Image source={Images.avatar} /> */}
+				<Entypo name="user" size={25} color="#9299C2" style={{ marginTop: 6 }} />
 				<View
 					style={{
 						flex: 1,
