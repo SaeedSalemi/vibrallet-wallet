@@ -3,7 +3,7 @@ import { WebView } from 'react-native-webview';
 import PropTypes from 'prop-types';
 
 const MarketWebView = (props) => {
-
+  
   return (
     <WebView
       style={{ width: "100%" }}

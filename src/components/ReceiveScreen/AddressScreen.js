@@ -12,6 +12,7 @@ import Clipboard from '@react-native-community/clipboard'
 import { showMessage } from "react-native-flash-message";
 import { share } from '../../utils/Functions'
 import { Context } from '../../context/Provider'
+import bitcoinManager from '../../blockchains/BitcoinManager'
 
 export default function AddressScreen({ route, navigation }) {
 	const { coin } = route.params || {}
@@ -29,12 +30,15 @@ export default function AddressScreen({ route, navigation }) {
 	useEffect(() => {
 		const setWalletAsync = async () => {
 			if (wallet) {
-				if (coin.symbol === 'ETH') {
-					const info = await ethManager.getWalletFromMnemonic(wallet.backup)
-					setWalletInfo(info)
+				if (coin.symbol === 'BTC') {
+					const info = await bitcoinManager.getWalletFromMnemonic(wallet.backup);
+					setWalletInfo(info);
+				} else if (coin.symbol === 'ETH') {
+					const info = await ethManager.getWalletFromMnemonic(wallet.backup);
+					setWalletInfo(info);
 				} else if (coin.symbol === 'BSC') {
-					const info = await bscManager.getWalletFromMnemonic(wallet.backup)
-					setWalletInfo(info, 'info after')
+					const info = await bscManager.getWalletFromMnemonic(wallet.backup);
+					setWalletInfo(info, 'info after');
 				} else {
 					// not supported
 				}

@@ -40,7 +40,7 @@ export default function MarketWebView({ route, navigation }) {
         <View style={{ marginVertical: 2, height: 750 }}>
           {/* <MarketWebViewWidget name={coin.name} /> */}
           <WebView
-            source={{ uri: `https://coinmarketcap.com/currencies/${coin.name}/` }}
+            source={{ uri: `https://coinmarketcap.com/currencies/${coin.name.toLowerCase().replace(" ", "-")}/` }}
             style={{ marginTop: 20 }}
           />
         </View>
