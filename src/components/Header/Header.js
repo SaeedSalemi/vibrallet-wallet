@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -15,10 +15,22 @@ import { globalStyles } from '../../config/styles'
 import AppCamera from '../common/AppCamera'
 import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Header({ route = routes.home, children }) {
 	const { navigate } = useNavigation()
 	const [show, setShow] = useState(false)
+
+
+	const [user, setUser] = useState({})
+	useEffect(() => {
+		AsyncStorage.getItem("user").then(user => {
+			if (user) {
+				setUser(JSON.parse(user))
+			}
+		})
+	}, [])
+
 
 	const [state, setState] = useState({
 		address: '',
@@ -128,7 +140,14 @@ export default function Header({ route = routes.home, children }) {
 						flexDirection: 'row',
 					}}
 					activeOpacity={0.75}
-					onPress={() => navigate(routes.profile)}
+					onPress={() => {
+						// navigate(routes.profile)
+						// user.email ? navigate(routes.createWalletEmail) : navigate(routes.profile)
+						// navigate(routes.createWalletEmail)
+						// navigate.replace(routes.createWalletEmail)
+						// alert('1')
+						// navigation.replace(routes.createWalletEmail)
+					}}
 				>
 					<View
 						style={{
@@ -149,7 +168,7 @@ export default function Header({ route = routes.home, children }) {
 						style={{ justifyContent: 'space-evenly', paddingHorizontal: 16 }}
 					>
 						<AppText bold typo="tiny">
-							@SamJones
+							{!user.email ? 'Register' : 'Login'}
 						</AppText>
 						<AppText typo="dot" color="text3">
 							Vibranium Evagelist
