@@ -20,7 +20,7 @@ const MainProvider = props => {
     coins: [],
     coinManager: { ETH: ethManager, BNB: bscManager, BTC: bitcoinManager },
     preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
-    countries: []
+    // countries: []
   })
   // const { coins, setCoin } = useCoins()
 
@@ -37,17 +37,17 @@ const MainProvider = props => {
   }
 
 
-  const getCounties = () => {
-    new HttpService("", {
-      "uniqueId": "123",
-      "action": "getCountries"
-    }).Post(response => {
-      if (response) {
-        setState({ ...state, countries: response })
-        setToStorage("countries", JSON.stringify(response))
-      }
-    })
-  }
+  // const getCounties = () => {
+  //   new HttpService("", {
+  //     "uniqueId": "123",
+  //     "action": "getCountries"
+  //   }).Post(response => {
+  //     if (response) {
+  //       setState({ ...state, countries: response })
+  //       setToStorage("countries", JSON.stringify(response))
+  //     }
+  //   })
+  // }
 
 
   const supportedCoins = async () => {
@@ -88,7 +88,7 @@ const MainProvider = props => {
 
   useEffect(() => {
     supportedCoins()
-    getCounties()
+    // getCounties()
   }, [])
 
   const setCoin = (value) => {
@@ -143,7 +143,7 @@ const MainProvider = props => {
 
   // FCASList, MarketListing,
   return (
-    <Context.Provider value={{ ...state, getCoinBalance, getCounties, setCoin, hideCoinHandler, dispatch, getACoin }}>
+    <Context.Provider value={{ ...state, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin }}>
       {props.children}
     </Context.Provider>
   )
