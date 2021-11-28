@@ -59,5 +59,6 @@ export const routes = {
 	marketCoinDetail: 'MarketCoinDetail',
 	itemPicker: 'itemPicker',
 	backup: 'backup',
-	restoreScreen: 'RestoreScreen'
+	restoreScreen: 'RestoreScreen',
+	marketWebview: 'MarketWebView'
 }
