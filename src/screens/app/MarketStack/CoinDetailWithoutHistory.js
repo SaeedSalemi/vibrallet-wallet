@@ -64,7 +64,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				"data": {
 					"symbol": `${coin.symbol}USDT`,
 					// "timeframe": state.timeframe,
-					"timeframe": '1h',
+					"timeframe": state.timeframe,
 					"limit": state.limit
 				}
 			}).Post(res => {
