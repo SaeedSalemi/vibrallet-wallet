@@ -12,7 +12,7 @@ const MarketProvider = props => {
 
     MarketListing: [],
     MarketListingSort: 'name',
-    MarketListingPageSize: 15,
+    MarketListingPageSize: 25,
     MarketListingPageNumber: 1
   })
   const [favCoins, setFavCoins] = useState([])
@@ -67,7 +67,7 @@ const MarketProvider = props => {
 
   const marketPagination = (page) => {
     setState((state) => {
-      state.MarketListingPageNumber = page
+      state.MarketListingPageNumber += page
       return { ...state }
     })
     fetchData()
@@ -100,7 +100,7 @@ const MarketProvider = props => {
         "pageSize": state.MarketListingPageSize,
         "pageNumber": 1,
         "sort": state.MarketListingSort,
-        "filter": "btc"
+        // "filter": "btc"
       }
     }
     ).Post(response => {
