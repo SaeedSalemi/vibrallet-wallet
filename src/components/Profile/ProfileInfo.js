@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Foundation from 'react-native-vector-icons/Foundation'
 import { Image, View, TouchableOpacity } from 'react-native'
 import AppText from '../common/AppText'
@@ -9,9 +9,11 @@ import HR from '../common/HR/HR'
 import { useNavigation } from '@react-navigation/core'
 import { routes } from '../../config/routes'
 import Entypo from 'react-native-vector-icons/Entypo'
+import { Context } from '../../context/Provider'
 
 const ProfileInfo = () => {
 	const { navigate } = useNavigation()
+	const { user: userProvider } = useContext(Context)
 
 	return (
 		<>
@@ -30,7 +32,7 @@ const ProfileInfo = () => {
 				>
 					<View>
 						<AppText bold typo="xs">
-							{'Login'}
+							{userProvider.username ? userProvider.username : 'Login'}
 						</AppText>
 						<AppText color="text3" bold typo="dot">
 							Vibranium Evangelist
