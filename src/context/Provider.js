@@ -30,6 +30,12 @@ const MainProvider = props => {
   }
   )
 
+  useEffect(() => {
+    supportedCoins()
+    // getCounties()
+    getRegisteredUser()
+  }, [])
+
 
 
   const getACoin = symbol => {
@@ -94,11 +100,6 @@ const MainProvider = props => {
 
   }
 
-  useEffect(() => {
-    supportedCoins()
-    // getCounties()
-  }, [])
-
 
   const setUserData = (user) => {
     console.log('user data', user)
@@ -107,6 +108,31 @@ const MainProvider = props => {
       return { ...state }
     })
   }
+
+
+  const getRegisteredUser = () => {
+    AsyncStorage.getItem("regUser").then(userData => {
+
+      const userInfo = {}
+      if (userData) {
+        let parsedUserData = JSON.parse(userData)
+        if (parsedUserData.username)
+          userInfo.username = parsedUserData.username
+        if (parsedUserData.email)
+          userInfo.email = parsedUserData.email
+        if (parsedUserData.country)
+          userInfo.country = parsedUserData.country
+        if (parsedUserData.phone)
+          userInfo.phone = parsedUserData.phone
+      }
+
+      setUserData(userInfo)
+
+    })
+  }
+
+
+
 
   const setCoin = (value) => {
     setState({ ...state, coins: value })
