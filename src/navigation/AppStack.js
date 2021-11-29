@@ -57,6 +57,7 @@ import SplashScreen from '../screens/SplashScreen'
 import BackupScreen from '../screens/app/ProfileStack/BackupScreen'
 import RestoreScreen from '../screens/authentication/RestoreModalScreen'
 import MarketWebView from '../screens/app/MarketStack/MarketWebView'
+import CreateAccountWithEmailScreen from '../screens/authentication/CreateAccountWithEmailScreen'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -136,6 +137,15 @@ export function AppStackNavigation() {
 			<AppTab.Screen
 				name={routes.appTab}
 				component={AppTabNavigation}
+				options={{ headerShown: false }}
+			/>
+
+
+			{/*  */}
+
+			<AppTab.Screen
+				name={routes.createWalletEmail}
+				component={CreateAccountWithEmailScreen}
 				options={{ headerShown: false }}
 			/>
 			<AppStack.Screen
