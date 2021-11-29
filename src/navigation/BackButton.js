@@ -3,13 +3,15 @@ import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { Colors, Images } from '../assets'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { globalStyles } from '../config/styles'
-
+import { useNavigation } from '@react-navigation/core'
 export default function BackButton({ navigation, ...restProps }) {
+	const { goBack } = useNavigation()
+
 	return (
 		<TouchableOpacity
 			{...restProps}
 			style={styles.btn}
-			onPress={() => navigation.goBack()}
+			onPress={() => goBack()}
 		>
 			<AntDesign
 				name="arrowleft"
