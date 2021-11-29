@@ -144,7 +144,11 @@ export default function Header({ route = routes.home, children }) {
 					}}
 					activeOpacity={0.75}
 					onPress={() => {
-						navigate(routes.createWalletEmail)
+						if (userProvider.username) {
+							navigate(routes.profile)
+						} else {
+							navigate(routes.createWalletEmail)
+						}
 					}}
 				>
 					<View
