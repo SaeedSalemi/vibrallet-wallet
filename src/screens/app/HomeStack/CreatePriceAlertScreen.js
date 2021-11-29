@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useContext } from 'react'
 import { FlatList } from 'react-native'
 import AppText from '../../../components/common/AppText'
 import AlertItem from '../../../components/PriceAlert/AlertItem'
@@ -9,6 +9,7 @@ import AppIcon from '../../../components/common/AppIcon'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import HttpService from '../../../services/HttpService'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
+import { Context } from '../../../context/Provider'
 
 const BSCIcon = () => (
 	<AppIcon style={{ width: 25, height: 25 }} name="binance" />
@@ -47,6 +48,8 @@ export const coins = [
 
 export default function CreatePriceAlertScreen({ navigation }) {
 	const items = useMemo(() => coins, [])
+
+	// const { coins } = useContext(Context)
 
 
 	const BSCIcon = () => (

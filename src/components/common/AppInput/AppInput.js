@@ -129,7 +129,8 @@ export default function AppInput({
 							flex: 1,
 							paddingVertical: 16,
 							color: globalStyles.Colors.text1,
-							fontSize: globalStyles.typo.xs,
+							fontSize: globalStyles.typo.tiny,
+							fontFamily: 'Poppins-Regular',
 						}}
 						secureTextEntry={secure}
 						{...restProps}
