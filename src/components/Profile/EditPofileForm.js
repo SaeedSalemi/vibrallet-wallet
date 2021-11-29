@@ -31,10 +31,18 @@ export default function EditProfileForm({ navigation }) {
 
 	useEffect(() => {
 
-		AsyncStorage.getItem("user").then(userData => {
+		AsyncStorage.getItem("regUser").then(userData => {
 			if (userData) {
-				let userinfo = JSON.parse(userData)
-				setRetData(userinfo)
+				let parsedUserData = JSON.parse(userData)
+				if (parsedUserData.username)
+					setUsername(parsedUserData.username)
+				if (parsedUserData.email)
+					setEmail(parsedUserData.email)
+				if (parsedUserData.country)
+					setCountry(parsedUserData.country)
+				if (parsedUserData.phone)
+					setPhone(parsedUserData.phone)
+
 			}
 		})
 
@@ -158,7 +166,6 @@ export default function EditProfileForm({ navigation }) {
 								return { id: country.phone, title: country.name }
 							}),
 							onSelect: (item) => {
-								console.log('selected country', item)
 								setCountry(item)
 							}
 						})
@@ -177,7 +184,7 @@ export default function EditProfileForm({ navigation }) {
 				>
 					<View style={{ flexDirection: 'row' }}>
 						<FontAwesome5Icon style={{ marginLeft: 4 }} size={15} color={globalStyles.Colors.text2} name="map-marker-alt" />
-						<AppText color="text3" style={{ marginHorizontal: 22 }} typo="tiny">Choose your region</AppText>
+						<AppText color="text3" style={{ marginHorizontal: 22 }} typo="tiny">{'Choose your region'}</AppText>
 					</View>
 					<AppIcon name="arrowRightCircle" />
 				</Pressable>
