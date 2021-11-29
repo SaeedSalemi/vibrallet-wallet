@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useContext } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -16,10 +16,13 @@ import AppCamera from '../common/AppCamera'
 import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Context } from '../../context/Provider'
 
 export default function Header({ route = routes.home, children }) {
 	const { navigate } = useNavigation()
 	const [show, setShow] = useState(false)
+
+	const { user: userProvider } = useContext(Context)
 
 
 	const [user, setUser] = useState({})
@@ -163,7 +166,8 @@ export default function Header({ route = routes.home, children }) {
 						style={{ justifyContent: 'space-evenly', paddingHorizontal: 16 }}
 					>
 						<AppText bold typo="tiny">
-							{!user.email ? 'Login' : 'Register'}
+							{/* {!user.email ? 'Login' : 'Register'} */}
+							{userProvider.username ? userProvider.username : 'Login'}
 						</AppText>
 						<AppText typo="dot" color="text3">
 							Vibranium Evagelist
