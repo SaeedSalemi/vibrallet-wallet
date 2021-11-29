@@ -84,6 +84,22 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		limit: 6,
 	})
 
+	const [__data, set_data] = useState()
+
+	const [__chart, setChart] = useState()
+
+	useEffect(() => {
+		chartDates()
+	//chartValues()
+	let result = state.coinHistory.map(p => parseFloat(p.value).toFixed(2));
+	console.log('chartValues RESULT:', result);
+	setChart([
+		{
+			data: result
+		}]);
+	}, [])
+
+
 	useEffect(() => {
 		console.log('---- LOAD DATA --> ', state.timeframe, state.limit)
 		new HttpService("",
@@ -162,6 +178,9 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		setState({ ...state, limit: limit, timeframe })
 	}
 
+
+
+
 	let chartDates = () => {
 
 		let format = 'MM-DD';
@@ -177,13 +196,18 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 		let result = state.coinHistory.map(p => p.date.format(format));
 		console.log('chartDates RESULT:', result);
-		return result;
+		set_data(result)
+		//return result;
 	};
 
 	let chartValues = () => {
 		let result = state.coinHistory.map(p => parseFloat(p.value).toFixed(2));
 		console.log('chartValues RESULT:', result);
-		return result;
+		setChart([
+			{
+				data: result
+			}]);
+		//return result;
 	};
 
 	return (
@@ -224,14 +248,18 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 			</View>
 			<View style={{ ...globalStyles.flex.row, marginVertical: 24 }}>
 				<LineChart
+					// data={{
+					// 	labels: __data,
+					// 	datasets: __chart
+					// }}
 					data={{
-						labels: chartDates(),
+						labels: state.coinHistory.map(p => p.date.format(format)),
 						datasets: [
-							{
-								data: chartValues()
-							}
+						  {
+							data: state.coinHistory.map(p => parseFloat(p.value))
+						  }
 						]
-					}}
+					  }}
 					width={Dimensions.get("window").width} // from react-native
 					height={220}
 					yAxisLabel="$"
