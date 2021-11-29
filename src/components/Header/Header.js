@@ -141,12 +141,7 @@ export default function Header({ route = routes.home, children }) {
 					}}
 					activeOpacity={0.75}
 					onPress={() => {
-						// navigate(routes.profile)
-						// user.email ? navigate(routes.createWalletEmail) : navigate(routes.profile)
-						// navigate(routes.createWalletEmail)
-						// navigate.replace(routes.createWalletEmail)
-						// alert('1')
-						// navigation.replace(routes.createWalletEmail)
+						navigate(routes.createWalletEmail)
 					}}
 				>
 					<View
