@@ -99,6 +99,15 @@ const MainProvider = props => {
     // getCounties()
   }, [])
 
+
+  const setUserData = (user) => {
+    console.log('user data', user)
+    setState((state) => {
+      state.user = user
+      return { ...state }
+    })
+  }
+
   const setCoin = (value) => {
     setState({ ...state, coins: value })
   }
@@ -151,7 +160,7 @@ const MainProvider = props => {
 
   // FCASList, MarketListing,
   return (
-    <Context.Provider value={{ ...state, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin }}>
+    <Context.Provider value={{ ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin }}>
       {props.children}
     </Context.Provider>
   )
