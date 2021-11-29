@@ -29,18 +29,33 @@ export default function AddressScreen({ route, navigation }) {
 
 	useEffect(() => {
 		const setWalletAsync = async () => {
+
+
+
+			// if (wallet) {
+			// 	let selectedCoin = coinManager[coinSymbol];
+			// 	if (typeof selectedCoin.getWalletFromMnemonic === "function") {
+			// 		selectedCoin.getWalletFromMnemonic(wallet.backup)
+			// 			.then(wallet => {
+			// 				selectedCoin.getBalance(wallet?.address, false).then(result => {
+			// 					balance = parseFloat(result).toFixed(3)
+			// 				})
+			// 			})
+			// 			.catch(ex => console.error('balance wallet error', ex))
+			// 	}
+			// }
+
 			if (wallet) {
-				if (coin.symbol === 'BTC') {
-					const info = await bitcoinManager.getWalletFromMnemonic(wallet.backup);
-					setWalletInfo(info);
-				} else if (coin.symbol === 'ETH') {
-					const info = await ethManager.getWalletFromMnemonic(wallet.backup);
-					setWalletInfo(info);
+				if (coin.symbol === 'ETH') {
+					const info = await ethManager.getWalletFromMnemonic(wallet.backup)
+					console.log('eth', info)
+					setWalletInfo(info)
 				} else if (coin.symbol === 'BSC') {
-					const info = await bscManager.getWalletFromMnemonic(wallet.backup);
-					setWalletInfo(info, 'info after');
-				} else {
-					// not supported
+					const info = await bscManager.getWalletFromMnemonic(wallet.backup)
+					setWalletInfo(info, 'info after')
+				} else if (coin.symbol === 'BTC') {
+					const info = await bitcoinManager.getWalletFromMnemonic(wallet.backup)
+					setWalletInfo(info, 'info after')
 				}
 			} else {
 				navigation.navigate(routes.profileWallet)

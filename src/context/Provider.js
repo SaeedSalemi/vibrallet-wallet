@@ -66,16 +66,24 @@ const MainProvider = props => {
           "action": "supportedCoins",
         }).Post(response => {
           if (response) {
-
+            // if (wallet) {
             const items = response
             for (let item of items) {
               item.balance = 0
               item.color = state.preDefinedCoinsColors[item.symbol]
               item.hide = false
               item.fav = false
+              // let selectedCoin = coinManager[item.symbol];
+              // if (typeof selectedCoin.getWalletFromMnemonic === "function") {
+              //   coinInfo = selectedCoin.getWalletFromMnemonic(wallet.backup)
+              //   item.address = coinInfo?.address
+              //   item.publicKey = coinInfo?.publicKey
+              //   item.privateKey = coinInfo?.privateKey
+              // }
             }
             setState({ ...state, coins: items })
             setToStorage("supportedCoins", JSON.stringify(items))
+            // }
           }
         })
       }

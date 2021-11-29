@@ -30,7 +30,7 @@ const ProfileInfo = () => {
 				>
 					<View>
 						<AppText bold typo="xs">
-							@SamJones
+							{'Login'}
 						</AppText>
 						<AppText color="text3" bold typo="dot">
 							Vibranium Evangelist
