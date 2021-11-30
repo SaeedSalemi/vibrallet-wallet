@@ -10,7 +10,7 @@ import { SvgUri } from 'react-native-svg'
 import { showMessage } from 'react-native-flash-message'
 
 export default function FCASRatingScreen() {
-	const { FCASList, setFCASFavoriteCoins } = useContext(Context)
+	const { FCASList, adderFCASFAV } = useContext(Context)
 	const colors = {
 		'S': '#67B010',
 		'A': '#4ED69D',
@@ -22,7 +22,8 @@ export default function FCASRatingScreen() {
 		return (
 			<SwapableRow leftItems={[{
 				title: 'Favorite', icon: 'star', onPress: function () {
-					setFCASFavoriteCoins(item)
+					item.favorite = true
+					adderFCASFAV(item)
 					showMessage({
 						message: `${item.symbol} added to your favorite list.`,
 						description: null,
