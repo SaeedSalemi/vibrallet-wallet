@@ -8,9 +8,23 @@ import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/MarketProvider'
 import { SvgUri } from 'react-native-svg'
 import { showMessage } from 'react-native-flash-message'
+import { useQuery } from 'react-query'
+import HttpService from '../../../services/HttpService'
 
 export default function FCASRatingScreen() {
 	const { FCASList, adderFCASFAV } = useContext(Context)
+
+
+
+
+
+	// if (isLoading) console.log("useQuery: Loading...");
+	// fetch("https://rickandmortyapi.com/api/episode")
+	// if (error) console.log("An error has occurred: ", error.message)
+
+	// console.log("useQuery: Data: ", data)
+
+
 	const colors = {
 		'S': '#67B010',
 		'A': '#4ED69D',
