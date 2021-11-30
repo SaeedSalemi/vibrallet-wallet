@@ -12,7 +12,7 @@ import { showMessage } from 'react-native-flash-message'
 
 export default function FCASFavTab() {
 
-  const { fcasFavCoins, deleteFCASFavoriteCoins } = useContext(Context)
+  const { fcasFavCoins, deleteFCASFav } = useContext(Context)
   console.log('fcasFavCoins from storage', fcasFavCoins)
 
   const colors = {
@@ -26,7 +26,8 @@ export default function FCASFavTab() {
     return (
       <SwapableRow leftItems={[{
         title: 'Favorite', icon: 'star', onPress: function () {
-          deleteFCASFavoriteCoins(item)
+          item.favorite = false
+          deleteFCASFav(item)
           showMessage({
             message: `${item.symbol} added to your favorite list.`,
             description: null,
