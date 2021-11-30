@@ -14,6 +14,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from '@react-navigation/core'
 import { Context } from '../../context/Provider'
 
+
 export default function EditProfileForm({ navigation }) {
 
 	const { setUserData } = useContext(Context)
@@ -110,17 +111,17 @@ export default function EditProfileForm({ navigation }) {
 
 		const data = JSON.stringify(registerInformation)
 		AsyncStorage.setItem("regUser", data).then(() => {
-			alert('registered successfully!')
-		})
 
-		showMessage({
-			message: `Your Profile has been successfuly updated!`,
-			description: null,
-			type: 'success',
-			icon: null,
-			duration: 1000,
-			style: { backgroundColor: "#6BC0B1" },
-			position: 'top'
+			showMessage({
+				message: `Your Profile has been successfuly updated!`,
+				description: null,
+				type: 'success',
+				icon: null,
+				duration: 2500,
+				style: { backgroundColor: "#6BC0B1" },
+				position: 'top'
+			})
+
 		})
 	}
 
