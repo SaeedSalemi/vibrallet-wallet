@@ -254,10 +254,10 @@ const RenderMarketItem = ((props) => {
 					>
 						<AppText typo="sm" bold
 							color={item.percent_change_24h > 0 ? 'success' : 'failure'}>
-							{parseFloat(item.price).toFixed(3)}
+							{parseFloat(item.price).toFixed(6)}
 						</AppText>
 						<AppText typo="tiny" color="text3">
-							{parseFloat(item.price).toFixed(3)}
+							{parseFloat(item.price).toFixed(6)}
 						</AppText>
 					</View>
 					<View
