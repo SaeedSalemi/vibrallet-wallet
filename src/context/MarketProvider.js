@@ -32,27 +32,17 @@ const MarketProvider = props => {
 
 
   useEffect(() => {
-    AsyncStorage.getItem("fcasFavCoins").then(data => {
-      setFcasFavCoins(JSON.parse(data))
-    })
-  }, [])
-
-
-  useEffect(() => {
     if (favCoins !== null) {
       AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
     }
   }, [favCoins])
 
-
-  useEffect(() => {
-    if (fcasFavCoins !== null) {
-      AsyncStorage.setItem("fcasFavCoins", JSON.stringify(fcasFavCoins))
-    }
-  }, [fcasFavCoins])
-
-
   const adder = (item) => {
+    AsyncStorage.getItem("marketFavCoins").then(data => {
+      if (data === null) {
+        AsyncStorage.setItem('marketFavCoins', JSON.stringify([]))
+      }
+    })
     const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
     if (index < 0) {
       setFavCoins([...favCoins, item])
@@ -68,23 +58,45 @@ const MarketProvider = props => {
     }
   }
 
-  const setFCASFavoriteCoins = (item) => {
+
+
+  const FCAS_FAV_COINS_STORAGE = 'FCAS_FAV_COIN_STORAGE'
+
+
+
+  useEffect(() => {
+    AsyncStorage.getItem(FCAS_FAV_COINS_STORAGE).then(res => {
+      console.log('result storage', res)
+      setFcasFavCoins(JSON.parse(res))
+    }).catch(err => {
+      console.log('error get from storage')
+    })
+  }, [])
+
+
+  useEffect(() => {
+    if (fcasFavCoins !== null) {
+      AsyncStorage.setItem(FCAS_FAV_COINS_STORAGE, JSON.stringify(fcasFavCoins))
+    }
+  }, [fcasFavCoins])
+
+  const adderFCASFAV = (item) => {
     const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
     if (index < 0) {
-      setFavCoins([...fcasFavCoins, item])
+      setFcasFavCoins([...fcasFavCoins, item])
     } else {
-      setFavCoins(fcasFavCoins.splice(index, 1))
+      setFcasFavCoins(fcasFavCoins.splice(index, 1))
     }
+
   }
 
-  const deleteFCASFavoriteCoins = (item) => {
+  const deleteFCASFav = (item) => {
     const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
     if (index >= 0) {
       setFavCoins(fcasFavCoins.splice(index, 1))
     }
   }
-
-  // ==================
+  // ==========================================
 
   useEffect(() => {
     fetchData()
@@ -188,7 +200,7 @@ const MarketProvider = props => {
   }, [state])
 
   return <Context.Provider
-    value={{ ...state, adder, deleteFav, favCoins, setFCASFavoriteCoins, deleteFCASFavoriteCoins, fcasFavCoins, dispatch, changeMarketSort, marketPagination, changeFCASSort }}>
+    value={{ ...state, adder, deleteFav, favCoins, fcasFavCoins, adderFCASFAV, deleteFCASFav, dispatch, changeMarketSort, marketPagination, changeFCASSort }}>
     {props.children}
   </Context.Provider>
 
