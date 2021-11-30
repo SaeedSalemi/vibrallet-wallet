@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux';
 import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
 import ethManager from '../blockchains/EthManager';
-import useFCASRating from '../hooks/useFCASRating'
-import useMarketListing from '../hooks/useMarketListing'
 import HttpService from '../services/HttpService';
 import { setToStorage } from '../utils/Functions';
 
@@ -21,6 +19,7 @@ const MainProvider = props => {
     coinManager: { ETH: ethManager, BNB: bscManager, BTC: bitcoinManager },
     preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
     // countries: []
+    userProfile: ''
   })
   // const { coins, setCoin } = useCoins()
 
@@ -29,6 +28,12 @@ const MainProvider = props => {
     state.wallets.data ? state.wallets.data[0] : null
   }
   )
+
+
+  const setUserProfile = profile => {
+    setState({ ...state, userProfile: profile })
+  }
+
 
   useEffect(() => {
     supportedCoins()
@@ -186,7 +191,7 @@ const MainProvider = props => {
 
   // FCASList, MarketListing,
   return (
-    <Context.Provider value={{ ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin }}>
+    <Context.Provider value={{ ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin, setUserProfile }}>
       {props.children}
     </Context.Provider>
   )
