@@ -16,6 +16,7 @@ const MarketProvider = props => {
     MarketListingPageNumber: 1
   })
   const [favCoins, setFavCoins] = useState([])
+  const [fcasFavCoins, setFcasFavCoins] = useState([])
 
   const dispatch = value => {
     setState({ ...state, ...value })
@@ -29,18 +30,29 @@ const MarketProvider = props => {
     })
   }, [])
 
-  useEffect(() => {
-    if (favCoins) {
-      if (favCoins.length) {
-        AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
-      }
-    }
 
+  useEffect(() => {
+    AsyncStorage.getItem("fcasFavCoins").then(data => {
+      setFcasFavCoins(JSON.parse(data))
+    })
+  }, [])
+
+
+  useEffect(() => {
+    if (favCoins !== null) {
+      AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
+    }
   }, [favCoins])
 
 
+  useEffect(() => {
+    if (fcasFavCoins !== null) {
+      AsyncStorage.setItem("fcasFavCoins", JSON.stringify(fcasFavCoins))
+    }
+  }, [fcasFavCoins])
 
-  const adder = async (item) => {
+
+  const adder = (item) => {
     const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
     if (index < 0) {
       setFavCoins([...favCoins, item])
@@ -56,7 +68,21 @@ const MarketProvider = props => {
     }
   }
 
+  const setFCASFavoriteCoins = (item) => {
+    const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
+    if (index < 0) {
+      setFavCoins([...fcasFavCoins, item])
+    } else {
+      setFavCoins(fcasFavCoins.splice(index, 1))
+    }
+  }
 
+  const deleteFCASFavoriteCoins = (item) => {
+    const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
+    if (index >= 0) {
+      setFavCoins(fcasFavCoins.splice(index, 1))
+    }
+  }
 
   // ==================
 
@@ -158,18 +184,11 @@ const MarketProvider = props => {
 
 
       }
-
-      // if (response) {
-      //   setState((state) => {
-      //     state.FCASList = response
-      //     return { ...state }
-      //   })
-
-      // }
     })
   }, [state])
 
-  return <Context.Provider value={{ ...state, adder, deleteFav, favCoins, dispatch, changeMarketSort, marketPagination, changeFCASSort }}>
+  return <Context.Provider
+    value={{ ...state, adder, deleteFav, favCoins, setFCASFavoriteCoins, deleteFCASFavoriteCoins, fcasFavCoins, dispatch, changeMarketSort, marketPagination, changeFCASSort }}>
     {props.children}
   </Context.Provider>
 
