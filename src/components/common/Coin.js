@@ -62,7 +62,7 @@ export default function Coin({
 			console.log('error to load coin svg', error)
 			setCoinLogo('')
 		}
-	}, [])
+	}, [coin.symbol])
 
 	useEffect(() => {
 		new HttpService("", {
