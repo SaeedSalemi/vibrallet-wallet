@@ -15,21 +15,15 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 const { store, persistor } = configStore()
 
-const QueryConfigs = new QueryClient({
-	defaultOptions: {
-		queries: {
-			retry: 0,
-		},
-	},
-})
+const QueryConfigs = new QueryClient()
 
 
 export default function App() {
 	return (
 		<Provider store={store}>
 			{/* <PersistGate loading={<SplashScreen />} persistor={persistor}> */}
-			<QueryClientProvider client={QueryConfigs}>
-				<MainProvider>
+			<MainProvider>
+				<QueryClientProvider client={QueryConfigs}>
 					<SafeAreaProvider
 						style={{ backgroundColor: globalStyles.Colors.bckColor }}
 					>
@@ -39,8 +33,8 @@ export default function App() {
 							<RootNavigation />
 						</HideKeyboard>
 					</SafeAreaProvider>
-				</MainProvider>
-			</QueryClientProvider>
+				</QueryClientProvider>
+			</MainProvider>
 			{/* </PersistGate> */}
 		</Provider>
 	)
