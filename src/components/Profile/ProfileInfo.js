@@ -13,14 +13,19 @@ import { Context } from '../../context/Provider'
 
 const ProfileInfo = () => {
 	const { navigate } = useNavigation()
-	const { user: userProvider } = useContext(Context)
+	const { user: userProvider, userProfile } = useContext(Context)
 
 	return (
 		<>
 			<HR style={{ marginVertical: 4 }} />
 			<View style={{ flexDirection: 'row' }}>
-				{/* <Image source={Images.avatar} /> */}
-				<Entypo name="user" size={25} color="#9299C2" style={{ marginTop: 6 }} />
+
+				{/* <Entypo name="user" size={25} color="#9299C2" style={{ marginTop: 6 }} /> */}
+				{userProfile ? <Image source={{ uri: `${userProfile}` }} style={{ width: 30, height: 30, borderRadius: 50, marginTop: 6 }} /> : <Entypo
+					name="user"
+					size={25}
+					color="#9299C2" style={{ marginTop: 6 }}
+				/>}
 				<View
 					style={{
 						flex: 1,
