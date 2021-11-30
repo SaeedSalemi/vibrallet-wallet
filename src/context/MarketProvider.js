@@ -27,6 +27,8 @@ const MarketProvider = props => {
   useEffect(() => {
     AsyncStorage.getItem("marketFavCoins").then(res => {
       setFavCoins(JSON.parse(res))
+    }).catch(error => {
+      console.log('error form Market FAV coins', error)
     })
   }, [])
 
@@ -38,11 +40,11 @@ const MarketProvider = props => {
   }, [favCoins])
 
   const adder = (item) => {
-    AsyncStorage.getItem("marketFavCoins").then(data => {
-      if (data === null) {
-        AsyncStorage.setItem('marketFavCoins', JSON.stringify([]))
-      }
-    })
+    // AsyncStorage.getItem("marketFavCoins").then(data => {
+    //   if (data === null) {
+    //     AsyncStorage.setItem('marketFavCoins', JSON.stringify([]))
+    //   }
+    // })
     const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
     if (index < 0) {
       setFavCoins([...favCoins, item])
@@ -66,10 +68,9 @@ const MarketProvider = props => {
 
   useEffect(() => {
     AsyncStorage.getItem(FCAS_FAV_COINS_STORAGE).then(res => {
-      console.log('result storage', res)
       setFcasFavCoins(JSON.parse(res))
     }).catch(err => {
-      console.log('error get from storage')
+      console.log('error get from storage FCAS')
     })
   }, [])
 
