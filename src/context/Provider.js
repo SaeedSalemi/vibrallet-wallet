@@ -34,6 +34,14 @@ const MainProvider = props => {
     setState({ ...state, userProfile: profile })
   }
 
+  useEffect(() => {
+    AsyncStorage.getItem('userImage').then(res => {
+      if (res) {
+        setState({ ...state, userProfile: `data:image/gif;base64,${res}` })
+      }
+    })
+  }, [state.userProfile])
+
 
   useEffect(() => {
     supportedCoins()
