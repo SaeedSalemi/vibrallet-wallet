@@ -9,7 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import Feather from 'react-native-vector-icons/Feather'
 
-import { StyleSheet, View, TouchableOpacity, Modal } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Modal, Image } from 'react-native'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
 import AppCamera from '../common/AppCamera'
@@ -22,7 +22,7 @@ export default function Header({ route = routes.home, children }) {
 	const { navigate } = useNavigation()
 	const [show, setShow] = useState(false)
 
-	const { user: userProvider } = useContext(Context)
+	const { user: userProvider, userProfile } = useContext(Context)
 
 
 	const [user, setUser] = useState({})
@@ -159,11 +159,17 @@ export default function Header({ route = routes.home, children }) {
 							borderRadius: 100,
 						}}
 					>
-						<Entypo
+						{/* <Entypo
 							name="user"
 							size={30}
 							color={globalStyles.Colors.inputColor2}
-						/>
+						/> */}
+
+						{userProfile ? <Image source={{ uri: `${userProfile}` }} style={{ width: 30, height: 30, borderRadius: 50 }} /> : <Entypo
+							name="user"
+							size={30}
+							color={globalStyles.Colors.inputColor2}
+						/>}
 					</View>
 
 					<View
