@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Images } from '../../../assets'
-import AppButton from '../../../components/common/AppButton'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import Screen from '../../../components/Screen'
@@ -47,7 +46,7 @@ export default function BackupScreen({ navigation }) {
 
 
   const handleBackup = () => {
-    const path = RNFS.DownloadDirectoryPath + '/vibranium-backup.json';
+    const path = RNFS.DownloadDirectoryPath + `/vibranium-backup-${new Date().getTime()}.json`;
     RNFS.writeFile(path, JSON.stringify(encrypt(backup)), 'utf8')
       .then((success) => {
         showMessage({
