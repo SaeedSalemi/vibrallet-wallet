@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { createContext, useCallback, useEffect, useState } from 'react'
 import HttpService from '../services/HttpService'
+import { useQuery } from "react-query";
 
 export const Context = createContext()
 
@@ -12,7 +13,7 @@ const MarketProvider = props => {
 
     MarketListing: [],
     MarketListingSort: 'name',
-    MarketListingPageSize: 25,
+    MarketListingPageSize: 200,
     MarketListingPageNumber: 1
   })
   const [favCoins, setFavCoins] = useState([])
@@ -97,7 +98,6 @@ const MarketProvider = props => {
       setFavCoins(fcasFavCoins.splice(index, 1))
     }
   }
-  // ==========================================
 
   useEffect(() => {
     fetchData()
@@ -128,9 +128,37 @@ const MarketProvider = props => {
     fetchData()
   }
 
+  // ==========================================
+
+
+  const fetchFCAS = () => {
+    let data = []
+    new HttpService(
+      "", {
+      "uniqueId": "123",
+      "action": "fcasListing",
+      "data": {
+        "pageSize": 5,
+        "pageNumber": 1,
+        "sort": "name"
+      }
+    }
+    ).Post(response => {
+      data = response
+    })
+    return data
+  };
+
+  // const { isLoading, error, data, isFetching } = useQuery("repoData", fetchFCAS)
+
+
+  // ==========================================
+
 
 
   const fetchData = useCallback(() => {
+    // const { isLoading, error, data, isFetching } = useQuery("repoData", fetchFCAS)
+    // console.log('fucker data', data)
     new HttpService(
       "", {
       "uniqueId": "123",
@@ -155,6 +183,10 @@ const MarketProvider = props => {
 
 
   const fetchFCASData = useCallback(() => {
+
+
+
+
     new HttpService(
       "", {
       "uniqueId": "123",
