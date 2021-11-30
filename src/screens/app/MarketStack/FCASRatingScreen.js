@@ -1,63 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { FlatList, Image, View } from 'react-native'
-import { Images } from '../../../assets'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import RatingSortHeader from '../../../components/Market/RatingSortHeader'
 import { globalStyles } from '../../../config/styles'
-// import { coins } from '../HomeStack/CreatePriceAlertScreen'
 import { Context } from '../../../context/MarketProvider'
 import { SvgUri } from 'react-native-svg'
-import HttpService from '../../../services/HttpService'
 import { showMessage } from 'react-native-flash-message'
 
 export default function FCASRatingScreen() {
-
-
-	const { FCASList } = useContext(Context)
-	// const [_data, setData] = useState([])
-	// const data = FCASList
-
-	// useEffect(() => {
-	// 	console.log('fcas list', FCASList)
-	// 	for (let item of FCASList) {
-	// 		try {
-
-
-	// 			new HttpService("",
-	// 				{
-	// 					"uniqueId": "123",
-	// 					"action": "priceChart",
-	// 					"data": {
-	// 						"symbol": `${item.symbol}`,
-	// 						"timeframe": "30m",
-	// 						"limit": 440,
-	// 						"responseType": "url",
-	// 						"height": 50,
-	// 						"width": 250,
-	// 					}
-	// 				}).Post(res => {
-	// 					if (res?.success === true) {
-	// 						item.svgUri = res.data.url
-	// 						console.log('svg uri', item.svgUri)
-	// 					}
-	// 				})
-	// 		} catch (error) {
-	// 			console.log('error to load coin svg', error)
-	// 			item.svgUri = ""
-	// 		}
-
-	// 	}
-
-	// 	console.log('fcas list data', FCASList)
-
-	// 	setData(FCASList)
-	// }, [])
-
-
-
-
+	const { FCASList, setFCASFavoriteCoins } = useContext(Context)
 	const colors = {
 		'S': '#67B010',
 		'A': '#4ED69D',
@@ -65,21 +18,21 @@ export default function FCASRatingScreen() {
 		'D': '#F69B4F',
 		'C': '#F84837',
 	}
-
-
 	const renderFCASItem = ({ item, index }) => {
 		return (
 			<SwapableRow leftItems={[{
 				title: 'Favorite', icon: 'star', onPress: function () {
+					setFCASFavoriteCoins(item)
 					showMessage({
-						message: `In order to add coin to your favorite list you have sign in`,
+						message: `${item.symbol} added to your favorite list.`,
 						description: null,
 						type: 'success',
 						icon: null,
-						duration: 8000,
-						style: { backgroundColor: "#e74c3c" },
+						duration: 1000,
+						style: { backgroundColor: "#2ecc71" },
 						position: 'top'
 					})
+
 				}
 			}]}>
 				<View
