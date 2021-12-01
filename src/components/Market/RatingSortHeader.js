@@ -4,7 +4,7 @@ import { globalStyles } from '../../config/styles'
 // import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import MarketHeaderContainer from './MarketHeaderContainer'
-import { Context } from '../../context/MarketProvider'
+import { Context } from '../../context/Provider'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default function RatingSortHeader() {
