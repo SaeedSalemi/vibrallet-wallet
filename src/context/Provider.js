@@ -5,7 +5,7 @@ import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
 import ethManager from '../blockchains/EthManager';
 import HttpService from '../services/HttpService';
-import { setToStorage } from '../utils/Functions';
+// import { setToStorage } from '../utils/Functions';
 
 export const Context = createContext()
 
@@ -23,9 +23,10 @@ const MainProvider = props => {
 
     MarketListing: [],
     MarketListingSort: 'name',
-    MarketListingPageSize: 200,
+    MarketListingPageSize: 10,
     MarketListingPageNumber: 1,
-    MarketingFilter: 'btc',
+    MarketListingFilter: '',
+    // MarketListingFilter: 'btc',
 
 
     FCASList: [],
@@ -36,34 +37,24 @@ const MainProvider = props => {
   const [favCoins, setFavCoins] = useState([])
   const [fcasFavCoins, setFcasFavCoins] = useState([])
 
-  const wallet = useSelector(state => {
-    state.wallets.data ? state.wallets.data[0] : null
-  }
-  )
-
-
-  const setUserProfile = profile => {
-    setState({ ...state, userProfile: profile })
-  }
+  const wallet = useSelector(state => { state.wallets.data ? state.wallets.data[0] : null })
 
   useEffect(() => {
     AsyncStorage.getItem('userImage').then(res => {
       if (res) {
         setState({ ...state, userProfile: `data:image/gif;base64,${res}` })
       }
+    }).catch(errr => {
+      console.log('set base 64 user profile image', errr)
     })
   }, [state.userProfile])
 
 
   useEffect(() => {
     supportedCoins()
-    // getCounties()
     getRegisteredUser()
   }, [])
   //============================= Market And FCAS ===============
-
-
-
   useEffect(() => {
     AsyncStorage.getItem("marketFavCoins").then(res => {
       setFavCoins(JSON.parse(res))
@@ -72,10 +63,9 @@ const MainProvider = props => {
     })
   }, [])
 
-
   useEffect(() => {
     if (favCoins !== null) {
-      AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
+      AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins)).then().catch()
     }
   }, [favCoins])
 
@@ -91,7 +81,7 @@ const MainProvider = props => {
 
   useEffect(() => {
     if (fcasFavCoins !== null) {
-      AsyncStorage.setItem(FCAS_FAV_COINS_STORAGE, JSON.stringify(fcasFavCoins))
+      AsyncStorage.setItem(FCAS_FAV_COINS_STORAGE, JSON.stringify(fcasFavCoins)).then().catch()
     }
   }, [fcasFavCoins])
 
@@ -102,7 +92,8 @@ const MainProvider = props => {
 
 
   const setMarketSearchFilter = (text) => {
-    setState({ ...state, MarketingFilter: text })
+    state.MarketListingFilter = text
+    fetchData(true)
   }
 
   const adder = (item) => {
@@ -120,10 +111,7 @@ const MainProvider = props => {
   }
 
   const deleteFav = (item) => {
-    const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
-    if (index >= 0) {
-      setFavCoins(favCoins.splice(index, 1))
-    }
+    setFavCoins(favCoins.filter((itm) => itm.symbol !== item.symbol))
   }
 
   const FCAS_FAV_COINS_STORAGE = 'FCAS_FAV_COIN_STORAGE'
@@ -145,11 +133,9 @@ const MainProvider = props => {
   }
 
 
-  const marketPagination = (page) => {
-    setState((state) => {
-      state.MarketListingPageNumber += page
-      return { ...state }
-    })
+  const marketPagination = () => {
+    state.MarketListingPageNumber = state.MarketListingPageNumber + 1
+    // setState({ ...state })
     fetchData()
   }
 
@@ -158,15 +144,14 @@ const MainProvider = props => {
       state.FCASSort = sort
       return { ...state }
     })
-    fetchData()
+    // fetchData()
   }
 
   const changeMarketSort = (sort) => {
-    setState((state) => {
-      state.MarketListingSort = sort
-      return { ...state }
-    })
-    fetchData()
+    state.MarketListingSort = sort
+    fetchData(true)
+
+    // setState({ ...state })
   }
 
   // ==========================================
@@ -192,76 +177,87 @@ const MainProvider = props => {
 
   // const { isLoading, error, data, isFetching } = useQuery("repoData", fetchFCAS)
   // ==========================================
-  const fetchData = useCallback(() => {
-    // const { isLoading, error, data, isFetching } = useQuery("repoData", fetchFCAS)
-    // console.log('fucker data', data)
-    new HttpService(
-      "", {
+
+
+
+
+  const fetchData = (clear = false) => {
+    if (clear) {
+      state.MarketListing = []
+      state.MarketListingPageNumber = 1
+
+    }
+    console.log('fetch data is loading')
+    const data = {
       "uniqueId": "123",
       "action": "marketListing",
       "data": {
         "pageSize": state.MarketListingPageSize,
-        "pageNumber": 1,
+        "pageNumber": state.MarketListingPageNumber,
         "sort": state.MarketListingSort,
-        // "filter": "btc"
+        "filter": state.MarketListingFilter
       }
     }
-    ).Post(response => {
+
+    new HttpService(
+      "", data
+    ).Post((response) => {
       if (response) {
+        console.log('setMarketSearchFilter', { data: response });
         setState((state) => {
-          state.MarketListing = response
+          state.MarketListing = [...state.MarketListing, ...response]
           return { ...state }
         })
 
       }
+    }, err => {
     })
-  }, [state])
-
+  }
 
   const fetchFCASData = useCallback(() => {
-    new HttpService(
-      "", {
-      "uniqueId": "123",
-      "action": "fcasListing",
-      "data": {
-        "pageSize": 50,
-        "pageNumber": 1,
-        "sort": state.FCASSort
-      }
-    }
-    ).Post(response => {
-      if (response) {
+    // new HttpService(
+    //   "", {
+    //   "uniqueId": "123",
+    //   "action": "fcasListing",
+    //   "data": {
+    //     "pageSize": 50,
+    //     "pageNumber": 1,
+    //     "sort": state.FCASSort
+    //   }
+    // }
+    // ).Post(response => {
+    //   if (response) {
 
-        const items = response.map(item => {
+    //     const items = response.map(item => {
 
-          new HttpService("",
-            {
-              "uniqueId": "123",
-              "action": "priceChart",
-              "data": {
-                "symbol": `${item.symbol}`,
-                "timeframe": "30m",
-                "limit": 440,
-                "responseType": "url",
-                "height": 50,
-                "width": 250,
-              }
-            }).Post(res => {
-              if (res?.success === true) {
-                item.svgUri = res.data.url
-              }
-            })
-          return item
-        })
+    //       new HttpService("",
+    //         {
+    //           "uniqueId": "123",
+    //           "action": "priceChart",
+    //           "data": {
+    //             "symbol": `${item.symbol}`,
+    //             "timeframe": "30m",
+    //             "limit": 440,
+    //             "responseType": "url",
+    //             "height": 50,
+    //             "width": 250,
+    //           }
+    //         }).Post(res => {
+    //           if (res?.success === true) {
+    //             item.svgUri = res.data.url
+    //           }
+    //         })
+    //       return item
+    //     })
 
-        setState((state) => {
-          state.FCASList = items
-          return { ...state }
-        })
+    //     setState((state) => {
+    //       state.FCASList = items
+    //       return { ...state }
+    //     })
 
 
-      }
-    })
+    //   }
+    // })
   }, [state])
 
   // ================================================
@@ -302,7 +298,8 @@ const MainProvider = props => {
               // }
             }
             setState({ ...state, coins: items })
-            setToStorage("supportedCoins", JSON.stringify(items))
+            // setToStorage("supportedCoins", JSON.stringify(items))
+            AsyncStorage.setItem("supportedCoins", JSON.stringify(items)).then().catch()
             // }
           }
         })
@@ -314,14 +311,18 @@ const MainProvider = props => {
 
   }
 
+
   const setUserData = (user) => {
-    console.log('user data', user)
     setState((state) => {
       state.user = user
       return { ...state }
     })
   }
 
+
+  const setUserProfile = profile => {
+    setState({ ...state, userProfile: profile })
+  }
 
   const getRegisteredUser = () => {
     AsyncStorage.getItem("regUser").then(userData => {
@@ -341,6 +342,8 @@ const MainProvider = props => {
 
       setUserData(userInfo)
 
+    }).catch(error => {
+      console.log('error in reg user', error)
     })
   }
 
@@ -392,17 +395,16 @@ const MainProvider = props => {
             }
         }
       }
+    }).catch(error => {
+      console.log('error in supported coins', error)
     })
-
     return balance
   }
-  // Market Provider 
 
-  //
   return (
     <Context.Provider value={{
       ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin, setUserProfile,
-      adder, deleteFav, favCoins, fcasFavCoins, adderFCASFAV, deleteFCASFav, dispatch, changeMarketSort, marketPagination, changeFCASSort, setMarketSearchFilter
+      adder, deleteFav, favCoins, fcasFavCoins, adderFCASFAV, deleteFCASFav, changeMarketSort, marketPagination, changeFCASSort, setMarketSearchFilter, fetchData
     }}>
       {props.children}
     </Context.Provider>
