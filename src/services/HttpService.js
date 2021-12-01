@@ -10,7 +10,7 @@ export default class HttpService {
     this.notif_time = notif_time;
     this.base_url = "https://api.vibrallet.com/" + url
     this.time_out = Platform.OS === "android" ? 10000 : 12000
-    this.maxRedirects = 2
+    this.maxRedirects = 1
     this.headers = {
       'X-Requested-With': 'XMLHttpRequest',
       'Content-Type': 'application/json',
@@ -65,7 +65,6 @@ export default class HttpService {
     } catch (e) {
       if (err) { err(error) }
     }
-
   }
 
   Post(xhr_response, err = null, prgDownload = null, prgUpload = null) {
@@ -96,6 +95,7 @@ export default class HttpService {
           err(error.response)
         }
       }).then(async (response) => {
+
         let responseData = response?.data || { item: {}, items: [] };
         this.log("RESPONSE POST " + this.url + " :::  data response = ", responseData);
         if (this.notif && responseData.note) {
