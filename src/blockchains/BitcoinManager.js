@@ -1,60 +1,64 @@
-// var bip39 = require('bip39');
-// var hdkey = require('hdkey');
+var bip39 = require('bip39');
+var hdkey = require('hdkey');
 // var createHash = require('create-hash');
 // var btcLib = require('bitcoinjs-lib');
-// var bs58check = require('bs58check');
+var bs58check = require('bs58check');
 const bitcore = require('bitcore-lib')
 const axios = require('axios')
 
 // const bitcoinfees = require('bitcoinfees-21co');
 const feeutil = require('bitcoin-util-fee')
 
+const BITCOIN_MAINNET_PREFIX = 0x00;
+const BITCOIN_TESTNET_PREFIX = 0x6f;
+
+const BITCOIN_ADDRESS_PREFIX = BITCOIN_TESTNET_PREFIX;
+
 class BitcoinManager {
-	// async generateAddress() {
-	//     //const mnemonic = bip39.generateMnemonic(); //generates string
-	//     const mnemonic = "source purpose antenna demise desert outdoor panel blush actor master transfer initial";
-	//     const seed = await bip39.mnemonicToSeed(mnemonic); //creates seed buffer
-	//     // console.log('Seed: ' + seed);
-	//     // console.log('mnemonic: ' + mnemonic);
+	async getWalletFromMnemonic(mnemonic) {
+		const seed = await bip39.mnemonicToSeed(mnemonic); //creates seed buffer
+		// console.log('Seed: ' + seed);
+		// console.log('mnemonic: ' + mnemonic);
 
-	//     const root = hdkey.fromMasterSeed(seed);
-	//     const masterPrivateKey = root.privateKey.toString('hex');
-	//     console.log('masterPrivateKey: ' + masterPrivateKey);
+		const root = hdkey.fromMasterSeed(seed);
+		const masterPrivateKey = root.privateKey.toString('hex');
+		// console.log('masterPrivateKey: ' + masterPrivateKey);
 
-	//     // const addrnode = root.derive("m/44'/1'/0'/0/0");
-	//     const addrnode = root.derive("m/84'/1'/0'/0/1");
-	//     console.log('addrnodePublicKey: ' + addrnode._publicKey, addrnode.privateKey)
+		// const addrnode = root.derive("m/44'/1'/0'/0/0");
+		const addrnode = root.derive("m/84'/1'/0'/0/1");
+		// console.log('addrnodePublicKey: ' + addrnode._publicKey, addrnode.privateKey)
 
-	//     const step1 = addrnode._publicKey;
-	//     const step2 = crypto.createHash('sha256').update(step1).digest();
-	//     const step3 = crypto.createHash('rmd160').update(step2).digest();
+		const step1 = addrnode._publicKey;
+		const step2 = crypto.createHash('sha256').update(step1).digest();
+		const step3 = crypto.createHash('rmd160').update(step2).digest();
 
-	//     var step4 = Buffer.allocUnsafe(21);
-	//     step4.writeUInt8(0x6f, 0);
-	//     step3.copy(step4, 1); //step4 now holds the extended RIPMD-160 result
-	//     const step9 = bs58check.encode(step4);
-	//     console.log('Base58Check: ' + step9);
+		var step4 = Buffer.allocUnsafe(21);
 
-	//     /*
-	//         Mainnet
-	//         pubKeyHash: 0x00,
-	//         Testnet
-	//         pubKeyHash: 0x6f,
-	//     */
+		step4.writeUInt8(BITCOIN_ADDRESS_PREFIX, 0);
 
-	//     return {
-	//         masterPrivateKey: masterPrivateKey,
-	//         WIF: bitcore.PrivateKey(addrnode.privateKey.toString("hex"), bitcore.Networks.testnet).toWIF(),
-	//         publicKey: addrnode.publicKey.toString("hex"),
-	//         privateKey: addrnode.privateKey.toString("hex"),
+		step3.copy(step4, 1); //step4 now holds the extended RIPMD-160 result
+		const step9 = bs58check.encode(step4);
+		// console.log('Base58Check: ' + step9);
 
-	//         privateExtendedKey: addrnode.privateExtendedKey,
-	//         publicExtendedKey: addrnode.publicExtendedKey,
+		/*
+			Mainnet
+			pubKeyHash: 0x00,
+			Testnet
+			pubKeyHash: 0x6f,
+		*/
 
-	//         address: step9,
-	//         // base58: step9
-	//     }
-	// }
+		return {
+			masterPrivateKey: masterPrivateKey,
+			WIF: bitcore.PrivateKey(addrnode.privateKey.toString("hex"), bitcore.Networks.testnet).toWIF(),
+			publicKey: addrnode.publicKey.toString("hex"),
+			privateKey: addrnode.privateKey.toString("hex"),
+
+			privateExtendedKey: addrnode.privateExtendedKey,
+			publicExtendedKey: addrnode.publicExtendedKey,
+
+			address: step9,
+		}
+	}
 
 	async balance(address) {
 		let balance = 0
