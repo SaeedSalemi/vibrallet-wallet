@@ -7,11 +7,17 @@ import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/Provider'
 
-export default function SearchPairsScreen() {
+export default function SearchPairsScreen({ navigation }) {
 
 	const [state, setState] = useState()
 	const { setMarketSearchFilter } = useContext(Context)
 	const history = ['BTC/USDT', 'ETH/USDT', 'CRV/USDT']
+
+
+	const submitHandler = () => {
+		setMarketSearchFilter(state)
+		navigation.pop()
+	}
 
 	return (
 		<Screen>
@@ -20,6 +26,8 @@ export default function SearchPairsScreen() {
 					icon="search"
 					containerStyle={{ paddingVertical: 0 }}
 					placeholder="Search All Pairs..."
+					onChangeText={(text) => setState(text)}
+					onSubmitEditing={submitHandler}
 				/>
 				<View
 					style={{
@@ -35,7 +43,7 @@ export default function SearchPairsScreen() {
 					<AppIcon name="delete" />
 				</View>
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-					{[...history, ...history].map((item, i) => (
+					{[...history].map((item, i) => (
 						<View
 							style={{
 								width: '33%',
