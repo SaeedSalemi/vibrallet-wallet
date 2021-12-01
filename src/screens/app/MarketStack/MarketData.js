@@ -42,28 +42,26 @@ export default function MarketData(props) {
 	// 		setFavCoins(favCoins.splice(index, 1))
 	// 	}
 	// }
-	const { marketPagination, MarketListingPageSize } = useContext(Context)
+	const { marketPagination, MarketListingPageSize, fetchData } = useContext(Context)
 	return (
 		<>
 			{props.items && <FlatList
 				data={props.items}
 				renderItem={({ item, index }) => <RenderMarketItem item={item} index={index} type={props.type} />}
-				keyExtractor={(item) => item.id.toString()}
+				keyExtractor={(item, index) => `market_${index}`}
 				refreshControl={
 					<RefreshControl
 						refreshing={false}
 						onRefresh={() => {
-							// alert('refreshing')
-							// setRender(true)
-							// console.log('refreshing', render)
-							// // setRender(true)
-							// console.log('refreshing 2', render)
+							fetchData(true)
 						}} />
 				}
 
-			// onEndReachedThreshold={0.8}
-			// onEndReached={() => {
-			// 	marketPagination(MarketListingPageSize + 5)
+				onEndReachedThreshold={0.99}
+				onEndReached={() => {
+					if (props.items && props.items.length > 5)
+						marketPagination()
+				}}
 			// }}
 
 			// removeClippedSubviews={
@@ -83,9 +81,9 @@ const RenderMarketItem = ((props) => {
 			measure={75}
 			leftItems={[{
 				title: 'Favorite', icon: 'star', onPress: function () {
-
 					if (type === "fav") {
 						item.favorite = false
+						console.log('item to delete', item)
 						deleteFav(item)
 						// new HttpService(
 						// 	"", {
