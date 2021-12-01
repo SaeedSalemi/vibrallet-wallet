@@ -5,11 +5,10 @@ import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import RatingSortHeader from '../../../components/Market/RatingSortHeader'
 import { globalStyles } from '../../../config/styles'
-import { Context } from '../../../context/MarketProvider'
+import { Context } from '../../../context/Provider'
 import { SvgUri } from 'react-native-svg'
 import { showMessage } from 'react-native-flash-message'
 import { useQuery } from 'react-query'
-import HttpService from '../../../services/HttpService'
 
 export default function FCASRatingScreen() {
 	const { FCASList, adderFCASFAV } = useContext(Context)

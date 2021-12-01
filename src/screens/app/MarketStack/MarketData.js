@@ -7,8 +7,7 @@ import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
-import { Context } from '../../../context/MarketProvider'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Context } from '../../../context/Provider'
 
 export default function MarketData(props) {
 	// const [favCoins, setFavCoins] = useState([])

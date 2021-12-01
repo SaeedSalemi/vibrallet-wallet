@@ -200,7 +200,7 @@ export default function MarketCoinDetailScreen({ route, navigation }) {
 				</View> */}
 				<View style={{ marginVertical: 16 }}>
 					{/* <Image source={Images.marketChartImage} /> */}
-					<TradingViewWidget symbol={`${coin.symbol}USDT`} />
+					<TradingViewWidget symbol={`${coin.symbol}`} />
 				</View>
 				<View>
 					<View

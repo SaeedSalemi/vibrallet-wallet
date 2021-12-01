@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { View } from 'react-native'
 import AppIcon from '../../../components/common/AppIcon'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import AppText from '../../../components/common/AppText'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
+import { Context } from '../../../context/Provider'
 
 export default function SearchPairsScreen() {
+
+	const [state, setState] = useState()
+	const { setMarketSearchFilter } = useContext(Context)
 	const history = ['BTC/USDT', 'ETH/USDT', 'CRV/USDT']
 
 	return (
