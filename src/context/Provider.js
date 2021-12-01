@@ -380,6 +380,7 @@ const MainProvider = props => {
             } else {
 
               if (wallet) {
+                console.log('----------> In the Provider: ', coinSymbol);
                 let selectedCoin = state.coinManager[coinSymbol];
                 if (typeof selectedCoin.getWalletFromMnemonic === "function") {
                   selectedCoin.getWalletFromMnemonic(wallet.backup)
