@@ -15,9 +15,9 @@ import AppText from '../../components/common/AppText'
 import BarChart from '../../components/BarChart/BarChart'
 import Feather from 'react-native-vector-icons/Feather'
 import { useNavigation } from '@react-navigation/core'
-import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import { Context } from '../../context/Provider'
+import HttpService from '../../services/HttpService'
 
 const ChartItems = ({ iconColor, title, value }) => {
 	return (
@@ -44,29 +44,46 @@ const ChartItems = ({ iconColor, title, value }) => {
 }
 
 export default function WalletScreen() {
-
-	// TODO:
-	// Get the latest coin balance from the storage and wallet information.
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
 	const [state, setState] = useState({ allSupportedCoins: [] })
 	const { coins, setCoin } = useContext(Context)
-	// const wallet = useSelector(state =>
-	// 	state.wallets.data ? state.wallets.data[0] : null
-	// )
+
 	useEffect(() => {
 		setState({ ...state, allSupportedCoins: coins })
-		// TODO: Generate nmonics, wallet, balance
+	}, [])
+
+	useEffect(() => {
+
+		for (let i of coins) {
+			new HttpService("", {
+				"uniqueId": "abc1",
+				"action": "quotedPrice",
+				"data": {
+					"symbol": `${i.symbol}USDT`
+				}
+			}).Post(res => {
+				i.price = res.data.rate
+			})
+		}
+		setState({ ...state, allSupportedCoins: coins })
+		// console.log('q', quotedPrice)
 	}, [])
 
 
-	const totalBalance = useMemo(() => {
-		let balance = 0
-		// coins.map((item, index) => {
-		// balance += (parseFloat(item.amount) * parseFloat(item.price))
-		// })
-		return balance
-	}, [state])
+	// const totalAmount = useMemo(() => {
+	// 	return state.allSupportedCoins.reduce((acc, curr) => {
+	// 		console.log('acc', curr.balance, curr.price, curr.symbol)
+	// 		return acc + (curr.balance * curr.price)
+	// 	}, 0)
+	// }, [])
+
+	const totalAmount = state.allSupportedCoins.reduce((acc, curr) => {
+		console.log('acc', curr.balance, curr.price, curr.symbol)
+		return acc + (curr.balance * curr.price)
+	}, 0)
+
+	console.log("totalAmount", totalAmount)
 
 	const pieData = useMemo(() => {
 		const length = state.allSupportedCoins.length
@@ -81,22 +98,25 @@ export default function WalletScreen() {
 		if (counter === length) {
 			return []
 		} else {
+
 			return coins.map((item, index) => {
+
+				//price قیمت لحظه ای ارز
+				//balance موجودی ارز
+				//amount == price * balance
+				//percent = amount / totalAmount
 				// const balance = ((aparseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
-				const balance = 1
+				const percent = ((item.balance * item.price) * 100) / totalAmount
+				console.log("info", item.symbol, item.balance, item.price, totalAmount, percent)
 				return {
-					series: 1, // item.balance TODO: handle 0
+					series: (item.balance * item.price),
 					title: item.symbol,
-					value: '77.56%',
-					// value: `${balance.toFixed(0)}%`,
+					value: `${percent}%`,
 					color: item.color,
 					radius: 100,
 				}
 			})
 		}
-
-
-		// totalBalance
 	}, [state])
 
 
@@ -215,7 +235,7 @@ export default function WalletScreen() {
 										Portfolio Value
 									</AppText>
 									<AppText typo="md" color="text2" bold>
-										${totalBalance}
+										${totalAmount}
 									</AppText>
 								</View>
 							</View>
@@ -226,7 +246,7 @@ export default function WalletScreen() {
 							<View style={{ ...globalStyles.flex.center, marginVertical: 6 }}>
 								<AppText color="text3">Portfolio Value</AppText>
 								<AppText color="text2" bold typo="md">
-									${totalBalance}
+									${totalAmount}
 								</AppText>
 							</View>
 							<BarChart data={coins} />
