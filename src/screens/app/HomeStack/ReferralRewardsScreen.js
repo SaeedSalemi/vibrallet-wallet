@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View, TouchableOpacity } from 'react-native'
 import AppButton from '../../../components/common/AppButton'
 import AppIcon from '../../../components/common/AppIcon'
 import AppText from '../../../components/common/AppText'
@@ -7,6 +7,8 @@ import Steps from '../../../components/Steps/Steps'
 import { globalStyles } from '../../../config/styles'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { showMessage } from 'react-native-flash-message'
+import Clipboard from '@react-native-community/clipboard'
 const data = [
 	{
 		title: 'Invite your friends',
@@ -23,6 +25,23 @@ const data = [
 ]
 
 export default function ReferralRewardsScreen() {
+
+
+	const handleCopyCode = () => {
+		// 
+		Clipboard.setString('12nfef23rm')
+		showMessage({
+			message: `Copied to clipboard.`,
+			description: null,
+			type: 'success',
+			icon: null,
+			duration: 1000,
+			style: { backgroundColor: "#6BC0B1" },
+			position: 'top'
+		})
+	}
+
+
 	return (
 		<View style={[globalStyles.screen, styles.container]}>
 			<ScrollView style={styles.scroll}>
@@ -50,9 +69,11 @@ export default function ReferralRewardsScreen() {
 					<AppText typo="sm" bold>
 						12nfef23rm
 					</AppText>
-					<AppText color="primaryColor" bold>
-						Copy
-					</AppText>
+					<TouchableOpacity onPress={handleCopyCode}>
+						<AppText color="primaryColor" bold>
+							Copy
+						</AppText>
+					</TouchableOpacity>
 				</View>
 				<View style={styles.gift}>
 					<FontAwesome5 name="gift" color="#727AF4" size={15} />
