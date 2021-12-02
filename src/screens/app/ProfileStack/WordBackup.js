@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Images } from '../../../assets'
@@ -19,8 +19,10 @@ import HttpService from '../../../services/HttpService'
 import bitcoinManager from '../../../blockchains/BitcoinManager'
 import ethManager from '../../../blockchains/EthManager'
 import bscManager from '../../../blockchains/BscManager'
+import { Context } from '../../../context/Provider'
 
 export default function WordBackup({ navigation }) {
+	const { setCoinsToSupport } = useContext(Context)
 	const dispatch = useDispatch()
 	const { navigate } = navigation
 	const [backup, setBackup] = useState('')
@@ -64,16 +66,17 @@ export default function WordBackup({ navigation }) {
 								item.publicKey = coininfo.publicKey
 								item.privateKey = coininfo.privateKey
 								item.address = coininfo.address
-								item.balance = await ethManager.getBalance(item.address)
+								// item.balance = await ethManager.getBalance(item.address)
 							}
 							if (item.symbol.toUpperCase() === 'BNB') {
 								const coininfo = await bscManager.getWalletFromMnemonic(backup)
 								item.publicKey = coininfo.publicKey
 								item.privateKey = coininfo.privateKey
 								item.address = coininfo.address
-								item.balance = await bscManager.getBalance(item.address)
+								// item.balance = await bscManager.getBalance(item.address)
 							}
 						}
+						setCoinsToSupport(items)
 						AsyncStorage.setItem("supportedCoins", JSON.stringify(items)).then().catch()
 					}
 				} catch (error) {

@@ -42,6 +42,11 @@ const MainProvider = props => {
 
   const dispatch = value => setState({ ...state, ...value })
 
+  const setCoinsToSupport = items => {
+    state.coins = items
+    setState({ ...state })
+  }
+
   useEffect(() => {
     AsyncStorage.getItem('userImage').then(res => {
       if (res) {
@@ -56,6 +61,7 @@ const MainProvider = props => {
   useEffect(() => {
 
     AsyncStorage.getItem("supportedCoins").then(result => {
+      console.log('supported', result)
       if (result !== null) {
         let supportedCoinData = JSON.parse(result)
         if (supportedCoinData && supportedCoinData.length > 0) {
@@ -380,7 +386,7 @@ const MainProvider = props => {
     <Context.Provider value={{
       ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin, setUserProfile,
       adder, deleteFav, favCoins, fcasFavCoins, changeMarketSort, marketPagination, setMarketSearchFilter, fetchData,
-      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort
+      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort, setCoinsToSupport
     }}>
       {props.children}
     </Context.Provider>
