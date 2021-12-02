@@ -1,10 +1,11 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View, Image } from 'react-native'
 import AppIcon from '../../../components/common/AppIcon'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
+// const defaultStyles = globalStyles()
 
 export default function SingleSliderScreen() {
 	return (
@@ -15,11 +16,22 @@ export default function SingleSliderScreen() {
 				</AppText>
 				<View style={styles.logo}>
 					<View style={styles.logoWrapper}>
-						<AppIcon name="blankLogo" />
+						{/* <AppIcon name="blankLogo" /> */}
+						<Image
+							fadeDuration={300}
+							style={{
+								marginTop: 4,
+								alignSelf: 'center',
+								height: 30,
+							}}
+							source={globalStyles.Images.vib_starterLogo}
+							resizeMethod="auto"
+							resizeMode="contain"
+						/>
 					</View>
 					<View style={styles.info}>
 						<AppText typo="tiny" style={styles.title}>
-							Binrex
+							Vibranium
 						</AppText>
 						<AppText typo="dot" style={styles.date}>
 							2021.2.12 15:14
