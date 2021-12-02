@@ -220,7 +220,7 @@ export default function WalletScreen() {
 
 
 
-								{pieData.length > 0 ?
+								{totalAmount > 0 ?
 									<PieChart
 										widthAndHeight={170}
 										series={
