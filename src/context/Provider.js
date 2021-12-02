@@ -26,7 +26,6 @@ const MainProvider = props => {
     MarketListingPageSize: 10,
     MarketListingPageNumber: 1,
     MarketListingFilter: '',
-    // MarketListingFilter: 'btc',
 
 
     FCASList: [],
@@ -36,8 +35,11 @@ const MainProvider = props => {
   // Market Fav Coins
   const [favCoins, setFavCoins] = useState([])
   const [fcasFavCoins, setFcasFavCoins] = useState([])
+  const FCAS_FAV_COINS_STORAGE = 'FCAS_FAV_COIN_STORAGE'
 
   const wallet = useSelector(state => { state.wallets.data ? state.wallets.data[0] : null })
+
+  const dispatch = value => setState({ ...state, ...value })
 
   useEffect(() => {
     AsyncStorage.getItem('userImage').then(res => {
@@ -53,8 +55,50 @@ const MainProvider = props => {
   useEffect(() => {
     supportedCoins()
     getRegisteredUser()
+
   }, [])
-  //============================= Market And FCAS ===============
+
+  useEffect(() => {
+    fetchData()
+    fetchFCASData()
+  }, [])
+
+  // ===================== Profile 
+
+  const setUserData = (user) => {
+    setState((state) => {
+      state.user = user
+      return { ...state }
+    })
+  }
+  const setUserProfile = profile => {
+    setState({ ...state, userProfile: profile })
+  }
+
+  const getRegisteredUser = () => {
+    AsyncStorage.getItem("regUser").then(userData => {
+
+      const userInfo = {}
+      if (userData) {
+        let parsedUserData = JSON.parse(userData)
+        if (parsedUserData.username)
+          userInfo.username = parsedUserData.username
+        if (parsedUserData.email)
+          userInfo.email = parsedUserData.email
+        if (parsedUserData.country)
+          userInfo.country = parsedUserData.country
+        if (parsedUserData.phone)
+          userInfo.phone = parsedUserData.phone
+      }
+
+      setUserData(userInfo)
+
+    }).catch(error => {
+      console.log('error in reg user', error)
+    })
+  }
+
+  //============================= Market ===============
   useEffect(() => {
     AsyncStorage.getItem("marketFavCoins").then(res => {
       setFavCoins(JSON.parse(res))
@@ -69,39 +113,12 @@ const MainProvider = props => {
     }
   }, [favCoins])
 
-
-  useEffect(() => {
-    AsyncStorage.getItem(FCAS_FAV_COINS_STORAGE).then(res => {
-      setFcasFavCoins(JSON.parse(res))
-    }).catch(err => {
-      console.log('error get from storage FCAS')
-    })
-  }, [])
-
-
-  useEffect(() => {
-    if (fcasFavCoins !== null) {
-      AsyncStorage.setItem(FCAS_FAV_COINS_STORAGE, JSON.stringify(fcasFavCoins)).then().catch()
-    }
-  }, [fcasFavCoins])
-
-  useEffect(() => {
-    fetchData()
-    fetchFCASData()
-  }, [])
-
-
   const setMarketSearchFilter = (text) => {
     state.MarketListingFilter = text
     fetchData(true)
   }
 
   const adder = (item) => {
-    // AsyncStorage.getItem("marketFavCoins").then(data => {
-    //   if (data === null) {
-    //     AsyncStorage.setItem('marketFavCoins', JSON.stringify([]))
-    //   }
-    // })
     const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
     if (index < 0) {
       setFavCoins([...favCoins, item])
@@ -114,71 +131,15 @@ const MainProvider = props => {
     setFavCoins(favCoins.filter((itm) => itm.symbol !== item.symbol))
   }
 
-  const FCAS_FAV_COINS_STORAGE = 'FCAS_FAV_COIN_STORAGE'
-  const adderFCASFAV = (item) => {
-    const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
-    if (index < 0) {
-      setFcasFavCoins([...fcasFavCoins, item])
-    } else {
-      setFcasFavCoins(fcasFavCoins.splice(index, 1))
-    }
-
-  }
-
-  const deleteFCASFav = (item) => {
-    const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
-    if (index >= 0) {
-      setFavCoins(fcasFavCoins.splice(index, 1))
-    }
-  }
-
-
   const marketPagination = () => {
     state.MarketListingPageNumber = state.MarketListingPageNumber + 1
-    // setState({ ...state })
     fetchData()
-  }
-
-  const changeFCASSort = (sort) => {
-    setState((state) => {
-      state.FCASSort = sort
-      return { ...state }
-    })
-    // fetchData()
   }
 
   const changeMarketSort = (sort) => {
     state.MarketListingSort = sort
     fetchData(true)
-
-    // setState({ ...state })
   }
-
-  // ==========================================
-
-
-  const fetchFCAS = () => {
-    let data = []
-    new HttpService(
-      "", {
-      "uniqueId": "123",
-      "action": "fcasListing",
-      "data": {
-        "pageSize": 5,
-        "pageNumber": 1,
-        "sort": "name"
-      }
-    }
-    ).Post(response => {
-      data = response
-    })
-    return data
-  };
-
-  // const { isLoading, error, data, isFetching } = useQuery("repoData", fetchFCAS)
-  // ==========================================
-
-
 
 
   const fetchData = (clear = false) => {
@@ -212,6 +173,50 @@ const MainProvider = props => {
       }
     }, err => {
     })
+  }
+
+  // ============================== FCAS
+
+  useEffect(() => {
+    AsyncStorage.getItem(FCAS_FAV_COINS_STORAGE).then(res => {
+      setFcasFavCoins(JSON.parse(res))
+    }).catch(err => {
+      console.log('error get from storage FCAS', err)
+    })
+  }, [])
+
+
+  useEffect(() => {
+    if (fcasFavCoins !== null) {
+      AsyncStorage.setItem(FCAS_FAV_COINS_STORAGE, JSON.stringify(fcasFavCoins)).then().catch()
+    }
+  }, [fcasFavCoins])
+
+  const adderFCASFAV = (item) => {
+    const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
+    if (index < 0) {
+      setFcasFavCoins([...fcasFavCoins, item])
+    } else {
+      setFcasFavCoins(fcasFavCoins.splice(index, 1))
+    }
+
+  }
+
+  const deleteFCASFav = (item) => {
+    const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
+    if (index >= 0) {
+      setFavCoins(fcasFavCoins.splice(index, 1))
+    }
+  }
+
+
+
+  const changeFCASSort = (sort) => {
+    setState((state) => {
+      state.FCASSort = sort
+      return { ...state }
+    })
+    // fetchData()
   }
 
   const fetchFCASData = useCallback(() => {
@@ -260,11 +265,17 @@ const MainProvider = props => {
     // })
   }, [state])
 
-  // ================================================
+  // ================================================ COINS
 
   const getACoin = symbol => {
     return state.coins.find(coin => coin.symbol === symbol)
   }
+
+
+  const setCoin = (value) => {
+    setState({ ...state, coins: value })
+  }
+
 
   const supportedCoins = async () => {
     try {
@@ -310,50 +321,6 @@ const MainProvider = props => {
     }
 
   }
-
-
-  const setUserData = (user) => {
-    setState((state) => {
-      state.user = user
-      return { ...state }
-    })
-  }
-
-
-  const setUserProfile = profile => {
-    setState({ ...state, userProfile: profile })
-  }
-
-  const getRegisteredUser = () => {
-    AsyncStorage.getItem("regUser").then(userData => {
-
-      const userInfo = {}
-      if (userData) {
-        let parsedUserData = JSON.parse(userData)
-        if (parsedUserData.username)
-          userInfo.username = parsedUserData.username
-        if (parsedUserData.email)
-          userInfo.email = parsedUserData.email
-        if (parsedUserData.country)
-          userInfo.country = parsedUserData.country
-        if (parsedUserData.phone)
-          userInfo.phone = parsedUserData.phone
-      }
-
-      setUserData(userInfo)
-
-    }).catch(error => {
-      console.log('error in reg user', error)
-    })
-  }
-
-
-
-
-  const setCoin = (value) => {
-    setState({ ...state, coins: value })
-  }
-  const dispatch = value => setState({ ...state, ...value })
 
   const hideCoinHandler = (symbol) => {
     let coins = state.coins.map(item => {
