@@ -13,7 +13,8 @@ import { showMessage } from 'react-native-flash-message'
 export default function FCASFavTab() {
 
   const { fcasFavCoins, deleteFCASFav } = useContext(Context)
-  console.log('fcasFavCoins from storage', fcasFavCoins)
+  console.log('fcas fav coins', fcasFavCoins)
+
 
   const colors = {
     'S': '#67B010',
@@ -25,11 +26,12 @@ export default function FCASFavTab() {
   const renderFCASItem = ({ item, index }) => {
     return (
       <SwapableRow leftItems={[{
+        color: item.favorite && '#f1c40f',
         title: 'Favorite', icon: 'star', onPress: function () {
           item.favorite = false
           deleteFCASFav(item)
           showMessage({
-            message: `${item.symbol} added to your favorite list.`,
+            message: `${item.symbol} removed to your favorite list.`,
             description: null,
             type: 'success',
             icon: null,
@@ -82,17 +84,12 @@ export default function FCASFavTab() {
             </AppText>
           </View>
           <View style={{ flex: 2, paddingHorizontal: 10 }}>
-            {/* <Image
-							source={Images[item.chart]}
-							style={{ maxWidth: '100%' }}
-						/> */}
             {item.svgUri ? <SvgUri
               width={80}
               style={{
                 alignItems: 'center',
                 flexDirection: 'row',
                 justifyContent: 'center',
-                // marginTop: 50
               }}
               uri={item.svgUri}
             /> : <></>}
@@ -113,7 +110,7 @@ export default function FCASFavTab() {
       <FlatList
         data={fcasFavCoins}
         renderItem={renderFCASItem}
-        keyExtractor={(item) => `fcas_fav_${item.id.toString()}`}
+        keyExtractor={(item, index) => `fcas_fav_${index}`}
       />
     </View>
   )

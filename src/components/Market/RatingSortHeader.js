@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { globalStyles } from '../../config/styles'
-// import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import MarketHeaderContainer from './MarketHeaderContainer'
 import { Context } from '../../context/Provider'
@@ -20,14 +19,9 @@ export default function RatingSortHeader() {
 					<AppText typo="tiny" color="text2" style={{ paddingEnd: 2 }}>
 						Rank
 					</AppText>
-					{/* <AppIcon name="arrowDownSm2" /> */}
 				</View>
 			</View>
 			<View style={{ flex: 3 }}>
-				{/* <AppText typo="tiny" color="text2">
-					Project
-				</AppText> */}
-
 				<TouchableOpacity onPress={() => {
 					FCASSort === 'name' ? changeFCASSort('-name') : changeFCASSort('name')
 				}}>
