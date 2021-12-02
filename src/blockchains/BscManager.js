@@ -59,10 +59,8 @@ class BscManager {
 
     async getWalletFromMnemonic(mnemonic) {
         let wallet = await WalletManager.getBscAddressFromMnemonic(mnemonic);
-        // console.log(mnemonic);
         let account = await this.web3.eth.accounts.privateKeyToAccount(wallet.privateKey);
         wallet.address = account.address;
-        // console.log(wallet);
         return wallet;
     }
 
