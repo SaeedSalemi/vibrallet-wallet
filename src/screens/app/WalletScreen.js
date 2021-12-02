@@ -48,6 +48,7 @@ export default function WalletScreen() {
 	const [pie, setPie] = useState(true)
 	const [state, setState] = useState({ allSupportedCoins: [] })
 	const { coins, setCoin } = useContext(Context)
+	const [totalAmount, setTotalAmount] = useState(0)
 
 	useEffect(() => {
 		setState({ ...state, allSupportedCoins: coins })
@@ -66,8 +67,13 @@ export default function WalletScreen() {
 				i.price = res.data.rate
 			})
 		}
-		setState({ ...state, allSupportedCoins: coins })
+		setState({ allSupportedCoins: coins })
 		// console.log('q', quotedPrice)
+		let totalAmount = state.allSupportedCoins.reduce((acc, curr) => {
+			console.log('acc', curr.balance, curr.price, curr.symbol)
+			return acc + (curr.balance * curr.price)
+		}, 0)
+		setTotalAmount(totalAmount)
 	}, [])
 
 
@@ -78,10 +84,10 @@ export default function WalletScreen() {
 	// 	}, 0)
 	// }, [])
 
-	const totalAmount = state.allSupportedCoins.reduce((acc, curr) => {
-		console.log('acc', curr.balance, curr.price, curr.symbol)
-		return acc + (curr.balance * curr.price)
-	}, 0)
+	// const totalAmount = state.allSupportedCoins.reduce((acc, curr) => {
+	// 	console.log('acc', curr.balance, curr.price, curr.symbol)
+	// 	return acc + (curr.balance * curr.price)
+	// }, 0)
 
 	console.log("totalAmount", totalAmount)
 
@@ -107,9 +113,9 @@ export default function WalletScreen() {
 				//percent = amount / totalAmount
 				// const balance = ((aparseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
 				const percent = ((item.balance * item.price) * 100) / totalAmount
-				console.log("info", item.symbol, item.balance, item.price, totalAmount, percent)
+				console.log("info", item.balance, item.price, item.symbol, percent, totalAmount)
 				return {
-					series: (item.balance * item.price),
+					series: item.balance,
 					title: item.symbol,
 					value: `${percent}%`,
 					color: item.color,
@@ -122,8 +128,8 @@ export default function WalletScreen() {
 
 	const data = coins
 	// calculate the pie chart series
-	const series = []
-	// const series = pieData.map(item => item.series)
+	// const series = []
+	const series = pieData.map(item => item.series)
 	const sliceColor = pieData.map(item => item.color)
 
 
@@ -212,7 +218,21 @@ export default function WalletScreen() {
 								}}
 							>
 
-								{pieData.length > 0 ? <PieChart
+								<PieChart
+									widthAndHeight={170}
+									// series={[0, 0, 1]}
+									series={
+										state.allSupportedCoins.map(item => item.balance)
+									}
+									sliceColor={
+										state.allSupportedCoins.map(item => item.color)
+									}
+									doughnut={true}
+									coverRadius={0.88}
+									coverFill={globalStyles.Colors.inputColor}
+								/>
+
+								{/* {pieData.length > 0 ? <PieChart
 									widthAndHeight={170}
 									series={series}
 									sliceColor={sliceColor}
@@ -226,7 +246,7 @@ export default function WalletScreen() {
 									doughnut={true}
 									coverRadius={0.88}
 									coverFill={globalStyles.Colors.inputColor}
-								/>}
+								/>} */}
 
 								<View
 									style={{ position: 'absolute', ...globalStyles.flex.center }}

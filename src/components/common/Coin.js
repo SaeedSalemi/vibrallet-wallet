@@ -83,7 +83,8 @@ export default function Coin({
 
 
 	useEffect(() => {
-		state.balance = getCoinBalance([coin.symbol])
+		// state.balance = getCoinBalance([coin.symbol])
+		state.balance = coin.balance
 		state.amount = state.balance * state.rate
 		setState({ ...state })
 	}, [])
@@ -171,7 +172,7 @@ export default function Coin({
 							maxHeight: 0,
 						}}>
 
-							<SvgUri
+							{/* <SvgUri
 								width={100}
 								style={{
 									alignItems: 'center',
@@ -180,14 +181,14 @@ export default function Coin({
 									marginTop: 50,
 								}}
 								uri={coinLogo}
-							/>
+							/> */}
 
 						</View>
 					)}
 					{hideDetails ? null : (
 						<View style={{ flex: 1, alignItems: 'flex-end' }}>
 							<AppText typo="tiny">
-								{state.amount} 	{coin.symbol}
+								{state.balance} 	{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
 								size={15}
@@ -203,7 +204,7 @@ export default function Coin({
 
 							{noPrice ? null : (
 								<AppText bold color="text2">
-									{state.balance} $
+									{state.amount} $
 								</AppText>
 							)}
 						</View>
