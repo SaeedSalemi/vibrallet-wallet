@@ -20,11 +20,11 @@ export default class SwapableRow extends Component {
 		measure: 70,
 	}
 
-	 renderLeftAction = (
+	renderLeftAction = (
 		item,
 		x,
 		progress,
-		divider
+		divider,
 	) => {
 		const trans = progress.interpolate({
 			inputRange: [0, 1],
@@ -35,6 +35,7 @@ export default class SwapableRow extends Component {
 			item?.onPress?.()
 		}
 
+
 		return (
 			<Animated.View
 				style={{ flex: 1, transform: [{ translateX: trans }] }}
@@ -43,7 +44,7 @@ export default class SwapableRow extends Component {
 				<RectButton
 					style={[
 						styles.rightAction,
-						{ backgroundColor: item.color || globalStyles.Colors.bckColor },
+						{ backgroundColor: globalStyles.Colors.bckColor },
 					]}
 					onPress={pressHandler}
 				>
@@ -59,7 +60,8 @@ export default class SwapableRow extends Component {
 						<FontAwesomeIcon
 							name={item.icon}
 							size={20}
-							color={globalStyles.Colors.text3}
+							// { backgroundColor: item.color || globalStyles.Colors.bckColor },
+							color={item.color || globalStyles.Colors.text3}
 						/>
 					</View>
 					<AppText style={styles.actionText} typo="tiny">
@@ -70,7 +72,7 @@ export default class SwapableRow extends Component {
 		)
 	}
 
-	 renderLeftActions = (
+	renderLeftActions = (
 		progress,
 		_dragAnimatedValue
 	) => (
@@ -86,7 +88,7 @@ export default class SwapableRow extends Component {
 		</View>
 	)
 
-	 renderRightAction = (
+	renderRightAction = (
 		item,
 		x,
 		progress,
@@ -137,7 +139,7 @@ export default class SwapableRow extends Component {
 		)
 	}
 
-	 renderRightActions = (
+	renderRightActions = (
 		progress,
 		_dragAnimatedValue
 	) => (
@@ -157,7 +159,7 @@ export default class SwapableRow extends Component {
 				this.renderRightAction(
 					rightItem,
 					this.props.rightItems.length * this.props.measure -
-						i * this.props.measure,
+					i * this.props.measure,
 					progress
 				)
 			)}
@@ -169,7 +171,7 @@ export default class SwapableRow extends Component {
 	// private updateRef = (ref: Swipeable) => {
 	// 	this.swipeableRow = ref
 	// }
-	 close = () => {
+	close = () => {
 		this.swipeableRow?.close()
 	}
 	render() {
