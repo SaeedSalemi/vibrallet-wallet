@@ -27,7 +27,7 @@ export default function MarketData(props) {
 							}} />
 					}
 
-					onEndReachedThreshold={0.99}
+					onEndReachedThreshold={0.7}
 					onEndReached={() => {
 						if (props.items && props.items.length > 5)
 							marketPagination()

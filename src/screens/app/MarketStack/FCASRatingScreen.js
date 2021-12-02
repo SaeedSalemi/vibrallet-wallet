@@ -40,12 +40,37 @@ export default function FCASRatingScreen() {
 			}]}>
 				<View
 					style={{
-						paddingVertical: 8,
-						paddingHorizontal: 20,
+						paddingVertical: 2,
+						paddingHorizontal: 12,
 						flexDirection: 'row',
 						alignItems: 'center',
 					}}
 				>
+					<View style={{ flex: 2, paddingHorizontal: 10 }}>
+						{/* {item.svgUri ? <SvgUri
+							width={80}
+							style={{
+								alignItems: 'center',
+								flexDirection: 'row',
+								justifyContent: 'center',
+							}}
+							uri={item.svgUri}
+						/> : <></>} */}
+						<View style={{
+							backgroundColor: globalStyles.Colors.inputColor2,
+							height: 40,
+							...globalStyles.flex.center,
+							borderRadius: 12,
+							paddingHorizontal: 0,
+							paddingVertical: 0,
+							marginHorizontal: 6
+						}}>
+
+							<Image resizeMode={"stretch"}
+								style={{ width: 30, height: 30, alignSelf: 'center' }} source={{ uri: item.logo }} />
+						</View>
+
+					</View>
 					<View style={{ flex: 2 }}>
 						<AppText bold>{index + 1}</AppText>
 					</View>
@@ -80,31 +105,7 @@ export default function FCASRatingScreen() {
 							{item.score}
 						</AppText>
 					</View>
-					<View style={{ flex: 2, paddingHorizontal: 10 }}>
-						{/* {item.svgUri ? <SvgUri
-							width={80}
-							style={{
-								alignItems: 'center',
-								flexDirection: 'row',
-								justifyContent: 'center',
-							}}
-							uri={item.svgUri}
-						/> : <></>} */}
-						<View style={{
-							backgroundColor: globalStyles.Colors.inputColor2,
-							height: 40,
-							...globalStyles.flex.center,
-							borderRadius: 12,
-							paddingHorizontal: 0,
-							paddingVertical: 0,
-							marginHorizontal: 4
-						}}>
 
-							<Image resizeMode={"stretch"}
-								style={{ width: 30, height: 30, alignSelf: 'center' }} source={{ uri: item.logo }} />
-						</View>
-
-					</View>
 				</View>
 				<View style={{ marginVertical: 12 }}>
 					{index + 1 !== FCASList.length ? <HR /> : null}
@@ -128,7 +129,7 @@ export default function FCASRatingScreen() {
 							fetchFCASData(true)
 						}} />
 				}
-				onEndReachedThreshold={0.99}
+				onEndReachedThreshold={0.7}
 				onEndReached={() => {
 					if (FCASList && FCASList.length > 5)
 						fcasPagination()

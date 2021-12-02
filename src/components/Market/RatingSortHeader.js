@@ -14,6 +14,13 @@ export default function RatingSortHeader() {
 
 	return (
 		<MarketHeaderContainer style={{}}>
+
+			<View style={{ flex: 2, alignItems: 'flex-end' }}>
+				<AppText typo="tiny" color="text2">
+
+				</AppText>
+			</View>
+
 			<View style={{ flex: 2 }}>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<AppText typo="tiny" color="text2" style={{ paddingEnd: 2 }}>
@@ -46,11 +53,6 @@ export default function RatingSortHeader() {
 						</AppText>
 					</TouchableOpacity>
 				</View>
-			</View>
-			<View style={{ flex: 2, alignItems: 'flex-end' }}>
-				<AppText typo="tiny" color="text2">
-
-				</AppText>
 			</View>
 		</MarketHeaderContainer>
 	)
