@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/core'
-import { FlatList, TouchableOpacity, View, Platform, RefreshControl, Image, ActivityIndicator } from 'react-native'
+import { FlatList, TouchableOpacity, View, RefreshControl, Image } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
@@ -10,64 +10,29 @@ import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/Provider'
 
 export default function MarketData(props) {
-	// const [favCoins, setFavCoins] = useState([])
-
-
-	// useEffect(() => {
-	// 	AsyncStorage.getItem("marketFavCoins").then(res => {
-	// 		setFavCoins(JSON.parse(res))
-	// 	})
-	// }, [])
-
-	// useEffect(() => {
-	// 	if (favCoins.length) {
-	// 		AsyncStorage.setItem("marketFavCoins", JSON.stringify(favCoins))
-	// 	}
-	// }, [favCoins])
-
-
-	// const adder = async (item) => {
-	// 	const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
-	// 	if (index < 0) {
-	// 		setFavCoins([...favCoins, item])
-	// 	} else {
-	// 		setFavCoins(favCoins.splice(index, 1))
-	// 	}
-	// }
-
-	// const deleteFav = (item) => {
-	// 	const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
-	// 	alert(index)
-	// 	if (index >= 0) {
-	// 		setFavCoins(favCoins.splice(index, 1))
-	// 	}
-	// }
-	const { marketPagination, MarketListingPageSize, fetchData } = useContext(Context)
+	const { marketPagination, fetchData } = useContext(Context)
 	return (
 		<>
-			{props.items && <FlatList
-				data={props.items}
-				renderItem={({ item, index }) => <RenderMarketItem item={item} index={index} type={props.type} />}
-				keyExtractor={(item, index) => `market_${index}`}
-				refreshControl={
-					<RefreshControl
-						refreshing={false}
-						onRefresh={() => {
-							fetchData(true)
-						}} />
-				}
+			{
+				props.items &&
+				<FlatList
+					data={props.items}
+					renderItem={({ item, index }) => <RenderMarketItem item={item} index={index} type={props.type} />}
+					keyExtractor={(item, index) => `market_${index}`}
+					refreshControl={
+						<RefreshControl
+							refreshing={false}
+							onRefresh={() => {
+								fetchData(true)
+							}} />
+					}
 
-				onEndReachedThreshold={0.99}
-				onEndReached={() => {
-					if (props.items && props.items.length > 5)
-						marketPagination()
-				}}
-			// }}
-
-			// removeClippedSubviews={
-			// 	Platform.OS === "android"
-			// }
-			/>}
+					onEndReachedThreshold={0.99}
+					onEndReached={() => {
+						if (props.items && props.items.length > 5)
+							marketPagination()
+					}}
+				/>}
 		</>
 	)
 }
@@ -89,6 +54,15 @@ const RenderMarketItem = ((props) => {
 					else if (type === "market") {
 						item.favorite = true
 						adder(item)
+						showMessage({
+							message: `${item.symbol} added to your favorite list.`,
+							description: null,
+							type: 'success',
+							icon: null,
+							duration: 1000,
+							style: { backgroundColor: "#2ecc71" },
+							position: 'top'
+						})
 					}
 				}
 			}]}

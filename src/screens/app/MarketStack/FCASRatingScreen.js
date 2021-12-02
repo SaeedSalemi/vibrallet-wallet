@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { FlatList, Image, View } from 'react-native'
+import React, { useContext } from 'react'
+import { FlatList, View, RefreshControl } from 'react-native'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
@@ -8,21 +8,9 @@ import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/Provider'
 import { SvgUri } from 'react-native-svg'
 import { showMessage } from 'react-native-flash-message'
-import { useQuery } from 'react-query'
 
 export default function FCASRatingScreen() {
-	const { FCASList, adderFCASFAV } = useContext(Context)
-
-
-
-
-
-	// if (isLoading) console.log("useQuery: Loading...");
-	// fetch("https://rickandmortyapi.com/api/episode")
-	// if (error) console.log("An error has occurred: ", error.message)
-
-	// console.log("useQuery: Data: ", data)
-
+	const { FCASList, fetchFCASData, fcasPagination, adderFCASFAV } = useContext(Context)
 
 	const colors = {
 		'S': '#67B010',
@@ -34,6 +22,7 @@ export default function FCASRatingScreen() {
 	const renderFCASItem = ({ item, index }) => {
 		return (
 			<SwapableRow leftItems={[{
+				color: item.favorite && '#f1c40f',
 				title: 'Favorite', icon: 'star', onPress: function () {
 					item.favorite = true
 					adderFCASFAV(item)
@@ -92,17 +81,12 @@ export default function FCASRatingScreen() {
 						</AppText>
 					</View>
 					<View style={{ flex: 2, paddingHorizontal: 10 }}>
-						{/* <Image
-							source={Images[item.chart]}
-							style={{ maxWidth: '100%' }}
-						/> */}
 						{item.svgUri ? <SvgUri
 							width={80}
 							style={{
 								alignItems: 'center',
 								flexDirection: 'row',
 								justifyContent: 'center',
-								// marginTop: 50
 							}}
 							uri={item.svgUri}
 						/> : <></>}
@@ -123,7 +107,19 @@ export default function FCASRatingScreen() {
 			<FlatList
 				data={FCASList}
 				renderItem={renderFCASItem}
-				keyExtractor={(item) => `fcas_${item.id.toString()}`}
+				keyExtractor={(item, index) => `fcas_${index}`}
+				refreshControl={
+					<RefreshControl
+						refreshing={false}
+						onRefresh={() => {
+							fetchFCASData(true)
+						}} />
+				}
+				onEndReachedThreshold={0.99}
+				onEndReached={() => {
+					if (FCASList && FCASList.length > 5)
+						fcasPagination()
+				}}
 			/>
 		</View>
 	)
