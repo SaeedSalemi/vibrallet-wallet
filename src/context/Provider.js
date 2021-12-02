@@ -37,7 +37,7 @@ const MainProvider = props => {
   // Market Fav Coins
   const [favCoins, setFavCoins] = useState([])
   const [fcasFavCoins, setFcasFavCoins] = useState([])
-  const FCAS_FAV_COINS_STORAGE = 'FCAS_FAV_COIN_STORAGE'
+  // const "fcasFav" = 'FCAS_FAV_COIN_STORAGE'
 
   const wallet = useSelector(state => { state.wallets.data ? state.wallets.data[0] : null })
 
@@ -180,7 +180,7 @@ const MainProvider = props => {
   // ============================== FCAS
 
   useEffect(() => {
-    AsyncStorage.getItem(FCAS_FAV_COINS_STORAGE).then(res => {
+    AsyncStorage.getItem("fcasFav").then(res => {
       setFcasFavCoins(JSON.parse(res))
     }).catch(err => {
       console.log('error form FCAS FAV coins', err)
@@ -190,17 +190,18 @@ const MainProvider = props => {
 
   useEffect(() => {
     if (fcasFavCoins !== null) {
-      AsyncStorage.setItem(FCAS_FAV_COINS_STORAGE, JSON.stringify(fcasFavCoins)).then().catch()
+      AsyncStorage.setItem("fcasFav", JSON.stringify(fcasFavCoins)).then().catch()
     }
   }, [fcasFavCoins])
 
   const adderFCASFAV = (item) => {
-
+    alert(item.symbol)
     const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
     if (index < 0) {
-      setFavCoins([...fcasFavCoins, item])
+      setFcasFavCoins([...fcasFavCoins, item])
+      console.log('added to fcas list', fcasFavCoins, item)
     } else {
-      setFavCoins(fcasFavCoins.splice(index, 1))
+      setFcasFavCoins(fcasFavCoins.splice(index, 1))
     }
   }
 
