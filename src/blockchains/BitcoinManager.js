@@ -5,7 +5,7 @@ var hdkey = require('hdkey');
 var bs58check = require('bs58check');
 const bitcore = require('bitcore-lib')
 const axios = require('axios')
-
+import crypto from 'crypto'
 // const bitcoinfees = require('bitcoinfees-21co');
 const feeutil = require('bitcoin-util-fee')
 
