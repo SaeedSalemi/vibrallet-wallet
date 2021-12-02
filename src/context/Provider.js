@@ -253,29 +253,29 @@ const MainProvider = props => {
       "", data
     ).Post(response => {
       if (response) {
-        const items = response.map(item => {
-          new HttpService("",
-            {
-              "uniqueId": "123",
-              "action": "priceChart",
-              "data": {
-                "symbol": `${item.symbol}`,
-                "timeframe": "30m",
-                "limit": 440,
-                "responseType": "url",
-                "height": 50,
-                "width": 250,
-              }
-            }).Post(res => {
-              if (res?.success === true) {
-                item.svgUri = res.data.url
-              }
-            })
-          return item
-        })
+        // const items = response.map(item => {
+        //   new HttpService("",
+        //     {
+        //       "uniqueId": "123",
+        //       "action": "priceChart",
+        //       "data": {
+        //         "symbol": `${item.symbol}`,
+        //         "timeframe": "30m",
+        //         "limit": 440,
+        //         "responseType": "url",
+        //         "height": 50,
+        //         "width": 250,
+        //       }
+        //     }).Post(res => {
+        //       if (res?.success === true) {
+        //         item.svgUri = res.data.url
+        //       }
+        //     })
+        //   return item
+        // })
 
         setState((state) => {
-          state.FCASList = [...state.FCASList, ...items]
+          state.FCASList = [...state.FCASList, ...response]
           return { ...state }
         })
       }

@@ -49,7 +49,7 @@ export default function RatingSortHeader() {
 			</View>
 			<View style={{ flex: 2, alignItems: 'flex-end' }}>
 				<AppText typo="tiny" color="text2">
-					Last 30D
+
 				</AppText>
 			</View>
 		</MarketHeaderContainer>

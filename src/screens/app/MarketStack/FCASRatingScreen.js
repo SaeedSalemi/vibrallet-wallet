@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { FlatList, View, RefreshControl } from 'react-native'
+import { FlatList, View, RefreshControl, Image } from 'react-native'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
 import SwapableRow from '../../../components/common/Swapable/SwapableRow'
@@ -81,7 +81,7 @@ export default function FCASRatingScreen() {
 						</AppText>
 					</View>
 					<View style={{ flex: 2, paddingHorizontal: 10 }}>
-						{item.svgUri ? <SvgUri
+						{/* {item.svgUri ? <SvgUri
 							width={80}
 							style={{
 								alignItems: 'center',
@@ -89,7 +89,20 @@ export default function FCASRatingScreen() {
 								justifyContent: 'center',
 							}}
 							uri={item.svgUri}
-						/> : <></>}
+						/> : <></>} */}
+						<View style={{
+							backgroundColor: globalStyles.Colors.inputColor2,
+							height: 40,
+							...globalStyles.flex.center,
+							borderRadius: 12,
+							paddingHorizontal: 0,
+							paddingVertical: 0,
+							marginHorizontal: 4
+						}}>
+
+							<Image resizeMode={"stretch"}
+								style={{ width: 30, height: 30, alignSelf: 'center' }} source={{ uri: item.logo }} />
+						</View>
 
 					</View>
 				</View>
