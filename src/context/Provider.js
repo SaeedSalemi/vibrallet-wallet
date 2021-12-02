@@ -5,7 +5,6 @@ import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
 import ethManager from '../blockchains/EthManager';
 import HttpService from '../services/HttpService';
-// import { setToStorage } from '../utils/Functions';
 
 export const Context = createContext()
 
@@ -55,7 +54,16 @@ const MainProvider = props => {
 
 
   useEffect(() => {
-    supportedCoins()
+
+    AsyncStorage.getItem("supportedCoins").then(result => {
+      if (result !== null) {
+        let supportedCoinData = JSON.parse(result)
+        if (supportedCoinData && supportedCoinData.length > 0) {
+          setState({ ...state, coins: supportedCoinData })
+        }
+      }
+    })
+
     getRegisteredUser()
 
   }, [])
@@ -282,50 +290,44 @@ const MainProvider = props => {
   }
 
 
-  const supportedCoins = async () => {
-    try {
-      const result = await AsyncStorage.getItem("supportedCoins")
+  // const supportedCoins = async () => {
+  //   try {
+  //     const result = await AsyncStorage.getItem("supportedCoins")
 
-      if (result !== null) {
-        let supportedCoinData = JSON.parse(result)
-        if (supportedCoinData && supportedCoinData.length > 0) {
-          setState({ ...state, coins: supportedCoinData })
-        }
-      } else {
+  //     if (result !== null) {
+  //       let supportedCoinData = JSON.parse(result)
+  //       if (supportedCoinData && supportedCoinData.length > 0) {
+  //         setState({ ...state, coins: supportedCoinData })
+  //       }
+  //     } else {
 
-        new HttpService("", {
-          "uniqueId": "abc1",
-          "action": "supportedCoins",
-        }).Post(response => {
-          if (response) {
-            // if (wallet) {
-            const items = response
-            for (let item of items) {
-              item.balance = 0
-              item.color = state.preDefinedCoinsColors[item.symbol]
-              item.hide = false
-              item.fav = false
-              // let selectedCoin = coinManager[item.symbol];
-              // if (typeof selectedCoin.getWalletFromMnemonic === "function") {
-              //   coinInfo = selectedCoin.getWalletFromMnemonic(wallet.backup)
-              //   item.address = coinInfo?.address
-              //   item.publicKey = coinInfo?.publicKey
-              //   item.privateKey = coinInfo?.privateKey
-              // }
-            }
-            setState({ ...state, coins: items })
-            // setToStorage("supportedCoins", JSON.stringify(items))
-            AsyncStorage.setItem("supportedCoins", JSON.stringify(items)).then().catch()
-            // }
-          }
-        })
-      }
-    }
-    catch (e) {
-      console.log(e)
-    }
+  //       new HttpService("", {
+  //         "uniqueId": "abc1",
+  //         "action": "supportedCoins",
+  //       }).Post(response => {
+  //         if (response) {
+  //           // if (wallet) {
+  //           const items = response
+  //           for (let item of items) {
+  //             item.balance = 0
+  //             item.color = state.preDefinedCoinsColors[item.symbol]
+  //             item.hide = false
+  //             item.fav = false
+  //             let _w = generateWalletData(item.symbol)
+  //             console.log('_w', _w)
+  //           }
+  //           setState({ ...state, coins: items })
 
-  }
+  //           AsyncStorage.setItem("supportedCoins", JSON.stringify(items)).then().catch()
+  //         }
+  //       })
+  //     }
+  //   }
+  //   catch (e) {
+  //     console.log(e)
+  //   }
+
+  // }
 
   const hideCoinHandler = (symbol) => {
     let coins = state.coins.map(item => {
