@@ -30,6 +30,8 @@ const MainProvider = props => {
 
     FCASList: [],
     FCASSort: 'name',
+    FCASPageSize: 10,
+    FCASPageNumber: 1,
   })
 
   // Market Fav Coins
@@ -148,7 +150,7 @@ const MainProvider = props => {
       state.MarketListingPageNumber = 1
 
     }
-    console.log('fetch data is loading')
+
     const data = {
       "uniqueId": "123",
       "action": "marketListing",
@@ -164,7 +166,6 @@ const MainProvider = props => {
       "", data
     ).Post((response) => {
       if (response) {
-        console.log('setMarketSearchFilter', { data: response });
         setState((state) => {
           state.MarketListing = [...state.MarketListing, ...response]
           return { ...state }
@@ -172,6 +173,7 @@ const MainProvider = props => {
 
       }
     }, err => {
+      console.log('MARKET FETCH Error', err)
     })
   }
 
@@ -181,7 +183,7 @@ const MainProvider = props => {
     AsyncStorage.getItem(FCAS_FAV_COINS_STORAGE).then(res => {
       setFcasFavCoins(JSON.parse(res))
     }).catch(err => {
-      console.log('error get from storage FCAS', err)
+      console.log('error form FCAS FAV coins', err)
     })
   }, [])
 
@@ -193,77 +195,79 @@ const MainProvider = props => {
   }, [fcasFavCoins])
 
   const adderFCASFAV = (item) => {
+
     const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
     if (index < 0) {
-      setFcasFavCoins([...fcasFavCoins, item])
+      setFavCoins([...fcasFavCoins, item])
     } else {
-      setFcasFavCoins(fcasFavCoins.splice(index, 1))
-    }
-
-  }
-
-  const deleteFCASFav = (item) => {
-    const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
-    if (index >= 0) {
       setFavCoins(fcasFavCoins.splice(index, 1))
     }
   }
 
-
-
-  const changeFCASSort = (sort) => {
-    setState((state) => {
-      state.FCASSort = sort
-      return { ...state }
-    })
-    // fetchData()
+  const deleteFCASFav = (item) => {
+    setFcasFavCoins(fcasFavCoins.filter((itm) => itm.symbol !== item.symbol))
   }
 
-  const fetchFCASData = useCallback(() => {
-    // new HttpService(
-    //   "", {
-    //   "uniqueId": "123",
-    //   "action": "fcasListing",
-    //   "data": {
-    //     "pageSize": 50,
-    //     "pageNumber": 1,
-    //     "sort": state.FCASSort
-    //   }
-    // }
-    // ).Post(response => {
-    //   if (response) {
 
-    //     const items = response.map(item => {
+  const fcasPagination = () => {
+    state.FCASPageNumber = state.FCASPageNumber + 1
+    fetchFCASData()
+  }
 
-    //       new HttpService("",
-    //         {
-    //           "uniqueId": "123",
-    //           "action": "priceChart",
-    //           "data": {
-    //             "symbol": `${item.symbol}`,
-    //             "timeframe": "30m",
-    //             "limit": 440,
-    //             "responseType": "url",
-    //             "height": 50,
-    //             "width": 250,
-    //           }
-    //         }).Post(res => {
-    //           if (res?.success === true) {
-    //             item.svgUri = res.data.url
-    //           }
-    //         })
-    //       return item
-    //     })
+  const changeFCASSort = (sort) => {
+    state.FCASSort = sort
+    fetchFCASData(true)
+  }
 
-    //     setState((state) => {
-    //       state.FCASList = items
-    //       return { ...state }
-    //     })
+  const fetchFCASData = (clear = false) => {
+    if (clear) {
+      state.FCASList = []
+      state.FCASPageNumber = 1
+    }
 
+    const data = {
+      "uniqueId": "123",
+      "action": "fcasListing",
+      "data": {
+        "pageSize": state.FCASPageSize,
+        "pageNumber": state.FCASPageNumber,
+        "sort": state.FCASSort
+      }
+    }
+    new HttpService(
+      "", data
+    ).Post(response => {
+      if (response) {
+        const items = response.map(item => {
+          new HttpService("",
+            {
+              "uniqueId": "123",
+              "action": "priceChart",
+              "data": {
+                "symbol": `${item.symbol}`,
+                "timeframe": "30m",
+                "limit": 440,
+                "responseType": "url",
+                "height": 50,
+                "width": 250,
+              }
+            }).Post(res => {
+              if (res?.success === true) {
+                item.svgUri = res.data.url
+              }
+            })
+          return item
+        })
 
-    //   }
-    // })
-  }, [state])
+        setState((state) => {
+          state.FCASList = [...state.FCASList, ...items]
+          return { ...state }
+        })
+      }
+    }, err => {
+      console.log('FCAS FETCH Error', err)
+    })
+  }
 
   // ================================================ COINS
 
@@ -372,7 +376,8 @@ const MainProvider = props => {
   return (
     <Context.Provider value={{
       ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin, setUserProfile,
-      adder, deleteFav, favCoins, fcasFavCoins, adderFCASFAV, deleteFCASFav, changeMarketSort, marketPagination, changeFCASSort, setMarketSearchFilter, fetchData
+      adder, deleteFav, favCoins, fcasFavCoins, changeMarketSort, marketPagination, setMarketSearchFilter, fetchData,
+      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort
     }}>
       {props.children}
     </Context.Provider>
