@@ -218,35 +218,30 @@ export default function WalletScreen() {
 								}}
 							>
 
-								<PieChart
-									widthAndHeight={170}
-									// series={[0, 0, 1]}
-									series={
-										state.allSupportedCoins.map(item => item.balance)
-									}
-									sliceColor={
-										state.allSupportedCoins.map(item => item.color)
-									}
-									doughnut={true}
-									coverRadius={0.88}
-									coverFill={globalStyles.Colors.inputColor}
-								/>
 
-								{/* {pieData.length > 0 ? <PieChart
-									widthAndHeight={170}
-									series={series}
-									sliceColor={sliceColor}
-									doughnut={true}
-									coverRadius={0.88}
-									coverFill={globalStyles.Colors.inputColor}
-								/> : <PieChart
-									widthAndHeight={170}
-									series={[100]}
-									sliceColor={[globalStyles.Colors.text2]}
-									doughnut={true}
-									coverRadius={0.88}
-									coverFill={globalStyles.Colors.inputColor}
-								/>} */}
+
+								{pieData.length > 0 ?
+									<PieChart
+										widthAndHeight={170}
+										series={
+											state.allSupportedCoins.map(item => item.balance)
+										}
+										sliceColor={
+											state.allSupportedCoins.map(item => item.color)
+										}
+										doughnut={true}
+										coverRadius={0.88}
+										coverFill={globalStyles.Colors.inputColor}
+									/>
+
+									: <PieChart
+										widthAndHeight={170}
+										series={[100]}
+										sliceColor={[globalStyles.Colors.text2]}
+										doughnut={true}
+										coverRadius={0.88}
+										coverFill={globalStyles.Colors.inputColor}
+									/>}
 
 								<View
 									style={{ position: 'absolute', ...globalStyles.flex.center }}
