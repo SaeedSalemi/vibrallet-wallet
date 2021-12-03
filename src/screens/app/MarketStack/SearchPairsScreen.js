@@ -1,20 +1,33 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { View, TouchableOpacity } from 'react-native'
-// import AppIcon from '../../../components/common/AppIcon'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import AppText from '../../../components/common/AppText'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/Provider'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 export default function SearchPairsScreen({ navigation }) {
 
 	const [state, setState] = useState()
+	const [searchHistory, setSearchHistory] = useState([])
 	const { setMarketSearchFilter } = useContext(Context)
-	const history = ['BTC/USDT', 'ETH/USDT', 'CRV/USDT']
 
+	const searchHistoryStorageKey = 'searchHistory'
+
+	// const history = ['BTC/USDT', 'ETH/USDT', 'CRV/USDT']
+
+	useEffect(() => {
+		AsyncStorage.getItem(searchHistoryStorageKey).then(res => {
+			if (res) {
+				setSearchHistory(JSON.parse(res))
+			}
+		}).catch(err => { })
+	}, [])
 
 	const submitHandler = () => {
+		AsyncStorage.setItem(searchHistoryStorageKey, JSON.stringify([...searchHistory, state]))
+		setSearchHistory([...searchHistory, state])
 		setMarketSearchFilter(state)
 		navigation.pop()
 	}
@@ -29,27 +42,30 @@ export default function SearchPairsScreen({ navigation }) {
 					onChangeText={(text) => setState(text)}
 					onSubmitEditing={submitHandler}
 				/>
-				<View
-					style={{
-						marginVertical: 16,
-						alignItems: 'center',
-						justifyContent: 'space-between',
-						flexDirection: 'row',
-					}}
-				>
-					<AppText color="text2" typo="tiny">
-						History
-					</AppText>
 
-					<TouchableOpacity onPress={() => {
-						setMarketSearchFilter('')
-						navigation.pop()
-					}}>
-						<FontAwesome5 name="trash" color={globalStyles.Colors.text3} size={15} />
-					</TouchableOpacity>
-				</View>
+				{searchHistory.length > 0 &&
+					<View
+						style={{
+							marginVertical: 16,
+							alignItems: 'center',
+							justifyContent: 'space-between',
+							flexDirection: 'row',
+						}}
+					>
+						<AppText color="text2" typo="tiny">
+							History
+						</AppText>
+
+						<TouchableOpacity onPress={() => {
+							AsyncStorage.removeItem(searchHistoryStorageKey)
+							setMarketSearchFilter('')
+							navigation.pop()
+						}}>
+							<FontAwesome5 name="trash" color={globalStyles.Colors.text3} size={15} />
+						</TouchableOpacity>
+					</View>}
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-					{[...history].map((item, i) => (
+					{searchHistory.map((item, i) => (
 						<View
 							style={{
 								width: '33%',
