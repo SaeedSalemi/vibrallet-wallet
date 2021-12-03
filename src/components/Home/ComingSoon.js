@@ -27,6 +27,9 @@ export default function ComingSoon({ details, time, imageName }) {
 			</View>
 			<View style={{ flex: 2 }}>
 				<CountDown
+					digitStyle={{ backgroundColor: '#FFF', marginHorizontal: 10 }}
+					showSeparator
+					separatorStyle={{ color: '#95949A', alignSelf: 'center', marginBottom: 20 }}
 					until={20 * 400 * 60 * 10 + 30}
 					size={20}
 				/>
