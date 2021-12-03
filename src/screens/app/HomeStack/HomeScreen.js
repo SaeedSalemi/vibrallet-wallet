@@ -30,10 +30,6 @@ import Header from '../../../components/Header/Header'
 import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-// import ethManager from '../../../blockchains/EthManager'
-// import bscManager from '../../../blockchains/BscManager'
-// import useWallet from './../../../hooks/useWallet'
-// import useCoinStorage from '../../../hooks/useCoinStorage'
 
 
 const ENTRIES1 = [
@@ -97,6 +93,7 @@ const HomeScreen = ({ navigation }) => {
 	const [entries, setEntries] = useState(ENTRIES1)
 	const [active, setActive] = useState(0)
 	const carouselRef = useRef(null)
+
 
 
 	useEffect(() => {
