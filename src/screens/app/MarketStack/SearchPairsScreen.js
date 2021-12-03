@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { View } from 'react-native'
-import AppIcon from '../../../components/common/AppIcon'
+import { View, TouchableOpacity } from 'react-native'
+// import AppIcon from '../../../components/common/AppIcon'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import AppText from '../../../components/common/AppText'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/Provider'
-
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 export default function SearchPairsScreen({ navigation }) {
 
 	const [state, setState] = useState()
@@ -40,7 +40,13 @@ export default function SearchPairsScreen({ navigation }) {
 					<AppText color="text2" typo="tiny">
 						History
 					</AppText>
-					<AppIcon name="delete" />
+
+					<TouchableOpacity onPress={() => {
+						setMarketSearchFilter('')
+						navigation.pop()
+					}}>
+						<FontAwesome5 name="trash" color={globalStyles.Colors.text3} size={15} />
+					</TouchableOpacity>
 				</View>
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
 					{[...history].map((item, i) => (
