@@ -60,12 +60,12 @@ class BitcoinManager {
 		}
 	}
 
-	async balance(address) {
+	async getBalance(address) {
 		let balance = 0
 
 		try {
 			const sochain_network = 'BTCTEST'
-			let minCofirm = 32 //MINIMUM CONFIRMATIONS
+			let minCofirm = 5 //MINIMUM CONFIRMATIONS
 
 			// https://chain.so/api/#get-balance
 			const result = await axios.get(
