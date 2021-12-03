@@ -28,7 +28,7 @@ const MainProvider = props => {
 
 
     FCASList: [],
-    FCASSort: 'name',
+    FCASSort: '-score',
     FCASPageSize: 10,
     FCASPageNumber: 1,
     FCASFilter: '',
@@ -136,11 +136,16 @@ const MainProvider = props => {
   }
 
   const adder = (item) => {
-    const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
-    if (index < 0) {
-      setFavCoins([...favCoins, item])
+    if (favCoins === null) {
+      AsyncStorage.setItem("marketFavCoins", JSON.stringify([]))
+      setFavCoins([item])
     } else {
-      setFavCoins(favCoins.splice(index, 1))
+      const index = favCoins.findIndex((itm) => itm.symbol === item.symbol)
+      if (index < 0) {
+        setFavCoins([...favCoins, item])
+      } else {
+        setFavCoins(favCoins.splice(index, 1))
+      }
     }
   }
 
@@ -215,14 +220,19 @@ const MainProvider = props => {
   }
 
   const adderFCASFAV = (item) => {
-    alert(item.symbol)
-    const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
-    if (index < 0) {
-      setFcasFavCoins([...fcasFavCoins, item])
-      console.log('added to fcas list', fcasFavCoins, item)
+    if (fcasFavCoins === null) {
+      AsyncStorage.setItem("fcasFavCoins", JSON.stringify([]))
+      setFcasFavCoins([item])
     } else {
-      setFcasFavCoins(fcasFavCoins.splice(index, 1))
+      const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
+      if (index < 0) {
+        setFcasFavCoins([...fcasFavCoins, item])
+        console.log('added to fcas list', fcasFavCoins, item)
+      } else {
+        setFcasFavCoins(fcasFavCoins.splice(index, 1))
+      }
     }
+
   }
 
   const deleteFCASFav = (item) => {
