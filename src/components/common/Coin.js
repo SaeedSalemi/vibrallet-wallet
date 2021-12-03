@@ -25,7 +25,8 @@ export default function Coin({
 	onHideHandler
 }) {
 
-	const { coinManager, getCoinBalance } = useContext(Context)
+	const { getCoinBalance } = useContext(Context)
+
 	const { navigate } = useNavigation()
 	// const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
 	const [isLoading, setIsLoading] = useState(true)
@@ -84,7 +85,7 @@ export default function Coin({
 
 	useEffect(() => {
 		// state.balance = getCoinBalance([coin.symbol])
-		state.balance = coin.balance
+		// state.balance = coin.balance
 		state.amount = state.balance * state.rate
 		setState({ ...state })
 	}, [])
@@ -188,7 +189,8 @@ export default function Coin({
 					{hideDetails ? null : (
 						<View style={{ flex: 1, alignItems: 'flex-end' }}>
 							<AppText typo="tiny">
-								{state.balance} 	{coin.symbol}
+								{/* {state.balance} 	{coin.symbol} */}
+								{getCoinBalance(coin)} 	{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
 								size={15}
