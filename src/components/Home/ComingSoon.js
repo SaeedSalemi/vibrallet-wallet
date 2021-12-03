@@ -27,7 +27,7 @@ export default function ComingSoon({ details, time, imageName }) {
 			</View>
 			<View style={{ flex: 2 }}>
 				<CountDown
-					until={90 * 400 * 60 * 10 + 30}
+					until={20 * 400 * 60 * 10 + 30}
 					size={20}
 				/>
 			</View>
