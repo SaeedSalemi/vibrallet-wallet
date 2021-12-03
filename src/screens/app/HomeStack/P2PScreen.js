@@ -3,6 +3,7 @@ import ComingSoon from '../../../components/Home/ComingSoon'
 import Screen from '../../../components/Screen'
 
 export default function P2PScreen() {
+	// const [time, resetTimer] = useTimer(30)
 	return (
 		<Screen edges={['bottom']}>
 			<ComingSoon
