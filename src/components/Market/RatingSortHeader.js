@@ -13,20 +13,35 @@ export default function RatingSortHeader() {
 	const PRIMARY_COLOR = '#FF9901';
 
 	return (
-		<MarketHeaderContainer style={{}}>
+		<MarketHeaderContainer style={{ justifyContent: 'center', alignItems: 'center', }}>
 
 			<View style={{ flex: 2, alignItems: 'flex-end' }}>
 				<AppText typo="tiny" color="text2">
-
 				</AppText>
 			</View>
 
-			<View style={{ flex: 2 }}>
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<View style={{ flex: 2, }}>
+
+
+				<TouchableOpacity onPress={() => {
+					FCASSort === 'rank' ? changeFCASSort('-rank') : changeFCASSort('rank')
+				}}
+				>
+					<AppText color={FCASSort === 'rank' || FCASSort === "-rank" ? 'primaryColor' : 'text3'} typo="tiny">
+						Rank <MaterialCommunityIcons name={FCASSort === 'rank' ? 'arrow-up' : 'arrow-down'}
+							color={FCASSort === 'rank' || FCASSort === "-rank" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`}
+						/>
+					</AppText>
+				</TouchableOpacity>
+
+
+				{/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<AppText typo="tiny" color="text2" style={{ paddingEnd: 2 }}>
 						Rank
 					</AppText>
-				</View>
+				</View> */}
+
+
 			</View>
 			<View style={{ flex: 3 }}>
 				<TouchableOpacity onPress={() => {
@@ -45,11 +60,11 @@ export default function RatingSortHeader() {
 					</AppText>
 					<AppIcon name="arrowDownSm" /> */}
 					<TouchableOpacity onPress={() => {
-						FCASSort === 'grade' ? changeFCASSort('-grade') : changeFCASSort('grade')
+						FCASSort === 'score' ? changeFCASSort('-score') : changeFCASSort('score')
 					}}>
-						<AppText color={FCASSort === 'grade' || FCASSort === "-grade" ? 'primaryColor' : 'text3'} typo="tiny">
-							FCAS <MaterialCommunityIcons name={FCASSort === 'grade' ? 'arrow-up' : 'arrow-down'}
-								color={FCASSort === 'grade' || FCASSort === "-grade" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
+						<AppText color={FCASSort === 'score' || FCASSort === "-score" ? 'primaryColor' : 'text3'} typo="tiny">
+							FCAS <MaterialCommunityIcons name={FCASSort === 'score' ? 'arrow-up' : 'arrow-down'}
+								color={FCASSort === 'score' || FCASSort === "-score" ? `${PRIMARY_COLOR}` : `${DEFAULT_COLOR}`} />
 						</AppText>
 					</TouchableOpacity>
 				</View>
