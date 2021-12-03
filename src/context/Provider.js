@@ -31,6 +31,7 @@ const MainProvider = props => {
     FCASSort: 'name',
     FCASPageSize: 10,
     FCASPageNumber: 1,
+    FCASFilter: '',
   })
 
   // Market Fav Coins
@@ -208,6 +209,11 @@ const MainProvider = props => {
     }
   }, [fcasFavCoins])
 
+  const setFCASSearchFilter = (text) => {
+    state.FCASFilter = text
+    fetchFCASData(true)
+  }
+
   const adderFCASFAV = (item) => {
     alert(item.symbol)
     const index = fcasFavCoins.findIndex((itm) => itm.symbol === item.symbol)
@@ -246,7 +252,8 @@ const MainProvider = props => {
       "data": {
         "pageSize": state.FCASPageSize,
         "pageNumber": state.FCASPageNumber,
-        "sort": state.FCASSort
+        "sort": state.FCASSort,
+        "filter": state.FCASFilter
       }
     }
     new HttpService(
@@ -386,7 +393,7 @@ const MainProvider = props => {
     <Context.Provider value={{
       ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin, setUserProfile,
       adder, deleteFav, favCoins, fcasFavCoins, changeMarketSort, marketPagination, setMarketSearchFilter, fetchData,
-      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort, setCoinsToSupport
+      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort, setCoinsToSupport, setFCASSearchFilter
     }}>
       {props.children}
     </Context.Provider>
