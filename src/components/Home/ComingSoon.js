@@ -4,7 +4,7 @@ import { Images } from '../../assets'
 import { globalStyles } from '../../config/styles'
 import AppText from '../common/AppText'
 import Timer from './Timer'
-
+import CountDown from 'react-native-countdown-component';
 export default function ComingSoon({ details, time, imageName }) {
 	return (
 		<View style={styles.container}>
@@ -26,7 +26,10 @@ export default function ComingSoon({ details, time, imageName }) {
 				<AppText typo="tiny" style={{ textAlign: 'center', color: '#95949A' }}>{details}</AppText>
 			</View>
 			<View style={{ flex: 2 }}>
-				<Timer time={time} />
+				<CountDown
+					until={90 * 400 * 60 * 10 + 30}
+					size={20}
+				/>
 			</View>
 		</View>
 	)
