@@ -12,10 +12,11 @@ import { routes } from '../../../config/routes'
 import { useContext } from 'react'
 import { Context } from '../../../context/Provider'
 import HttpService from '../../../services/HttpService'
-import AppLoader from '../../../components/common/AppLoader'
+
 
 export default function SelectCoinScreen({ navigation, route }) {
 	const { coins } = useContext(Context)
+	console.log('coins in select coin', coins)
 	const [state, setState] = useState({
 		rate: 0,
 		percentChange: 0,
