@@ -74,7 +74,7 @@ export default function FCASRatingScreen() {
 					<View style={{ flex: 2 }}>
 						<AppText bold>{index + 1}</AppText>
 					</View>
-					<View style={{ flex: 3 }}>
+					<View style={{ flex: 3, marginLeft: -15 }}>
 						<AppText bold>{item.name}</AppText>
 						<AppText typo="tiny" color="text3">
 							({item.symbol})
