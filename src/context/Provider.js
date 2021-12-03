@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
 import ethManager from '../blockchains/EthManager';
+import { useReduxWallet } from '../hooks/useReduxWallet';
 import HttpService from '../services/HttpService';
 
 export const Context = createContext()
@@ -39,7 +40,8 @@ const MainProvider = props => {
   const [fcasFavCoins, setFcasFavCoins] = useState([])
   // const "fcasFav" = 'FCAS_FAV_COIN_STORAGE'
 
-  const wallet = useSelector(state => { state.wallets.data ? state.wallets.data[0] : null })
+  // const wallet = useSelector(state => { state.wallets.data ? state.wallets.data[0] : null })
+  // console.log('wallet', wallet)
 
   const dispatch = value => setState({ ...state, ...value })
 
@@ -113,6 +115,10 @@ const MainProvider = props => {
     }).catch(error => {
       console.log('error in reg user', error)
     })
+  }
+
+  const setBalance = (symbol, balance) => {
+
   }
 
   //============================= Market ===============
@@ -362,41 +368,49 @@ const MainProvider = props => {
     setState({ ...state, coins })
   }
 
-  const getCoinBalance = coinSymbol => {
-    if (!coinSymbol)
-      return 0
-
-    let balance = 0
-    AsyncStorage.getItem("supportedCoins").then(data => {
-      if (data !== null) {
-        const parsedCoins = JSON.parse(data);
-        for (let coin of parsedCoins) {
-          if (coin["symbol"] === coinSymbol)
-            if (coin.hasOwnProperty("balance")) {
-              balance = parseFloat(coin["balance"]).toFixed(3)
-            } else {
-
-              if (wallet) {
-                console.log('----------> In the Provider: ', coinSymbol);
-                let selectedCoin = state.coinManager[coinSymbol];
-                if (typeof selectedCoin.getWalletFromMnemonic === "function") {
-                  selectedCoin.getWalletFromMnemonic(wallet.backup)
-                    .then(wallet => {
-                      selectedCoin.getBalance(wallet?.address, false).then(result => {
-                        balance = parseFloat(result).toFixed(3)
-                      })
-                    })
-                    .catch(ex => console.error('balance wallet error', ex))
-                }
-              }
-
-            }
-        }
-      }
-    }).catch(error => {
-      console.log('error in supported coins', error)
-    })
+  const getCoinBalance = coin => {
+    const { balance } = useReduxWallet(coin)
     return balance
+    // if (!coinSymbol)
+    //   return 0
+
+    // let balance = 0
+    // AsyncStorage.getItem("supportedCoins").then(data => {
+    //   if (data !== null) {
+    //     const parsedCoins = JSON.parse(data);
+    //     for (let coin of parsedCoins) {
+    //       if (coin["symbol"] === coinSymbol) {
+
+    //         const wallet = useSelector(state => { state.wallets.data ? state.wallets.data[0] : null })
+    //         console.log('wallet', wallet)
+    //         if (wallet) {
+    //           // let selectedCoin = state.coinManager[coinSymbol];
+    //           // if (typeof selectedCoin.getWalletFromMnemonic === "function") {
+    //           //   selectedCoin.getWalletFromMnemonic(wallet.backup)
+    //           //     .then(wallet => {
+    //           //       selectedCoin.getBalance(coin.address, false).then(result => {
+    //           //         balance = parseFloat(result).toFixed(3)
+    //           //         console.log('balance wallet', balance)
+    //           //       })
+    //           //     })
+    //           //     .catch(ex => console.error('balance wallet error', ex))
+    //           // }
+    //         }
+    //       }
+    //       // if (coin.hasOwnProperty("balance")) {
+    //       //   balance = parseFloat(coin["balance"]).toFixed(3)
+    //       //   console.log('balance storage', balance)
+    //       // } else {
+
+
+
+    //       // }
+    //     }
+    //   }
+    // }).catch(error => {
+    //   console.log('error in supported coins', error)
+    // })
+    // return balance
   }
 
   return (
