@@ -5,7 +5,6 @@ import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import * as Network from 'expo-network';
 
 import {
 	View,
@@ -122,24 +121,7 @@ const HomeScreen = ({ navigation }) => {
 	// 	state.wallets.data ? state.wallets.data[0] : null
 	// )
 
-	useEffect(() => {
 
-		Network.getNetworkStateAsync().then(status => {
-			if (!status.isConnected) {
-				showMessage({
-					message: 'Network connection not detected , please connect your phone to the internet connection and try again',
-					description: null,
-					type: 'danger',
-					icon: null,
-					duration: 8000,
-					style: { backgroundColor: "red" },
-					position: 'top'
-				})
-			}
-		})
-
-
-	}, [])
 	useEffect(() => {
 		if (navigateToWallet) {
 			navigation.replace(routes.newWallet, { no_back: true })
