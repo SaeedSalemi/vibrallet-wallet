@@ -31,10 +31,14 @@ export default function WordBackup({ navigation }) {
 	})
 
 	useEffect(() => {
-		const words = WalletManager.generateMnemonic()
-		console.log('debug words', words)
-		setBackup(words)
-		supportedCoins()
+		AsyncStorage.getItem('isBackup').then(value => {
+			if (value === null) {
+				const words = WalletManager.generateMnemonic()
+				AsyncStorage.setItem('isBackup', 'true')
+				setBackup(words)
+				supportedCoins()
+			}
+		})
 	}, [])
 
 	const supportedCoins = () => {
