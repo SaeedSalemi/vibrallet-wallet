@@ -18,23 +18,17 @@ export const useReduxWallet = async (coin) => {
     }
   }
 
-  const getBalanceFromMnemonic = async (coin) => {
-    const coinSelector = { ETH: ethManager, BNB: bscManager, BTC: bitcoinManager }
-    const balance = await coinSelector[coin.symbol].getBalance(coin.address, false)
-    console.log('getBalanceFromMnemonic debug', coin.symbol, `Balance is  ${balance}`)
-    return balance
-  }
-
   const mnemonic = await getStoredMnemonic()
 
-  if (mnemonic) {
-    const balance = await getBalanceFromMnemonic(coin)
-    console.log('real balance', balance)
-    return {
-      balance
-    }
-  } else
-    return {}
+  try {
+    let balance = 0
+    const coinManager = { ETH: ethManager, BNB: bscManager, BTC: bitcoinManager }
+    let selectedCoin = coinManager[coin.symbol];
+    const wallet = await selectedCoin.getWalletFromMnemonic(mnemonic?.backup)
+    balance = await selectedCoin.getBalance(wallet.address, false)
+    return balance
+  } catch (err) {
+    console.log('useReduxWallet', err)
+  }
 
 }
-
