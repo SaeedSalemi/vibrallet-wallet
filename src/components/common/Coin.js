@@ -11,7 +11,7 @@ import HR from './HR/HR'
 import SwapableRow from './Swapable/SwapableRow'
 import { SvgUri } from 'react-native-svg'
 import HttpService from '../../services/HttpService'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 import { Context } from '../../context/Provider'
 import { useReduxWallet } from '../../hooks/useReduxWallet'
 export default function Coin({
@@ -25,10 +25,6 @@ export default function Coin({
 	onPress,
 	onHideHandler
 }) {
-
-	const { getCoinBalance } = useContext(Context)
-	console.log('debug 1')
-	console.log('debug 2', useReduxWallet(coin))
 
 	const { navigate } = useNavigation()
 	// const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
@@ -194,7 +190,7 @@ export default function Coin({
 							<AppText typo="tiny">
 								{/* {state.balance} 	{coin.symbol} */}
 								{/* {getCoinBalance(coin)} 	{coin.symbol} */}
-								{getCoinBalance(coin)} 	{coin.symbol}
+								{useReduxWallet(coin)} 	{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
 								size={15}
