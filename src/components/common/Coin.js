@@ -13,6 +13,7 @@ import { SvgUri } from 'react-native-svg'
 import HttpService from '../../services/HttpService'
 import { useSelector } from 'react-redux'
 import { Context } from '../../context/Provider'
+import { useReduxWallet } from '../../hooks/useReduxWallet'
 export default function Coin({
 	coin,
 	index,
@@ -26,6 +27,8 @@ export default function Coin({
 }) {
 
 	const { getCoinBalance } = useContext(Context)
+	console.log('debug 1')
+	console.log('debug 2', useReduxWallet(coin))
 
 	const { navigate } = useNavigation()
 	// const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
@@ -190,6 +193,7 @@ export default function Coin({
 						<View style={{ flex: 1, alignItems: 'flex-end' }}>
 							<AppText typo="tiny">
 								{/* {state.balance} 	{coin.symbol} */}
+								{/* {getCoinBalance(coin)} 	{coin.symbol} */}
 								{getCoinBalance(coin)} 	{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
