@@ -58,3 +58,19 @@ export function share(title = '', msg = '', url = 'https://app.vibrallet.com') {
 }
 
 export const setToStorage = async (title, data) => await AsyncStorage.setItem(title, data)
+
+export const getToken = async () => {
+  try {
+    const appToken = await AsyncStorage.getItem("appToken")
+    if (appToken)
+      return JSON.parse(appToken)
+    else
+      return null
+  } catch (e) {
+    console.log('error to get token', e)
+  }
+}
+
+export const setToken = token => {
+  AsyncStorage.setItem("appToken", JSON.stringify(token))
+}
