@@ -1,11 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { createContext, useEffect, useState, useMemo, useCallback } from 'react'
+import { showMessage } from 'react-native-flash-message';
 import { useSelector } from 'react-redux';
 import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
 import ethManager from '../blockchains/EthManager';
 import { useReduxWallet } from '../hooks/useReduxWallet';
 import HttpService from '../services/HttpService';
+import { getToken } from '../utils/Functions';
 
 export const Context = createContext()
 
@@ -33,6 +36,8 @@ const MainProvider = props => {
     FCASPageSize: 10,
     FCASPageNumber: 1,
     FCASFilter: '',
+
+    MarketScreenActiveFilter: 'Market'
   })
 
   // Market Fav Coins
@@ -78,10 +83,10 @@ const MainProvider = props => {
   }, [])
 
   useEffect(() => {
+
     fetchData()
     fetchFCASData()
   }, [])
-
   // ===================== Profile 
 
   const setUserData = (user) => {
@@ -117,9 +122,13 @@ const MainProvider = props => {
     })
   }
 
-  const setBalance = (symbol, balance) => {
 
+  const setMarketScreenActiveFilter = (tabScreen) => {
+    state.MarketScreenActiveFilter = tabScreen
+    setState({ ...state })
   }
+
+
 
   //============================= Market ===============
   useEffect(() => {
@@ -369,8 +378,7 @@ const MainProvider = props => {
   }
 
   const getCoinBalance = coin => {
-    const { balance } = useReduxWallet(coin)
-    return balance
+    return 0
     // if (!coinSymbol)
     //   return 0
 
@@ -417,7 +425,7 @@ const MainProvider = props => {
     <Context.Provider value={{
       ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin, setUserProfile,
       adder, deleteFav, favCoins, fcasFavCoins, changeMarketSort, marketPagination, setMarketSearchFilter, fetchData,
-      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort, setCoinsToSupport, setFCASSearchFilter
+      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort, setCoinsToSupport, setFCASSearchFilter, setMarketScreenActiveFilter
     }}>
       {props.children}
     </Context.Provider>
