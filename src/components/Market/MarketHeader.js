@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
 import AppText from '../common/AppText'
 import Header from '../Header/Header'
+import { Context } from '../../context/Provider'
 
 export default function MarketHeader({ isMarket, setIsMarket }) {
+	const { setMarketScreenActiveFilter } = useContext(Context)
 	const borderStyle = {
 		borderBottomWidth: 1,
 		borderBottomColor: globalStyles.Colors.secondaryColor,
@@ -26,7 +28,10 @@ export default function MarketHeader({ isMarket, setIsMarket }) {
 					<TouchableOpacity
 						activeOpacity={0.75}
 						style={isMarket ? borderStyle : null}
-						onPress={() => setIsMarket(true)}
+						onPress={() => {
+							setMarketScreenActiveFilter("Market")
+							setIsMarket(true)
+						}}
 					>
 						<AppText bold typo="sm">
 							Market
@@ -35,7 +40,10 @@ export default function MarketHeader({ isMarket, setIsMarket }) {
 					<TouchableOpacity
 						activeOpacity={0.75}
 						style={isMarket ? null : borderStyle}
-						onPress={() => setIsMarket(false)}
+						onPress={() => {
+							setMarketScreenActiveFilter("FCAS")
+							setIsMarket(false)
+						}}
 					>
 						<AppText bold typo="sm">
 							FCAS Rating
