@@ -7,28 +7,49 @@ import { globalStyles } from '../../../config/styles'
 import { Context } from '../../../context/Provider'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-export default function SearchPairsScreen({ navigation }) {
+export default function SearchPairsScreen({ route, navigation }) {
+
+	// const { isMarket: MarketSearchScreen } = route.params || {}
+	// console.log('SearchPairsScreen useEffect', MarketSearchScreen)
 
 	const [state, setState] = useState()
 	const [searchHistory, setSearchHistory] = useState([])
-	const { setMarketSearchFilter } = useContext(Context)
+	const { setMarketSearchFilter, setFCASSearchFilter, MarketScreenActiveFilter } = useContext(Context)
 
-	const searchHistoryStorageKey = 'searchHistory'
-
-	// const history = ['BTC/USDT', 'ETH/USDT', 'CRV/USDT']
+	const marketSearchHistoryStorageKey = 'marketSearchHistory'
+	const fcasSearchHistoryStorageKey = 'fcasSearchHistory'
 
 	useEffect(() => {
-		AsyncStorage.getItem(searchHistoryStorageKey).then(res => {
-			if (res) {
-				setSearchHistory(JSON.parse(res))
-			}
-		}).catch(err => { })
+		if (MarketScreenActiveFilter === "Market") {
+			AsyncStorage.getItem(marketSearchHistoryStorageKey).then(res => {
+				if (res) {
+					setSearchHistory(JSON.parse(res))
+				}
+			}).catch(err => { })
+		} else if (MarketScreenActiveFilter === "FCAS") {
+			AsyncStorage.getItem(fcasSearchHistoryStorageKey).then(res => {
+				if (res) {
+					setSearchHistory(JSON.parse(res))
+				}
+			}).catch(err => { })
+		}
+
 	}, [])
 
 	const submitHandler = () => {
-		AsyncStorage.setItem(searchHistoryStorageKey, JSON.stringify([...searchHistory, state]))
-		setSearchHistory([...searchHistory, state])
-		setMarketSearchFilter(state)
+		if (MarketScreenActiveFilter === "Market") {
+			const index = searchHistory.findIndex(item => item === state)
+			if (index < 0) {
+				setSearchHistory([...searchHistory, state])
+				AsyncStorage.setItem(marketSearchHistoryStorageKey, JSON.stringify([...searchHistory, state]))
+			} else {
+				setSearchHistory(searchHistory.splice(index, 1))
+			}
+		} else if (MarketScreenActiveFilter === "FCAS") {
+			AsyncStorage.setItem(fcasSearchHistoryStorageKey, JSON.stringify([...searchHistory, state]))
+			setSearchHistory([...searchHistory, state])
+			setFCASSearchFilter(state)
+		}
 		navigation.pop()
 	}
 
@@ -57,8 +78,13 @@ export default function SearchPairsScreen({ navigation }) {
 						</AppText>
 
 						<TouchableOpacity onPress={() => {
-							AsyncStorage.removeItem(searchHistoryStorageKey)
-							setMarketSearchFilter('')
+							if (MarketScreenActiveFilter === "Market") {
+								AsyncStorage.removeItem(marketSearchHistoryStorageKey)
+								setMarketSearchFilter('')
+							} else if (MarketScreenActiveFilter === "FCAS") {
+								AsyncStorage.removeItem(fcasSearchHistoryStorageKey)
+								setFCASSearchFilter('')
+							}
 							navigation.pop()
 						}}>
 							<FontAwesome5 name="trash" color={globalStyles.Colors.text3} size={15} />
@@ -74,6 +100,7 @@ export default function SearchPairsScreen({ navigation }) {
 							}}
 							key={i}
 						>
+
 							<View
 								style={{
 									height: 40,
@@ -84,6 +111,7 @@ export default function SearchPairsScreen({ navigation }) {
 							>
 								<AppText>{item}</AppText>
 							</View>
+
 						</View>
 					))}
 				</View>
