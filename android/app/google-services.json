@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "226354431357",
+    "project_id": "vibrallet-334413",
+    "storage_bucket": "vibrallet-334413.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226354431357:android:593f8bf6420ee49013f814",
+        "android_client_info": {
+          "package_name": "com.binrexwallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226354431357-cjldbi5c1le7dq9571adqf63kt0l3ho4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC08OcaWqLyAEOlyEQMiPhBo0GanV1dk7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226354431357-cjldbi5c1le7dq9571adqf63kt0l3ho4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
