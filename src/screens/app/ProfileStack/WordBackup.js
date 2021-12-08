@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
+import { View, Image, TouchableOpacity, Text } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Images } from '../../../assets'
 import AppButton from '../../../components/common/AppButton'
@@ -21,14 +21,54 @@ import ethManager from '../../../blockchains/EthManager'
 import bscManager from '../../../blockchains/BscManager'
 import { Context } from '../../../context/Provider'
 
+import {
+	GoogleSignin,
+	GoogleSigninButton,
+	statusCodes,
+} from '@react-native-google-signin/google-signin';
+// import {
+// 	GDrive,
+// 	MimeTypes
+// } from "@robinbobin/react-native-google-drive-api-wrapper";
+
 export default function WordBackup({ navigation }) {
 	const { setCoinsToSupport } = useContext(Context)
+	const [googleInformation, setGoogleInformation] = useState({})
+
 	const dispatch = useDispatch()
 	const { navigate } = navigation
 	const [backup, setBackup] = useState('')
 	const [state, setState] = useState({
 		preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
 	})
+
+	// 
+	// AIzaSyBgpEANoyAWXw - zpC5T4irS8mrzQEtaEMY
+	// useEffect(() => {
+
+	// }, [])
+	// GoogleSignin.configure({
+	// 	// scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+	// 	webClientId: '226354431357-ep3eo9tnlau5vil2s5cph88igtca45ut.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+	// 	offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+	// });
+
+	GoogleSignin.configure({
+		scopes: ['https://www.googleapis.com/auth/drive.readonly'], // [Android] what API you want to access on behalf of the user, default is email and profile
+		webClientId: '226354431357-ep3eo9tnlau5vil2s5cph88igtca45ut.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+		offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+		hostedDomain: '', // specifies a hosted domain restriction
+		forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+		accountName: '', // [Android] specifies an account name on the device that should be used
+
+		// iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+		// googleServicePlistPath: '', // [iOS] if you renamed your GoogleService-Info file, new name here, e.g. GoogleService-Info-Staging
+		// openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
+		// profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
+	});
+
+
+	// 
 
 	useEffect(() => {
 		AsyncStorage.getItem('isBackup').then(value => {
@@ -113,6 +153,31 @@ export default function WordBackup({ navigation }) {
 		}
 
 	}
+
+
+	const signIn = async () => {
+
+		try {
+			console.log('signIn', await GoogleSignin.hasPlayServices())
+			const userInfo = await GoogleSignin.signIn();
+			console.log('kossher is here!')
+			this.setGoogleInformation({ userInfo });
+		} catch (error) {
+			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+				alert('user cancelled the login flow');
+				// user cancelled the login flow
+			} else if (error.code === statusCodes.IN_PROGRESS) {
+				alert('IN_PROGRESS')
+				// operation (e.g. sign in) is in progress already
+			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+				alert('Play services is not available');
+			} else {
+				// some other error happened
+				alert('Something went wrong');
+				console.log('google went wrong!', error)
+			}
+		}
+	};
 
 
 	const handleAddWallet = () => {
@@ -222,6 +287,22 @@ export default function WordBackup({ navigation }) {
 								Backup
 							</AppText>
 						</TouchableOpacity>
+
+						<GoogleSigninButton
+							onPress={signIn}
+							style={{ width: 192, height: 48 }}
+							size={GoogleSigninButton.Size.Wide}
+							color={GoogleSigninButton.Color.Dark}
+						/>
+						<View>
+							<Text>Fuck you</Text>
+							{/* {
+								googleInformation ? <>
+									<Text>{googleInformation.user.name}</Text>
+									<Text>{googleInformation.user.email}</Text>
+								</> : null
+							} */}
+						</View>
 					</View>
 
 
