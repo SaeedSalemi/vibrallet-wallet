@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "226354431357-g60pijqbi53kc3m2hbmon2sffo2qcbfu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.binrexwallet",
+            "certificate_hash": "10fd47fcd5efd03613617c5f877a6babc2d704ae"
+          }
+        },
+        {
           "client_id": "226354431357-cjldbi5c1le7dq9571adqf63kt0l3ho4.apps.googleusercontent.com",
           "client_type": 3
         }
