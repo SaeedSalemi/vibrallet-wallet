@@ -318,8 +318,7 @@ export default function WordBackup({ navigation }) {
 					</View>
 				</View>
 
-
-				{backupPlan.id === 2 ? <View style={{ ...globalStyles.flex.center }}>
+				{backup && backupPlan?.id === 2 ? <View style={{ ...globalStyles.flex.center }}>
 					<AppText
 						style={{
 							textAlign: 'center',
