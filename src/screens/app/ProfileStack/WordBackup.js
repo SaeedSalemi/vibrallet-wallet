@@ -20,16 +20,16 @@ import bitcoinManager from '../../../blockchains/BitcoinManager'
 import ethManager from '../../../blockchains/EthManager'
 import bscManager from '../../../blockchains/BscManager'
 import { Context } from '../../../context/Provider'
-
+import QRCode from 'react-native-qrcode-svg'
 import {
 	GoogleSignin,
 	GoogleSigninButton,
 	statusCodes,
 } from '@react-native-google-signin/google-signin';
-// import {
-// 	GDrive,
-// 	MimeTypes
-// } from "@robinbobin/react-native-google-drive-api-wrapper";
+import {
+	GDrive,
+	MimeTypes
+} from "@robinbobin/react-native-google-drive-api-wrapper";
 
 export default function WordBackup({ navigation }) {
 	const { setCoinsToSupport } = useContext(Context)
@@ -158,10 +158,25 @@ export default function WordBackup({ navigation }) {
 	const signIn = async () => {
 
 		try {
-			console.log('signIn', await GoogleSignin.hasPlayServices())
-			const userInfo = await GoogleSignin.signIn();
-			console.log('kossher is here!')
-			this.setGoogleInformation({ userInfo });
+			const hasPlayServices = await GoogleSignin.hasPlayServices()
+			if (hasPlayServices) {
+				const userInfo = await GoogleSignin.signIn();
+				console.log('user info', userInfo)
+				this.setGoogleInformation({ userInfo });
+			}
+			// const gdrive = new GDrive();
+
+			// gdrive.accessToken = (await GoogleSignin.getTokens()).accessToken;
+			// console.log('GDRIVE', await gdrive.files.list());
+
+			// const id = (await gdrive.files.newMultipartUploader()
+			// 	.setData([1, 2, 3, 4, 5], MimeTypes.BINARY)
+			// 	.setRequestBody({
+			// 		name: "multipart_bin"
+			// 	})
+			// 	.execute()
+			// ).id;
+			// console.log('kossher ', await gdrive.files.getBinary(id));
 		} catch (error) {
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
 				alert('user cancelled the login flow');
@@ -222,8 +237,18 @@ export default function WordBackup({ navigation }) {
 
 	return (
 		<Screen edges={['bottom']} style={{ ...globalStyles.gapScreen }}>
-			<View style={{ paddingVertical: 18, ...globalStyles.flex.center }}>
-				<Image source={Images.qrCode} />
+			<View style={{
+				...globalStyles.flex.center,
+				paddingHorizontal: 12,
+				paddingVertical: 18,
+			}}>
+				<View style={{ backgroundColor: globalStyles.Colors.inputColor, padding: 10, borderRadius: 12, }}>
+					<QRCode
+						size={150}
+						value={backup}
+						logoBackgroundColor="transparent"
+					/>
+				</View>
 			</View>
 			<View style={{ flex: 1 }}>
 				<View
@@ -288,26 +313,27 @@ export default function WordBackup({ navigation }) {
 							</AppText>
 						</TouchableOpacity>
 
-						<GoogleSigninButton
-							onPress={signIn}
-							style={{ width: 192, height: 48 }}
-							size={GoogleSigninButton.Size.Wide}
-							color={GoogleSigninButton.Color.Dark}
-						/>
-						<View>
-							<Text>Fuck you</Text>
-							{/* {
-								googleInformation ? <>
-									<Text>{googleInformation.user.name}</Text>
-									<Text>{googleInformation.user.email}</Text>
-								</> : null
-							} */}
-						</View>
+
 					</View>
+				</View>
 
-
-
-
+				<View style={{ ...globalStyles.flex.center }}>
+					<AppText
+						style={{
+							textAlign: 'center',
+							paddingHorizontal: 36,
+							paddingVertical: 8,
+						}}
+						typo="tiny"
+					>
+						Upload your Backup on your Google Drive.
+					</AppText>
+					<GoogleSigninButton
+						onPress={signIn}
+						style={{ width: 192, height: 48 }}
+						size={GoogleSigninButton.Size.Wide}
+						color={GoogleSigninButton.Color.Dark}
+					/>
 				</View>
 				<View style={{ ...globalStyles.flex.center, marginVertical: 24 }}>
 					<AppText
