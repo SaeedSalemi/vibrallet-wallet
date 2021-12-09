@@ -7,6 +7,7 @@ import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
 import ethManager from '../blockchains/EthManager';
 import { useReduxWallet } from '../hooks/useReduxWallet';
+import useWalletConnect from '../hooks/useWalletConnect';
 import HttpService from '../services/HttpService';
 import { getToken } from '../utils/Functions';
 
@@ -421,11 +422,14 @@ const MainProvider = props => {
     // return balance
   }
 
+  let walletConnect = useWalletConnect(coins);
+
   return (
     <Context.Provider value={{
       ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin, setUserProfile,
       adder, deleteFav, favCoins, fcasFavCoins, changeMarketSort, marketPagination, setMarketSearchFilter, fetchData,
-      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort, setCoinsToSupport, setFCASSearchFilter, setMarketScreenActiveFilter
+      fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort, setCoinsToSupport, setFCASSearchFilter, setMarketScreenActiveFilter,
+      ...walletConnect
     }}>
       {props.children}
     </Context.Provider>
