@@ -117,7 +117,7 @@ const RenderMarketItem = ((props) => {
 							...globalStyles.flex.center,
 						}}
 					>
-						<AppText typo="sm" bold
+						<AppText typo="tiny" bold
 							color={item.percent_change_24h > 0 ? 'success' : 'failure'}>
 							{parseFloat(item.price).toFixed(6)}
 						</AppText>
@@ -146,7 +146,7 @@ const RenderMarketItem = ((props) => {
 						>
 							<AppText
 								bold
-								typo="sm"
+								typo="tiny"
 								color={item.percent_change_24h > 0 ? 'success' : 'failure'}
 							>
 								{/* {item.increase ? '+' : '-'} 1.42% */}
