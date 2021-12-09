@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { View, Image, TouchableOpacity, Text } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { Images } from '../../../assets'
 import AppButton from '../../../components/common/AppButton'
 import AppText from '../../../components/common/AppText'
 import HR from '../../../components/common/HR/HR'
@@ -77,6 +76,8 @@ export default function WordBackup({ navigation }) {
 				AsyncStorage.setItem('isBackup', 'true')
 				setBackup(words)
 				supportedCoins()
+			} else {
+
 			}
 		})
 	}, [])
