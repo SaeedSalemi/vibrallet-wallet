@@ -6,8 +6,7 @@ import WalletConnect from "@walletconnect/client";
 
 // import { Context } from '../context/Provider'
 
-const useWalletConnect = (coins) => {
-
+const useWalletConnect = ({ coins }) => {
   // const { coinManager } = useContext(Context);
 
   // const [state, setState] = useState({
@@ -19,7 +18,7 @@ const useWalletConnect = (coins) => {
   let pair = async (uri) => {
 
     console.log(coins);
-    
+
     // Create connector
     const connector = new WalletConnect(
       {
@@ -43,12 +42,18 @@ const useWalletConnect = (coins) => {
 
       // Handle Session Request
       console.log("session_request  ,,,", JSON.stringify(payload));
+      let address = null;
+      if (payload.params.chainId == 1) {
+        address = coins.find(p => p.symbol == "ETH")?.address;
+      } else if (payload.params.chainId == 56) {
+        address = coins.find(p => p.network == "BNB")?.address;
+      }
 
+      console.log('---->selected Address', address);
       // Approve Session
       connector.approveSession({
         accounts: [                 // required
-          // '0x4292...931B3',
-          // '0xa4a7...784E8',
+          address
         ],
         chainId: payload.params.chainId                 // required
       })
@@ -84,7 +89,7 @@ const useWalletConnect = (coins) => {
       //   id: 1,
       //   result: "0x41791102999c339c844880b23950704cc43aa840f3739e365323cda4dfa89e7a"
       // });
-      
+
       /* payload:
       {
         id: 1,

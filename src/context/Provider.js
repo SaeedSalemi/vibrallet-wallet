@@ -422,7 +422,7 @@ const MainProvider = props => {
     // return balance
   }
 
-  let walletConnect = useWalletConnect(coins);
+  let walletConnect = useWalletConnect({coins: state.coins});
 
   return (
     <Context.Provider value={{
