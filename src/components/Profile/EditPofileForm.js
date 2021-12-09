@@ -3,7 +3,6 @@ import { View, Pressable } from 'react-native'
 import AppButton from '../common/AppButton'
 import AppInput from '../common/AppInput/AppInput'
 import { globalStyles } from '../../config/styles'
-import * as yup from 'yup';
 import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import HttpService from './../../services/HttpService';
