@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Pressable, View } from 'react-native'
 import AppButton from '../../../components/common/AppButton'
 import AppIcon from '../../../components/common/AppIcon'
@@ -8,12 +8,20 @@ import PriceCalculator from '../../../components/PriceAlert/PriceCalculator'
 import Screen from '../../../components/Screen'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
+import HttpService from '../../../services/HttpService'
 
 export default function NewCoinAlertScreen({ route, navigation }) {
-	const { coin } = route.params || {}
+	const { coin, coinPrice } = route.params || {}
+	console.log('coin item', coin)
 	const [state, setState] = useState({
 		alert_type: "On time"
 	})
+
+	const [price, setPrice] = useState()
+
+	coin.price = coinPrice
+	coin.lastPrice = coinPrice
+
 	return (
 		<Screen
 			edges={['bottom']}
