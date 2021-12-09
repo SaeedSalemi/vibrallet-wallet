@@ -49,7 +49,9 @@ export const coins = [
 export default function CreatePriceAlertScreen({ navigation }) {
 	const items = useMemo(() => coins, [])
 
-	// const { coins } = useContext(Context)
+	const { coins: allCoins } = useContext(Context)
+
+	console.log('coins in the popular coins', allCoins)
 
 
 	const BSCIcon = () => (
@@ -73,7 +75,7 @@ export default function CreatePriceAlertScreen({ navigation }) {
 					chart: 'sampleChart2',
 					amount: 0,
 					change: 0,
-					balance: 0.01,
+					balance: 0,
 					vol: '2,300341',
 					lastPrice: '1764.23',
 				},
@@ -90,7 +92,7 @@ export default function CreatePriceAlertScreen({ navigation }) {
 					changeAmount: '1.4%',
 					chart: 'sampleChart3',
 					amount: 0,
-					balance: 0.01,
+					balance: 0,
 					vol: '1.34340023',
 					lastPrice: '489.27',
 				},
@@ -129,9 +131,9 @@ export default function CreatePriceAlertScreen({ navigation }) {
 			</AppText>
 			<FlatList
 				// data={items}
-				data={state.coins}
+				data={allCoins}
 				renderItem={({ item, index }) => (
-					<AlertItem item={item} index={index} length={state.coins} />
+					<AlertItem item={item} index={index} length={allCoins} />
 				)}
 				keyExtractor={(_, i) => i.toString()}
 			/>
