@@ -88,7 +88,7 @@ export default function WordBackup({ navigation }) {
 			new HttpService("", {
 				"uniqueId": "abc1",
 				"action": "supportedCoins",
-			}).Post((response) => {
+			}).Post(async (response) => {
 
 				try {
 					if (response) {
@@ -100,43 +100,24 @@ export default function WordBackup({ navigation }) {
 							item.hide = false
 							item.fav = false
 							if (item.symbol === 'BTC') {
-								// const coininfo = await bitcoinManager.getWalletFromMnemonic(backup)
-								// item.publicKey = coininfo.publicKey
-								// item.privateKey = coininfo.privateKey
-								// item.address = coininfo.address
-
-								bitcoinManager.getWalletFromMnemonic(backup).then(coininfo => {
-									item.publicKey = coininfo.publicKey
-									item.privateKey = coininfo.privateKey
-									item.address = coininfo.address
-								})
-
-
+								const coininfo = await bitcoinManager.getWalletFromMnemonic(backup)
+								item.publicKey = coininfo.publicKey
+								item.privateKey = coininfo.privateKey
+								item.address = coininfo.address
 								// item.balance = await bitcoinManager.getBalance(item.address)
 							}
 							if (item.symbol.toUpperCase() === 'ETH') {
-								// const coininfo = await ethManager.getWalletFromMnemonic(backup)
-								// item.publicKey = coininfo.publicKey
-								// item.privateKey = coininfo.privateKey
-								// item.address = coininfo.address
-
-								ethManager.getWalletFromMnemonic(backup).then(coininfo => {
-									item.publicKey = coininfo.publicKey
-									item.privateKey = coininfo.privateKey
-									item.address = coininfo.address
-								})
+								const coininfo = await ethManager.getWalletFromMnemonic(backup)
+								item.publicKey = coininfo.publicKey
+								item.privateKey = coininfo.privateKey
+								item.address = coininfo.address
 								// item.balance = await ethManager.getBalance(item.address)
 							}
 							if (item.symbol.toUpperCase() === 'BNB') {
-								// const coininfo = await bscManager.getWalletFromMnemonic(backup)
-								// item.publicKey = coininfo.publicKey
-								// item.privateKey = coininfo.privateKey
-								// item.address = coininfo.address
-								bscManager.getWalletFromMnemonic(backup).then(coininfo => {
-									item.publicKey = coininfo.publicKey
-									item.privateKey = coininfo.privateKey
-									item.address = coininfo.address
-								})
+								const coininfo = await bscManager.getWalletFromMnemonic(backup)
+								item.publicKey = coininfo.publicKey
+								item.privateKey = coininfo.privateKey
+								item.address = coininfo.address
 								// item.balance = await bscManager.getBalance(item.address)
 							}
 						}
@@ -244,11 +225,11 @@ export default function WordBackup({ navigation }) {
 				paddingVertical: 18,
 			}}>
 				<View style={{ backgroundColor: globalStyles.Colors.inputColor, padding: 10, borderRadius: 12, }}>
-					<QRCode
+					{backup ? <QRCode
 						size={150}
 						value={backup}
 						logoBackgroundColor="transparent"
-					/>
+					/> : <></>}
 				</View>
 			</View>
 			<View style={{ flex: 1 }}>
