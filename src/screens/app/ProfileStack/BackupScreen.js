@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
+import { View, Image, TouchableOpacity, Text } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Images } from '../../../assets'
 import AppText from '../../../components/common/AppText'
@@ -13,8 +13,8 @@ import { showMessage } from "react-native-flash-message";
 import { routes } from '../../../config/routes'
 import RNFS from 'react-native-fs'
 import { encrypt } from '../../../utils/Functions'
-
 export default function BackupScreen({ navigation }) {
+
   const dispatch = useDispatch()
   const { navigate } = navigation
   const [backup, setBackup] = useState('')
@@ -59,10 +59,12 @@ export default function BackupScreen({ navigation }) {
           position: 'top'
         })
       })
-      .catch((err) => {
-        console.log(err.message);
+      .catch((error) => {
+        console.log(error.message)
       });
   }
+
+
 
   return (
     <Screen edges={['bottom']} style={{ ...globalStyles.gapScreen }}>
@@ -82,7 +84,6 @@ export default function BackupScreen({ navigation }) {
             style={{
               // flex: 1,
               alignSelf: 'stretch',
-
               paddingHorizontal: 16,
               paddingVertical: 8,
               ...globalStyles.flex.row,
@@ -132,10 +133,6 @@ export default function BackupScreen({ navigation }) {
               </AppText>
             </TouchableOpacity>
           </View>
-
-
-
-
         </View>
         <View style={{ ...globalStyles.flex.center, marginVertical: 24 }}>
           <AppText
