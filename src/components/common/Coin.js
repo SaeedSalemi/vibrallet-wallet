@@ -190,7 +190,7 @@ export default function Coin({
 							<AppText typo="tiny">
 								{/* {state.balance} 	{coin.symbol} */}
 								{/* {getCoinBalance(coin)} 	{coin.symbol} */}
-								{useReduxWallet(coin)} 	{coin.symbol}
+								{0} 	{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
 								size={15}
