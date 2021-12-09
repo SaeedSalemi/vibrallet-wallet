@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { View, Image, TouchableOpacity, Text } from 'react-native'
+import { View, TouchableOpacity, Pressable } from 'react-native'
 import { useDispatch } from 'react-redux'
 import AppButton from '../../../components/common/AppButton'
 import AppText from '../../../components/common/AppText'
@@ -33,6 +33,7 @@ import {
 export default function WordBackup({ navigation }) {
 	const { setCoinsToSupport } = useContext(Context)
 	const [googleInformation, setGoogleInformation] = useState({})
+	const [backupPlan, setBackupPlan] = useState()
 
 	const dispatch = useDispatch()
 	const { navigate } = navigation
@@ -40,17 +41,6 @@ export default function WordBackup({ navigation }) {
 	const [state, setState] = useState({
 		preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
 	})
-
-	// 
-	// AIzaSyBgpEANoyAWXw - zpC5T4irS8mrzQEtaEMY
-	// useEffect(() => {
-
-	// }, [])
-	// GoogleSignin.configure({
-	// 	// scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-	// 	webClientId: '226354431357-ep3eo9tnlau5vil2s5cph88igtca45ut.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-	// 	offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-	// });
 
 	GoogleSignin.configure({
 		scopes: ['https://www.googleapis.com/auth/drive.readonly'], // [Android] what API you want to access on behalf of the user, default is email and profile
@@ -65,9 +55,6 @@ export default function WordBackup({ navigation }) {
 		// openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
 		// profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
 	});
-
-
-	// 
 
 	useEffect(() => {
 		AsyncStorage.getItem('isBackup').then(value => {
@@ -286,20 +273,53 @@ export default function WordBackup({ navigation }) {
 							style={{ ...globalStyles.flex.center }}
 							onPress={handleBackup}
 						>
-							<AppText
+							{/* <AppText
 								bold
 								color="secondaryColor"
 								style={{ paddingVertical: 12 }}
 							>
 								Backup
-							</AppText>
+							</AppText> */}
+							<Pressable
+								onPress={() => {
+									navigate(routes.itemPicker, {
+										items: [
+											{ id: 1, title: 'Local Phone' },
+											{ id: 2, title: 'Google Drive' },
+										],
+										onSelect: (item) => {
+											setBackupPlan(item)
+										}
+									})
+								}}
+
+							// style={{
+							// 	backgroundColor: globalStyles.Colors.inputColor,
+							// 	borderRadius: 10,
+							// 	height: 55,
+							// 	alignItems: 'center',
+							// 	justifyContent: 'space-between',
+							// 	alignSelf: 'stretch',
+							// 	flexDirection: 'row',
+							// 	paddingHorizontal: 16,
+							// }}
+							>
+								<View style={{ flexDirection: 'row' }}>
+									{/* <FontAwesome5Icon style={{ marginLeft: 4 }} size={15} color={globalStyles.Colors.text2} name="map-marker-alt" /> */}
+									<AppText bold
+										color="secondaryColor"
+										style={{ paddingVertical: 12 }}>Backup</AppText>
+								</View>
+								{/* <AppIcon name="arrowRightCircle" /> */}
+							</Pressable>
 						</TouchableOpacity>
 
 
 					</View>
 				</View>
 
-				<View style={{ ...globalStyles.flex.center }}>
+
+				{backupPlan.id === 2 ? <View style={{ ...globalStyles.flex.center }}>
 					<AppText
 						style={{
 							textAlign: 'center',
@@ -316,7 +336,8 @@ export default function WordBackup({ navigation }) {
 						size={GoogleSigninButton.Size.Wide}
 						color={GoogleSigninButton.Color.Dark}
 					/>
-				</View>
+				</View> : <></>}
+
 				<View style={{ ...globalStyles.flex.center, marginVertical: 24 }}>
 					<AppText
 						style={{
