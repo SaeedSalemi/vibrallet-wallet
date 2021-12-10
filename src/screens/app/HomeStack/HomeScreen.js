@@ -30,6 +30,8 @@ import Header from '../../../components/Header/Header'
 import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import AppInput from '../../../components/common/AppInput/AppInput'
+import DAppItem from '../../../components/DApps/DAppItem'
 
 
 const ENTRIES1 = [
@@ -218,6 +220,81 @@ const HomeScreen = ({ navigation }) => {
 		)
 	}
 
+
+	const DAPPSDATA = [
+		{
+			id: 0,
+			name: 'Sushi',
+			logo: 'https://sushi.com/static/media/logo.dec926df.png',
+			description: 'This is test description',
+			url: 'Sushi.com'
+		},
+		{
+			id: 3,
+			name: '1inch',
+			logo: 'https://app.1inch.io/assets/images/logo.svg',
+			description: 'This is test description',
+			url: 'https://app.1inch.io/'
+		}
+		,
+		{
+			id: 4,
+			name: 'Bakeryswap',
+			logo: 'https://www.bakeryswap.org/static/media/logo.4e93c681.svg',
+			description: 'This is test description',
+			url: 'https://www.bakeryswap.org/#/home'
+		},
+		{
+			id: 1,
+			name: 'Pancakeswap',
+			logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+			description: 'This is test description',
+			url: 'https://pancakeswap.finance/'
+		},
+
+	]
+
+
+	const [filterdItems, setFilterItems] = useState(DAPPSDATA)
+	const [searchDApp, setSearchDApp] = useState()
+	const arrayHolder = DAPPSDATA
+
+	const searchFilterFunction = () => {
+		const includes = str => str.toLowerCase().includes(searchDApp.toLowerCase())
+		const newData = arrayHolder.filter(item => {
+			if (includes(item.name) || includes(item.name)) {
+				return item
+			}
+		})
+		if (newData.length > 0) {
+			setFilterItems(newData)
+		} else {
+			// concat with array
+			const newDAppItem = {
+				name: 'Google',
+				url: `https://www.google.com/search?${searchDApp}`,
+				description: `https://www.google.com/search?${searchDApp}`,
+				logo: 'https://image.similarpng.com/thumbnail/2020/12/Flat-design-Google-logo-design-Vector-PNG.png'
+			}
+			console.log('debug 1', newDAppItem)
+			// setFilterItems.push(prev => [...prev, newDAppItem])
+			setFilterItems(prev => [...prev, newDAppItem])
+			console.log('debug 2', DAPPSDATA)
+			navigation.navigate(routes.dAppWebview, { name: 'Google', url: `https://www.google.com/search?${searchDApp}` })
+		}
+	}
+
+
+	// const searchFilterFunction = text => {
+	// 	const includes = str => str.toLowerCase().includes(text.toLowerCase())
+	// 	const newData = arrayHolder.filter(item => {
+	// 		if (includes(item.name) || includes(item.name)) {
+	// 			return item
+	// 		} 
+	// 	})
+	// 	setFilterItems(newData)
+	// }
+
 	return (
 		<Screen style={styles.screen}>
 			<Header />
@@ -257,7 +334,7 @@ const HomeScreen = ({ navigation }) => {
 				</View>
 				<View style={styles.servicesContainer}>
 					<View style={styles.ourService}>
-						<AppText bold>Our Services</AppText>
+						<AppText bold>Services</AppText>
 						{/* <View style={styles.more}>
 							<Feather
 								name="more-horizontal"
@@ -273,8 +350,39 @@ const HomeScreen = ({ navigation }) => {
 					</View>
 				</View>
 				<View style={styles.listBarContainer}>
-					<ScrollView>
-						<View style={styles.listBarTitle}>
+
+					{/* ==================================================== */}
+					<View style={styles.listBarTitle}>
+
+						<AppInput
+							placeholder={"Search"}
+							icon={"search"}
+							// onChangeText={text => {
+							// 	searchFilterFunction(text)
+							// }}
+							onChangeText={(text) => setSearchDApp(text)}
+							onSubmitEditing={searchFilterFunction}
+						/>
+
+						<AppText typo="tiny" color="text2" style={{ marginLeft: 10, marginBottom: 4 }}>
+							All DApps
+						</AppText>
+					</View>
+					<ScrollView style={{ paddingHorizontal: 16, }}>
+						{filterdItems.map((item, i) => (
+							<DAppItem
+								key={i}
+								onPress={() => {
+									navigation.navigate(routes.dAppWebview, { name: item.name, url: item.url })
+								}}
+								coin={item}
+								index={i}
+								length={DAPPSDATA.length}
+							/>
+						))}
+					</ScrollView>
+					{/* ==================================================== */}
+					{/* <View style={styles.listBarTitle}>
 							<AppText bold>Steps to rewards</AppText>
 							<AppText
 								typo="dot"
@@ -283,8 +391,8 @@ const HomeScreen = ({ navigation }) => {
 								Follow 4 steps to complete your portfolio and earn rewards.
 							</AppText>
 						</View>
-						<Steps data={LISTDATA} />
-					</ScrollView>
+						<Steps data={LISTDATA} /> */}
+
 				</View>
 			</View>
 		</Screen>
@@ -309,7 +417,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
-		marginVertical: 6,
+		marginVertical: 4,
 	},
 	ourService: {
 		flexDirection: 'row',
@@ -330,7 +438,7 @@ const styles = StyleSheet.create({
 		flex: 3,
 	},
 	listBarTitle: {
-		paddingHorizontal: 4,
+		paddingHorizontal: 16,
 		marginBottom: 12,
 	},
 	item: {
