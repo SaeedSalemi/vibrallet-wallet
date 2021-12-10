@@ -7,7 +7,7 @@ export const routes = {
 	verifyEmail: 'VerifyEmail',
 	restore: 'Restore',
 	appTab: 'AppTab',
-	home: 'Home',
+	home: 'DApp',
 	wallet: 'Wallet',
 	transaction: 'Transaction',
 	market: 'Market',
@@ -61,5 +61,6 @@ export const routes = {
 	backup: 'backup',
 	restoreScreen: 'RestoreScreen',
 	marketWebview: 'MarketWebView',
-	setPriceAlert: 'SetPriceAlert'
+	setPriceAlert: 'SetPriceAlert',
+	dAppWebview: 'DAppWebView',
 }
