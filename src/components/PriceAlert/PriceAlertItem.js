@@ -11,7 +11,7 @@ import AppText from '../common/AppText'
 import HR from '../common/HR/HR'
 
 export default function PPriceAlertItem({ item, index, length, initialOpen }) {
-	const [isOpen, setIsOpen] = useState(initialOpen || false)
+	const [isOpen, setIsOpen] = useState(initialOpen || true)
 
 	const [up, setUp] = useState(true)
 	const [down, setDown] = useState(true)
@@ -27,16 +27,18 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 						alignItems: 'center',
 					}}
 				>
-					<AppIcon name={item.icon} />
+					{/* <AppIcon name={item.icon} /> */}
+					<Image resizeMode={"stretch"}
+						style={{ width: 30, height: 30, }} source={{ uri: item.logo }} />
 					<View style={{ flex: 1, paddingHorizontal: 12 }}>
-						<AppText bold typo="md">
-							{item.title}
+						<AppText bold typo="sm">
+							{item.name}
 						</AppText>
 						<AppText typo="tiny" color="text3">
-							{item.slug}
+							{item.symbol}
 						</AppText>
 					</View>
-					<AppText typo="md" bold>
+					<AppText typo="sm" bold>
 						{item.currency}
 						{item.price}
 					</AppText>
@@ -59,7 +61,7 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 					>
 						<Image source={Images.chartSuccess} />
 						<View style={{ flex: 1, paddingHorizontal: 12 }}>
-							<AppText bold>BTC is above $58,000</AppText>
+							<AppText bold>{item.name} is above $58,000</AppText>
 							<AppText typo="dot" color="text3">
 								Created on march 28, 2021
 							</AppText>
@@ -76,7 +78,7 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 					>
 						<Image source={Images.chartFailure} />
 						<View style={{ flex: 1, paddingHorizontal: 12 }}>
-							<AppText bold>BTC is below $58,000</AppText>
+							<AppText bold>{item.name} is below $58,000</AppText>
 							<AppText typo="dot" color="text3">
 								Created on march 29, 2021
 							</AppText>
@@ -94,7 +96,7 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 						<Image source={Images.chartGray} />
 						<View style={{ flex: 1, paddingHorizontal: 12 }}>
 							<AppText bold color="text3">
-								BTC is above $59,000
+								{item.name} is above $59,000
 							</AppText>
 							<AppText typo="dot" color="text3">
 								Created on march 28, 2021
