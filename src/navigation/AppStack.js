@@ -59,6 +59,7 @@ import RestoreScreen from '../screens/authentication/RestoreModalScreen'
 import MarketWebView from '../screens/app/MarketStack/MarketWebView'
 import CreateAccountWithEmailScreen from '../screens/authentication/CreateAccountWithEmailScreen'
 import SetPriceAlertScreen from '../screens/app/HomeStack/SetPriceAlertScreen'
+import DAppWebView from '../screens/app/HomeStack/DAppWebView'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -73,10 +74,10 @@ export function AppTabNavigation() {
 				},
 			}}
 			tabBar={props => <TabBar {...props} />}
-			initialRouteName={routes.home}
+			initialRouteName={routes.wallet}
 		>
-			<AppTab.Screen name={routes.home} component={HomeScreen} />
 			<AppTab.Screen name={routes.wallet} component={WalletScreen} />
+			<AppTab.Screen name={routes.home} component={HomeScreen} />
 			<AppTab.Screen name={routes.transaction} component={TransactionScreen} />
 			<AppTab.Screen name={routes.market} component={MarketScreen} />
 			<AppTab.Screen name={routes.profile} component={ProfileScreen} />
@@ -121,6 +122,16 @@ export function AppStackNavigation() {
 				options={({ route }) => ({
 					headerTitle: () => (
 						<AppText typo="sm">{route.params?.coin.name}</AppText>
+					),
+				})}
+			/>
+
+			<AppTab.Screen
+				name={"DAppWebView"}
+				component={DAppWebView}
+				options={({ route }) => ({
+					headerTitle: () => (
+						<AppText typo="sm">{route.params?.name}</AppText>
 					),
 				})}
 			/>
