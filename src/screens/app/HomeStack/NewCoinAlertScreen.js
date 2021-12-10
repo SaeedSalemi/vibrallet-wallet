@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useState, useEffect } from 'react'
 import { Pressable, View } from 'react-native'
 import AppButton from '../../../components/common/AppButton'
@@ -8,16 +9,12 @@ import PriceCalculator from '../../../components/PriceAlert/PriceCalculator'
 import Screen from '../../../components/Screen'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
-import HttpService from '../../../services/HttpService'
 
 export default function NewCoinAlertScreen({ route, navigation }) {
 	const { coin, coinPrice } = route.params || {}
-	console.log('coin item', coin)
 	const [state, setState] = useState({
 		alert_type: "On time"
 	})
-
-	const [price, setPrice] = useState()
 
 	coin.price = coinPrice
 	coin.lastPrice = coinPrice
@@ -67,7 +64,10 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 			</View>
 			<AppButton
 				title="Create Alert"
-				onPress={() => navigation.navigate(routes.priceAlert, { show: true })}
+				onPress={() => {
+					// navigation.navigate(routes.priceAlert, { show: true, coin: coin })
+					navigation.navigate(routes.setPriceAlert, { coin: coin })
+				}}
 			/>
 		</Screen>
 	)
