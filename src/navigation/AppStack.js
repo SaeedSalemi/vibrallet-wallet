@@ -58,6 +58,7 @@ import BackupScreen from '../screens/app/ProfileStack/BackupScreen'
 import RestoreScreen from '../screens/authentication/RestoreModalScreen'
 import MarketWebView from '../screens/app/MarketStack/MarketWebView'
 import CreateAccountWithEmailScreen from '../screens/authentication/CreateAccountWithEmailScreen'
+import SetPriceAlertScreen from '../screens/app/HomeStack/SetPriceAlertScreen'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -189,17 +190,20 @@ export function AppStackNavigation() {
 				}}
 			/>
 			<AppStack.Screen
+				name={routes.createPriceAlert}
+				component={CreatePriceAlertScreen}
+				options={({ route }) => ({
+					headerTitle: () => (
+						<AppText typo="sm">Create Price Alert</AppText>
+					),
+				})}
+			/>
+
+			<AppStack.Screen
 				name={routes.priceAlert}
 				component={PriceAlertScreen}
 				options={{
 					headerTitle: () => <AppText typo="sm">Price Alert</AppText>,
-				}}
-			/>
-			<AppStack.Screen
-				name={routes.createPriceAlert}
-				component={CreatePriceAlertScreen}
-				options={{
-					headerTitle: () => <AppText typo="sm">Create Price Alert</AppText>,
 				}}
 			/>
 			<AppStack.Screen
@@ -216,6 +220,18 @@ export function AppStackNavigation() {
 					),
 				})}
 			/>
+
+			<AppStack.Screen
+				name={routes.setPriceAlert}
+				component={SetPriceAlertScreen}
+				options={({ route }) => ({
+					headerTitle: () => (
+						<AppText typo="sm">Price Alert</AppText>
+					),
+				})}
+			/>
+
+
 			<AppStack.Screen
 				options={{
 					headerTitle: () => (
