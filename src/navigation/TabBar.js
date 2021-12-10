@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -34,8 +34,8 @@ export default function TabBar({ state, descriptors, navigation }) {
 						options.tabBarLabel !== undefined
 							? options.tabBarLabel
 							: options.title !== undefined
-							? options.title
-							: removeStack(route.name)
+								? options.title
+								: removeStack(route.name)
 
 					const isFocused = state.index === index
 
@@ -67,8 +67,13 @@ export default function TabBar({ state, descriptors, navigation }) {
 						switch (route.name) {
 							case routes.home:
 								return (
-									<MaterialIcons
-										name="home-filled"
+									// <MaterialIcons
+									// 	name="dashboard"
+									// 	size={iconSize}
+									// 	color={iconColor}
+									// />
+									<AntDesign
+										name="appstore1"
 										size={iconSize}
 										color={iconColor}
 									/>
