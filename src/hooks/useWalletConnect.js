@@ -18,7 +18,7 @@ const useWalletConnect = ({ coins }) => {
 
   let pair = async (uri) => {
 
-    console.log(coins);
+   
 
     // Create connector
     const connector = new WalletConnect(
@@ -46,10 +46,14 @@ const useWalletConnect = ({ coins }) => {
       let address = null;
       let chainId = payload.params[0].chainId;
 
-      if (chainId == 1) {
+      if ( chainId === undefined || chainId == 1) {
         address = coins.find(p => p.symbol == "ETH")?.address;
       } else if (chainId == 56) {
         address = coins.find(p => p.symbol == "BNB")?.address;
+      }
+
+      if (!address || address == null){
+        return connector.rejectSession();
       }
 
       console.log('---->selected Address', address);

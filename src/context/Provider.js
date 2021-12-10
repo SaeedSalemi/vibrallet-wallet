@@ -10,6 +10,7 @@ import { useReduxWallet } from '../hooks/useReduxWallet';
 import useWalletConnect from '../hooks/useWalletConnect';
 import HttpService from '../services/HttpService';
 import { getToken } from '../utils/Functions';
+import { Linking } from 'react-native'
 
 export const Context = createContext()
 
@@ -41,6 +42,8 @@ const MainProvider = props => {
     MarketScreenActiveFilter: 'Market'
   })
 
+  let walletConnect = useWalletConnect({ coins: state.coins });
+
   // Market Fav Coins
   const [favCoins, setFavCoins] = useState([])
   const [fcasFavCoins, setFcasFavCoins] = useState([])
@@ -55,6 +58,23 @@ const MainProvider = props => {
     state.coins = items
     setState({ ...state })
   }
+
+
+  useEffect(() => {
+    Linking.addEventListener('url', ({ url }) => {
+      console.log('addEventListener =====> ', url);
+      if (url.startsWith("wc:")) {
+        walletConnect.pair(url);
+      }
+    });
+
+    Linking.getInitialURL().then(url => {
+      // console.log('startUrl ---------->>>>>>>>>>>>>>>>>> ', url);
+      if (url != null &&  url.startsWith("wc:")) {
+        walletConnect.pair(url);
+      }
+    });
+  }, [])
 
   useEffect(() => {
     AsyncStorage.getItem('userImage').then(res => {
@@ -422,7 +442,6 @@ const MainProvider = props => {
     // return balance
   }
 
-  let walletConnect = useWalletConnect({coins: state.coins});
 
   return (
     <Context.Provider value={{

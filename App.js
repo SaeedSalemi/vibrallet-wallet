@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import configStore from './src/redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 // import SplashScreen from './src/screens/SplashScreen'
-import { Keyboard, TouchableWithoutFeedback } from 'react-native'
+import { Keyboard, TouchableWithoutFeedback} from 'react-native'
 import HideKeyboard from './src/utils/HideKeyboard'
 import InAppNotificaiton from './src/components/common/AppNotification/InAppNotification'
 import MainProvider from './src/context/Provider'
@@ -16,6 +16,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 const { store, persistor } = configStore()
 
 const QueryConfigs = new QueryClient()
+
 
 
 export default function App() {
