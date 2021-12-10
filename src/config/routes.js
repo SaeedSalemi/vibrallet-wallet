@@ -60,5 +60,6 @@ export const routes = {
 	itemPicker: 'itemPicker',
 	backup: 'backup',
 	restoreScreen: 'RestoreScreen',
-	marketWebview: 'MarketWebView'
+	marketWebview: 'MarketWebView',
+	setPriceAlert: 'SetPriceAlert'
 }
