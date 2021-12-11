@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, View, TouchableOpacity } from 'react-native'
 import AppButton from '../../../components/common/AppButton'
 import AppIcon from '../../../components/common/AppIcon'
@@ -9,6 +9,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { showMessage } from 'react-native-flash-message'
 import Clipboard from '@react-native-community/clipboard'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const data = [
 	{
 		title: 'Invite your friends',
@@ -25,6 +26,34 @@ const data = [
 ]
 
 export default function ReferralRewardsScreen() {
+
+
+	const [state, setState] = useState()
+
+
+	useEffect(() => {
+		AsyncStorage.getItem("referral_code").then(code => {
+			if (code)
+				setState(JSON.parse(code))
+			else {
+				const _code = genrateID(11)
+				setState(_code)
+				AsyncStorage.setItem("referral_code", JSON.stringify(_code))
+			}
+		})
+	}, [])
+
+
+	function genrateID(length) {
+		let result = '';
+		let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		let charactersLength = characters.length;
+		for (let i = 0; i < length; i++) {
+			result += characters.charAt(Math.floor(Math.random() *
+				charactersLength));
+		}
+		return result;
+	}
 
 
 	const handleCopyCode = () => {
@@ -67,7 +96,7 @@ export default function ReferralRewardsScreen() {
 						Referral Code
 					</AppText>
 					<AppText typo="sm" bold>
-						12nfef23rm
+						{state}
 					</AppText>
 					<TouchableOpacity onPress={handleCopyCode}>
 						<AppText color="primaryColor" bold>
