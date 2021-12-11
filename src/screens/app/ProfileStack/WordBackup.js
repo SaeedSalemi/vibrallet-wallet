@@ -204,6 +204,7 @@ export default function WordBackup({ navigation }) {
 			});
 	}
 
+
 	return (
 		<Screen edges={['bottom']} style={{ ...globalStyles.gapScreen }}>
 			<View style={{
@@ -271,7 +272,7 @@ export default function WordBackup({ navigation }) {
 
 						<TouchableOpacity
 							style={{ ...globalStyles.flex.center }}
-							onPress={handleBackup}
+						// onPress={handleBackup}
 						>
 							{/* <AppText
 								bold
@@ -317,6 +318,8 @@ export default function WordBackup({ navigation }) {
 
 					</View>
 				</View>
+
+				{backup && backupPlan?.id === 1 ? handleBackup() : <></>}
 
 				{backup && backupPlan?.id === 2 ? <View style={{ ...globalStyles.flex.center }}>
 					<AppText
