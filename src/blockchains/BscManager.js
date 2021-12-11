@@ -385,6 +385,144 @@ class BscManager {
         // console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
         return receipt;
     }
+
+
+     /**
+   * Estimates required gas for a given transaction.
+   *
+   * @param transaction - The transaction to estimate gas for.
+   * @returns The gas and gas price.
+   */
+      async estimateGas(transaction) {
+        const estimatedTransaction = { ...transaction };
+        const {
+            gas,
+            gasPrice, //: providedGasPrice,
+            to,
+            value,
+            data,
+        } = estimatedTransaction;
+
+        gasPrice = gasPrice || this.web3.utils.toHex(5 * 1e9);
+
+        // const gasPrice =
+        //     typeof providedGasPrice === 'undefined'
+        //         ? await query(this.ethQuery, 'gasPrice')
+        //         : providedGasPrice;
+        // const { isCustomNetwork } = this.getNetworkState();
+        // // 1. If gas is already defined on the transaction, use it
+        // if (typeof gas !== 'undefined') {
+        //     return { gas, gasPrice };
+        // }
+        // const { gasLimit } = await query(this.ethQuery, 'getBlockByNumber', [
+        //     'latest',
+        //     false,
+        // ]);
+
+        // 2. If to is not defined or this is not a contract address, and there is no data use 0x5208 / 21000.
+        // If the newtwork is a custom network then bypass this check and fetch 'estimateGas'.
+        /* istanbul ignore next */
+        // const code = to ? await query(this.ethQuery, 'getCode', [to]) : undefined;
+        // /* istanbul ignore next */
+        // if (
+        //     !isCustomNetwork &&
+        //     (!to || (to && !data && (!code || code === '0x')))
+        // ) {
+        //     return { gas: '0x5208', gasPrice };
+        // }
+
+        if ((!to || (to && !data) || value > 0)) {
+            return { gas: '0x5208', gasPrice };
+        }
+
+
+        let estimateGas = await this.web3.eth.estimateGas(estimatedTransaction);
+        return {
+            gas: this.web3.utils.toHex(estimateGas),
+            gasPrice
+        };
+
+        // // if data, should be hex string format
+        // estimatedTransaction.data = !data
+        //     ? data
+        //     : /* istanbul ignore next */ addHexPrefix(data);
+
+        // // 3. If this is a contract address, safely estimate gas using RPC
+        // estimatedTransaction.value =
+        //     typeof value === 'undefined' ? '0x0' : /* istanbul ignore next */ value;
+        // const gasLimitBN = hexToBN(gasLimit);
+        // estimatedTransaction.gas = BNToHex(fractionBN(gasLimitBN, 19, 20));
+        // const gasHex = await query(this.ethQuery, 'estimateGas', [
+        //     estimatedTransaction,
+        // ]);
+
+        // // 4. Pad estimated gas without exceeding the most recent block gasLimit. If the network is a
+        // // a custom network then return the eth_estimateGas value.
+        // const gasBN = hexToBN(gasHex);
+        // const maxGasBN = gasLimitBN.muln(0.9);
+        // const paddedGasBN = gasBN.muln(1.5);
+        // /* istanbul ignore next */
+        // if (gasBN.gt(maxGasBN) || isCustomNetwork) {
+        //     return { gas: addHexPrefix(gasHex), gasPrice };
+        // }
+
+        // /* istanbul ignore next */
+        // if (paddedGasBN.lt(maxGasBN)) {
+        //     return { gas: addHexPrefix(BNToHex(paddedGasBN)), gasPrice };
+        // }
+        // return { gas: addHexPrefix(BNToHex(maxGasBN)), gasPrice };
+    }
+
+    async signTransaction(txParams, privateKey) {
+        // const txParams = {};
+        // txParams.to = payload.params[0].to;
+        // txParams.from = payload.params[0].from;
+        // txParams.value = payload.params[0].value;
+        // txParams.gas = payload.params[0].gas;
+        // txParams.gasPrice = payload.params[0].gasPrice;
+        // txParams.data = payload.params[0].data;
+
+
+        let nonce = txParams.nonce || await this.web3.eth.getTransactionCount(txParams.from);
+
+        // let gasPrice = txParams.gasPrice || 5 * 1e9;
+        // let estimateGas = '21000';
+        // if (txParams.gasLimit && txParams.gasLimit > 0) {
+        //     estimateGas = txParams.gasLimit
+        // } else {
+
+        // }
+        var transaction = {
+            "from": txParams.from,
+            "to": txParams.to,
+            "nonce": this.web3.utils.toHex(nonce),
+            // "gasLimit": this.web3.utils.toHex(estimateGas),
+            // "gasPrice": this.web3.utils.toHex(gasPrice),
+            "value": txParams.value,
+            "data": txParams.data,
+            // "chainId": 56
+        };
+        let gasInfo = await this.estimateGas(transaction);
+        transaction.gasPrice = gasInfo.gasPrice;
+        transaction.gasLimit = gasInfo.gas;
+
+        let signedTx = await this.web3.eth.accounts.signTransaction(transaction, privateKey);
+
+        const rawTransaction = signedTx.raw || signedTx.rawTransaction;
+
+        return rawTransaction;
+    }
+
+    async sendTransaction(txParams, privateKey) {
+        const rawTransaction = await this.signTransaction(txParams, privateKey);
+        let txHash = this.web3.utils.sha3(signedTx.raw || signedTx.rawTransaction);
+
+        this.web3.eth.sendSignedTransaction(rawTransaction).then(receipt => {
+            console.log(` sendTransaction Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);
+        });
+
+        return txHash;
+    }
 }
 
 var bscManager = new BscManager();

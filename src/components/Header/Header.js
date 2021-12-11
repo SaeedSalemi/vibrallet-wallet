@@ -22,7 +22,7 @@ export default function Header({ route = routes.home, children }) {
 	const { navigate } = useNavigation()
 	const [show, setShow] = useState(false)
 
-	const { user: userProvider, userProfile } = useContext(Context)
+	const { user: userProvider, userProfile, pair, coinManager } = useContext(Context)
 
 
 	const [user, setUser] = useState({})
@@ -193,6 +193,10 @@ export default function Header({ route = routes.home, children }) {
 		state.address = qrData.data
 		setState({ ...state })
 		setShow(false)
+
+		if (qrData.data &&  qrData.data.startsWith("wc:")){
+			pair(qrData.data);
+		}
 	}
 
 	return (
