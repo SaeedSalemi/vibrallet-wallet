@@ -52,15 +52,31 @@ export default function DAppItem({
                 <AppText bold typo="tiny">
                   {item.name}
                 </AppText>
-                {noPrice ? null : (
-
-                  <AppText color="text2" typo="tiny" style={{ marginTop: 2 }}>
-                    {item.description}
-                  </AppText>
-                )}
+                <AppText color="text2" typo="tiny" style={{ marginTop: 2 }}>
+                  {item.description}
+                </AppText>
               </View>
+
             </View>
           </View>
+
+
+          {/* Category */}
+          {/* <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 10,
+            marginLeft: 50,
+          }}>
+            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+              <AppText typo="tiny">
+                mother fucker
+              </AppText>
+            </View>
+          </View> */}
+
         </View>
         <View style={{ marginVertical: 8 }}>
           {/* {index + 1 !== (length || coins.length) ? <HR /> : null} */}
