@@ -279,7 +279,7 @@ const HomeScreen = ({ navigation }) => {
 			}
 			// setFilterItems.push(prev => [...prev, newDAppItem])
 			setFilterItems(prev => [...prev, newDAppItem])
-			navigation.navigate(routes.dAppWebview, { name: 'Google', url: `https://www.google.com/search?${searchDApp}` })
+			navigation.navigate(routes.dAppWebview, { name: 'Google', url: `https://www.google.com/search?q=${searchDApp}` })
 		}
 	}
 
