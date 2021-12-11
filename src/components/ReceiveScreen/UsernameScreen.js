@@ -45,7 +45,7 @@ export default function UsernameScreen({ route }) {
 				</View>
 				<View style={{ ...globalStyles.flex.center }}>
 					{/* <Image source={Images.avatar3} style={{ marginVertical: 12 }} /> */}
-					{userProfile ? <Image source={{ uri: `${userProfile}` }} style={{ width: 30, height: 30, borderRadius: 50 }} /> : <Entypo
+					{userProfile ? <Image source={{ uri: `${userProfile}` }} style={{ width: 80, height: 80, borderRadius: 50 }} /> : <Entypo
 						name="user"
 						size={60}
 						color={globalStyles.Colors.inputColor2}
