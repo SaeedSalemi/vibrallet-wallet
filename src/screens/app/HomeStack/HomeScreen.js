@@ -274,12 +274,11 @@ const HomeScreen = ({ navigation }) => {
 				name: 'Google',
 				url: `https://www.google.com/search?${searchDApp}`,
 				description: `https://www.google.com/search?${searchDApp}`,
-				logo: 'https://image.similarpng.com/thumbnail/2020/12/Flat-design-Google-logo-design-Vector-PNG.png'
+				// logo: 'https://image.similarpng.com/thumbnail/2020/12/Flat-design-Google-logo-design-Vector-PNG.png'
+				logo: 'https://w7.pngwing.com/pngs/249/19/png-transparent-google-logo-g-suite-google-guava-google-plus-company-text-logo.png'
 			}
-			console.log('debug 1', newDAppItem)
 			// setFilterItems.push(prev => [...prev, newDAppItem])
 			setFilterItems(prev => [...prev, newDAppItem])
-			console.log('debug 2', DAPPSDATA)
 			navigation.navigate(routes.dAppWebview, { name: 'Google', url: `https://www.google.com/search?${searchDApp}` })
 		}
 	}
@@ -363,7 +362,6 @@ const HomeScreen = ({ navigation }) => {
 							onChangeText={(text) => setSearchDApp(text)}
 							onSubmitEditing={searchFilterFunction}
 						/>
-
 						<AppText typo="tiny" color="text2" style={{ marginLeft: 10, marginBottom: 4 }}>
 							All DApps
 						</AppText>
