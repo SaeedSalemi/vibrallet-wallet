@@ -101,7 +101,7 @@
     "tronweb": "^4.0.0",
     "url": "^0.10.3",
     "vm-browserify": "0.0.4",
-    "web3": "^1.6.0",
+    "web3": "^1.6.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {

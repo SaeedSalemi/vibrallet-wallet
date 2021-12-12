@@ -24,8 +24,11 @@ export const useReduxWallet = async (coin) => {
     let balance = 0
     const coinManager = { ETH: ethManager, BNB: bscManager, BTC: bitcoinManager }
     let selectedCoin = coinManager[coin.symbol];
-    const wallet = await selectedCoin.getWalletFromMnemonic(mnemonic?.backup)
-    balance = await selectedCoin.getBalance(wallet.address, false)
+    // const wallet = await selectedCoin.getWalletFromMnemonic(mnemonic?.backup)
+    balance = await selectedCoin.getBalance(coin.address, false);
+    if (!balance)
+      return 0;
+    console.log('REDUX ----------Balance of Wallet: ---->', coin.symbol, balance);
     return balance
   } catch (err) {
     console.log('useReduxWallet', err)

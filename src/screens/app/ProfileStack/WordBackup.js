@@ -60,7 +60,6 @@ export default function WordBackup({ navigation }) {
 		const words = WalletManager.generateMnemonic()
 		AsyncStorage.setItem('isBackup', 'true')
 		setBackup(words)
-		supportedCoins()
 		AsyncStorage.getItem('isBackup').then(value => {
 			if (value === null) {
 
@@ -80,6 +79,7 @@ export default function WordBackup({ navigation }) {
 
 				try {
 					if (response) {
+						console.log('supportedCoins WORD BACKYUp----> ', backup, response);
 						// if (wallet) {
 						const items = response
 						for (let item of items) {
@@ -167,6 +167,8 @@ export default function WordBackup({ navigation }) {
 
 	const handleAddWallet = () => {
 		dispatch(finalCreateWallet(backup))
+		supportedCoins()
+
 		showMessage({
 			message: 'Your wallet has been created successfully',
 			description: null,
