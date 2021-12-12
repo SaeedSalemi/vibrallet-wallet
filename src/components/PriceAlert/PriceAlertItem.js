@@ -10,7 +10,7 @@ import AppSwitch from '../common/AppSwitch'
 import AppText from '../common/AppText'
 import HR from '../common/HR/HR'
 
-export default function PPriceAlertItem({ item, index, length, initialOpen }) {
+export default function PPriceAlertItem({ item, index, length, initialOpen, name, logo, symbol }) {
 	const [isOpen, setIsOpen] = useState(initialOpen || false)
 
 	const [up, setUp] = useState(true)
@@ -30,7 +30,8 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 						style={{ width: 30, height: 30, }} source={{ uri: item.logo }} />
 					<View style={{ flex: 1, paddingHorizontal: 12 }}>
 						<AppText bold typo="sm">
-							{item.name}
+							{/* {item.name} */}
+							{name}
 						</AppText>
 						<AppText typo="tiny" color="text3">
 							{item.symbol}
@@ -105,7 +106,7 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 							onValueChange={() => setVeryUp(!veryUp)}
 						/>
 					</View>
-					<AppButton
+					{/* <AppButton
 						title="Add BTC Alert"
 						icon="add"
 						onPress={() => {
@@ -121,7 +122,7 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 						}}
 						customStyle={{ backgroundColor: globalStyles.Colors.bckColor }}
 						textStyle={{ color: globalStyles.Colors.secondaryColor }}
-					/>
+					/> */}
 					<HR />
 				</View>
 			) : null}

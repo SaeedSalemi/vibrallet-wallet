@@ -105,7 +105,7 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 						style: { backgroundColor: "#6BC0B1" },
 						position: 'top'
 					})
-					navigation.navigate(routes.setPriceAlert, { coin: coin })
+					navigation.navigate(routes.appTab)
 				}}
 			/>
 		</Screen>
