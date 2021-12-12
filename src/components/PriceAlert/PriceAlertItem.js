@@ -11,12 +11,11 @@ import AppText from '../common/AppText'
 import HR from '../common/HR/HR'
 
 export default function PPriceAlertItem({ item, index, length, initialOpen }) {
-	const [isOpen, setIsOpen] = useState(initialOpen || true)
+	const [isOpen, setIsOpen] = useState(initialOpen || false)
 
 	const [up, setUp] = useState(true)
 	const [down, setDown] = useState(true)
 	const [veryUp, setVeryUp] = useState(false)
-
 	return (
 		<View>
 			<TouchableOpacity activeOpacity={0.75} onPress={() => setIsOpen(!isOpen)}>
@@ -27,7 +26,6 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 						alignItems: 'center',
 					}}
 				>
-					{/* <AppIcon name={item.icon} /> */}
 					<Image resizeMode={"stretch"}
 						style={{ width: 30, height: 30, }} source={{ uri: item.logo }} />
 					<View style={{ flex: 1, paddingHorizontal: 12 }}>
@@ -39,8 +37,8 @@ export default function PPriceAlertItem({ item, index, length, initialOpen }) {
 						</AppText>
 					</View>
 					<AppText typo="sm" bold>
-						{item.currency}
-						{item.price}
+						{/* {item.currency}
+						{item.price} */}
 					</AppText>
 					<AppIcon
 						style={{ marginStart: 12 }}
