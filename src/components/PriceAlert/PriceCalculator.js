@@ -5,7 +5,7 @@ import { globalStyles } from '../../config/styles'
 import AppText from '../common/AppText'
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function PriceCalculator({ coin, style }) {
+export default function PriceCalculator({ coin, style, onPriceChange }) {
 	const [items, setItems] = useState([])
 	const [priceAlertValue, setPriceAlertValue] = useState(coin.lastPrice)
 	const [loading, setLoading] = useState(true)
@@ -31,7 +31,9 @@ export default function PriceCalculator({ coin, style }) {
 			clearTimeout(timeout)
 		}
 	}, [])
-
+	useEffect(() => {
+		onPriceChange(priceAlertValue)
+	}, [priceAlertValue])
 	const isNumberPositive = number => Number(number) > 0
 
 	const calcPercentLabel = percent => {
