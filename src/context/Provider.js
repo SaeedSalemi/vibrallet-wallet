@@ -368,10 +368,10 @@ const MainProvider = props => {
         //   return item
         // })
         if (response) {
-          // setState((state) => {
-          state.FCASList = [...state.FCASList, ...response]
-          return { ...state }
-          // })
+          setState((state) => {
+            state.FCASList = [...state.FCASList, ...response]
+            return { ...state }
+          })
         }
 
       }
