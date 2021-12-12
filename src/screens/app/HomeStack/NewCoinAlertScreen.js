@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import React, { useState, useEffect } from 'react'
 import { Pressable, View } from 'react-native'
@@ -25,7 +26,7 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 			style={[globalStyles.gapScreen, { paddingVertical: 8 }]}
 		>
 			<AlertItem item={coin} index={1} length={1} />
-			<PriceCalculator coin={coin} style={{}} />
+			<PriceCalculator onPriceChange={(price) => { setState({ ...state, price }) }} coin={coin} style={{}} />
 			<View
 				style={{
 					flex: 1,
@@ -64,8 +65,35 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 			</View>
 			<AppButton
 				title="Create Alert"
-				onPress={() => {
+				onPress={async () => {
 					// navigation.navigate(routes.priceAlert, { show: true, coin: coin })
+					let cacheAlerts = await AsyncStorage.getItem("alerts")
+					if (cacheAlerts) {
+						cacheAlerts = JSON.parse(cacheAlerts)
+					} else {
+						cacheAlerts = {}
+					}
+
+					if (cacheAlerts.hasOwnProperty(coin.symbol)) {
+						cacheAlerts[coin.symbol].push({
+							price: state.price,
+							status: false,
+							alert_type: state.alert_type
+						})
+						await AsyncStorage.setItem("alerts", JSON.stringify(cacheAlerts))
+
+					} else {
+						const createdAlert = {
+							[coin.symbol]: [
+								{
+									price: state.price,
+									status: false,
+									alert_type: state.alert_type
+								}
+							]
+						}
+						await AsyncStorage.setItem("alerts", JSON.stringify(createdAlert))
+					}
 					navigation.navigate(routes.setPriceAlert, { coin: coin })
 				}}
 			/>
