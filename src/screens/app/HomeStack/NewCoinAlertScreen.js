@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import React, { useState, useEffect } from 'react'
 import { Pressable, View } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 import AppButton from '../../../components/common/AppButton'
 import AppIcon from '../../../components/common/AppIcon'
 import AppText from '../../../components/common/AppText'
@@ -66,34 +67,44 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 			<AppButton
 				title="Create Alert"
 				onPress={async () => {
-					// navigation.navigate(routes.priceAlert, { show: true, coin: coin })
 					let cacheAlerts = await AsyncStorage.getItem("alerts")
 					if (cacheAlerts) {
 						cacheAlerts = JSON.parse(cacheAlerts)
-					} else {
-						cacheAlerts = {}
-					}
+						if (cacheAlerts.hasOwnProperty(coin.symbol)) {
 
-					if (cacheAlerts.hasOwnProperty(coin.symbol)) {
-						cacheAlerts[coin.symbol].push({
-							price: state.price,
-							status: false,
-							alert_type: state.alert_type
-						})
-						await AsyncStorage.setItem("alerts", JSON.stringify(cacheAlerts))
-
-					} else {
-						const createdAlert = {
-							[coin.symbol]: [
-								{
-									price: state.price,
-									status: false,
-									alert_type: state.alert_type
-								}
-							]
+							cacheAlerts[coin.symbol].push({
+								price: state.price,
+								status: false,
+								logo: coin.logo,
+								name: coin.name,
+								alert_type: state.alert_type
+							})
+							await AsyncStorage.setItem("alerts", JSON.stringify(cacheAlerts))
+						} else {
+							const createdAlert = {
+								[coin.symbol]: [
+									{
+										price: state.price,
+										status: false,
+										logo: coin.logo,
+										name: coin.name,
+										alert_type: state.alert_type
+									}
+								]
+							}
+							const finalResult = Object.assign(cacheAlerts, createdAlert)
+							await AsyncStorage.setItem("alerts", JSON.stringify(finalResult))
 						}
-						await AsyncStorage.setItem("alerts", JSON.stringify(createdAlert))
 					}
+					showMessage({
+						message: `Your Price has been set`,
+						description: null,
+						type: 'success',
+						icon: null,
+						duration: 2500,
+						style: { backgroundColor: "#6BC0B1" },
+						position: 'top'
+					})
 					navigation.navigate(routes.setPriceAlert, { coin: coin })
 				}}
 			/>
