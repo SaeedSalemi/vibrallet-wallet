@@ -70,7 +70,7 @@ const MainProvider = props => {
 
     Linking.getInitialURL().then(url => {
       // console.log('startUrl ---------->>>>>>>>>>>>>>>>>> ', url);
-      if (url != null &&  url.startsWith("wc:")) {
+      if (url != null && url.startsWith("wc:")) {
         walletConnect.pair(url);
       }
     });
@@ -104,10 +104,51 @@ const MainProvider = props => {
   }, [])
 
   useEffect(() => {
+    InitData()
+  }, [])
 
+  const getTokenFromServer = async () => {
+    return new Promise(async (resolve, reject) => {
+      const cache_token = await AsyncStorage.getItem("token")
+      if (cache_token) {
+        axios.defaults.token = cache_token
+        resolve()
+      } else {
+        console.log("amr", "token not found in cache")
+        axios({
+          method: 'post',
+          data: {
+            "uniqueId": "abc",
+            "action": "init"
+          },
+          url: 'https://api.vibrallet.com',
+          responseType: 'json',
+          timeout: this.time_out,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json',
+          },
+          maxRedirects: this.maxRedirects,
+        }).catch((error) => {
+          console.log(error)
+          console.log("amr", "token error", error)
+        }).then(async (response) => {
+          console.log("amr", "token recivie", response.data)
+          const token = response?.data.data.token
+          await AsyncStorage.setItem("token", token)
+          axios.defaults.token = token
+          resolve()
+
+        })
+      }
+    })
+  }
+
+  const InitData = async () => {
+    await getTokenFromServer()
     fetchData()
     fetchFCASData()
-  }, [])
+  }
   // ===================== Profile 
 
   const setUserData = (user) => {
@@ -326,11 +367,13 @@ const MainProvider = props => {
         //     })
         //   return item
         // })
-
-        setState((state) => {
+        if (response) {
+          // setState((state) => {
           state.FCASList = [...state.FCASList, ...response]
           return { ...state }
-        })
+          // })
+        }
+
       }
     }, err => {
       console.log('FCAS FETCH Error', err)
