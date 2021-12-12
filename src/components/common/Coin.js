@@ -83,11 +83,13 @@ export default function Coin({
 
 
 	useEffect(() => {
-		// state.balance = getCoinBalance([coin.symbol])
+		state.balance =	useReduxWallet(coin);
+		// state.balance =  getCoinBalance([coin.symbol])
 		// state.balance = coin.balance
 		state.amount = state.balance * state.rate
 		setState({ ...state })
 	}, [])
+	
 	return (
 		<SwapableRow
 			leftItems={[
