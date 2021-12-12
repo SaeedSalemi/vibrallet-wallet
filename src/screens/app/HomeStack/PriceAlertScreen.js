@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
-import { View, Image } from 'react-native'
+import { View, Image, Text } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import AppButton from '../../../components/common/AppButton'
 import AppText from '../../../components/common/AppText'
@@ -25,26 +25,19 @@ export default function PriceAlertScreen({ route }) {
 			state.items = JSON.parse(data)
 			setState({ ...state })
 			// ==================
-			for (const [key, value] of Object.entries(state.items)) {
-				for (let item of value) {
-					console.log('_it', <PriceItem name={item.name} logo={item.logo} symbol={item.symbol} />)
-				}
-			}
+			// Object.entries(state.items).forEach(item => {
+			// 	item[1].map((_item, i) => {
+			// 		alert(i)
+			// 		return <View key={i}>
+
+			// 		</View>
+			// 	})
+			// })
 
 		})
 
 	}, [])
 
-
-	const renderItemPrice = () => {
-		const items = []
-		for (const [key, value] of Object.entries(state.items)) {
-			for (let item of value) {
-				items.push(<PriceItem name={item.name} logo={item.logo} symbol={item.symbol} />)
-			}
-		}
-		return items
-	}
 
 
 
@@ -53,34 +46,27 @@ export default function PriceAlertScreen({ route }) {
 		<Screen edges={['bottom']}>
 			{/* {show ? <PriceAlerts /> : <NoPriceAlert />} */}
 
+
+
 			<View style={{ flex: 1 }}>
-				{Object.keys(state.items).length > 0 ? Object.keys(state.items).map((item, i) => {
-					// console.log("dani logger", item, state.items[item].coin)
-					const coin = state.items[item]
-					console.log('coin is here!', state.items[item])
-					return (
-						<View style={{ flex: 1 }} key={i}>
-							<PPriceAlertItem
-								item={{ name: coin.name, logo: coin.logo }}
-								name={coin.name}
-								index={i}
-								length={Object.keys(state.items).length}
-								initialOpen={i === 0}
-							/>
-						</View>
-					)
-				}) : <View style={{ flex: 1, ...globalStyles.flex.center }}>
-					<Image source={Images.noPriceAlert} />
-					<AppText color="text2" style={{ marginTop: 16, marginBottom: 8 }}>
-						No Price Alert Set
-					</AppText>
-					<AppText typo="tiny" color="text3">
-						Get notified when crypto price changes,
-					</AppText>
-					<AppText typo="tiny" color="text3">
-						So you can buy and sell at the perfect time.
-					</AppText>
-				</View>
+				{Object.keys(state.items).length > 0 ? <View style={{ flex: 1 }}>
+					{Object.keys(state.items).map(function (key) {
+						return state.items[key].map((_item, i) => {
+							return <PriceItem key={i} logo={_item.logo} name={_item.name} price={_item.price} type={_item.alert_type} status={_item.status} />
+						})
+					})}</View>
+					: <View style={{ flex: 1, ...globalStyles.flex.center }}>
+						<Image source={Images.noPriceAlert} />
+						<AppText color="text2" style={{ marginTop: 16, marginBottom: 8 }}>
+							No Price Alert Set
+						</AppText>
+						<AppText typo="tiny" color="text3">
+							Get notified when crypto price changes,
+						</AppText>
+						<AppText typo="tiny" color="text3">
+							So you can buy and sell at the perfect time.
+						</AppText>
+					</View>
 				}
 				<View>
 					<AppButton
