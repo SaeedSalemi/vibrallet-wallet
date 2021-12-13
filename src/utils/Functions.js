@@ -78,7 +78,7 @@ export const setToken = token => {
 }
 
 
-export const backup = (toBackUp) => {
+export const gettingBackup = (toBackUp) => {
   const path = RNFS.DownloadDirectoryPath + `/vibranium-backup-${new Date().getTime()}.json`;
   RNFS.writeFile(path, JSON.stringify(encrypt(toBackUp)), 'utf8')
     .then((success) => {
