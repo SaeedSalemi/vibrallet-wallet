@@ -11,8 +11,8 @@ import WalletManager from '../../../blockchains/walletManager'
 import Clipboard from '@react-native-community/clipboard'
 import { showMessage } from "react-native-flash-message";
 import { routes } from '../../../config/routes'
-import RNFS from 'react-native-fs'
-import { encrypt } from '../../../utils/Functions'
+// import RNFS from 'react-native-fs'
+// import { encrypt } from '../../../utils/Functions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import HttpService from '../../../services/HttpService'
 import bitcoinManager from '../../../blockchains/BitcoinManager'
@@ -29,6 +29,7 @@ import {
 	GDrive,
 	MimeTypes
 } from "@robinbobin/react-native-google-drive-api-wrapper";
+import { gettingBackup } from '../../../utils/Functions'
 
 export default function WordBackup({ navigation }) {
 	const { setCoinsToSupport } = useContext(Context)
@@ -189,22 +190,7 @@ export default function WordBackup({ navigation }) {
 
 
 	const handleBackup = () => {
-		const path = RNFS.DownloadDirectoryPath + `/vibranium-backup-${new Date().getTime()}.json`;
-		RNFS.writeFile(path, JSON.stringify(encrypt(backup)), 'utf8')
-			.then((success) => {
-				showMessage({
-					message: 'Your wallet backup has been created in your downloads',
-					description: null,
-					type: 'success',
-					icon: null,
-					duration: 3000,
-					style: { backgroundColor: "#16a085" },
-					position: 'top'
-				})
-			})
-			.catch((err) => {
-				console.log(err.message);
-			});
+		gettingBackup(backup)
 	}
 
 
