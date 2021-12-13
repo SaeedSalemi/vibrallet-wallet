@@ -12,9 +12,10 @@ import { routes } from '../../config/routes'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from '@react-navigation/core'
 import { Context } from '../../context/Provider'
+import { register_user } from '../../config/async-storage.json'
 
 
-export default function EditProfileForm({ navigation }) {
+export default function EditProfileForm({ navigation, onChange }) {
 
 	const { setUserData } = useContext(Context)
 
@@ -24,27 +25,29 @@ export default function EditProfileForm({ navigation }) {
 
 	const [countries, setCountries] = useState()
 
-	const [country, setCountry] = useState()
+	const [country, setCountry] = useState({ title: '' })
 	const [phone, setPhone] = useState()
 	const [username, setUsername] = useState()
 	const [email, setEmail] = useState()
 
 	useEffect(() => {
 
-		AsyncStorage.getItem("regUser").then(userData => {
+		AsyncStorage.getItem(register_user).then(userData => {
 			if (userData) {
 				let parsedUserData = JSON.parse(userData)
 				if (parsedUserData.username)
 					setUsername(parsedUserData.username)
 				if (parsedUserData.email)
 					setEmail(parsedUserData.email)
-				if (parsedUserData.country)
-					setCountry(parsedUserData.country)
+				if (parsedUserData.country) {
+					setCountry({ title: parsedUserData.country })
+				}
 				if (parsedUserData.phone)
 					setPhone(parsedUserData.phone)
-
 			}
 		})
+
+
 
 
 		// get countries list
@@ -92,25 +95,16 @@ export default function EditProfileForm({ navigation }) {
 		]
 	}, [])
 
-
 	const handleSubmitProfile = () => {
-
-
-		// 1- validate form
-
-
 		const registerInformation = {
-			email,
-			username,
-			country: country.title,
-			phone
+			email: email || '',
+			username: username || '',
+			country: country ? country.title : '',
+			phone: phone || ''
 		}
-
 		setUserData(registerInformation)
-
 		const data = JSON.stringify(registerInformation)
-		AsyncStorage.setItem("regUser", data).then(() => {
-
+		AsyncStorage.setItem(register_user, data).then(() => {
 			showMessage({
 				message: `Your Profile has been successfuly updated!`,
 				description: null,
@@ -120,14 +114,12 @@ export default function EditProfileForm({ navigation }) {
 				style: { backgroundColor: "#6BC0B1" },
 				position: 'top'
 			})
-
+			onChange()
 		})
 	}
 
 	return (
 		<View>
-
-
 			<AppInput
 				placeholder={"Enter your username"}
 				label={"Username"}
@@ -184,7 +176,9 @@ export default function EditProfileForm({ navigation }) {
 				>
 					<View style={{ flexDirection: 'row' }}>
 						<FontAwesome5Icon style={{ marginLeft: 4 }} size={15} color={globalStyles.Colors.text2} name="map-marker-alt" />
-						<AppText color="text3" style={{ marginHorizontal: 22 }} typo="tiny">{'Choose your region'}</AppText>
+						<AppText color={country && country.title ? 'text2' : 'text3'} style={{ marginHorizontal: 22 }} typo="tiny">
+							{country && country.title ? country.title : 'Choose your region'}
+						</AppText>
 					</View>
 					<AppIcon name="arrowRightCircle" />
 				</Pressable>
@@ -192,8 +186,8 @@ export default function EditProfileForm({ navigation }) {
 			<View style={{ marginVertical: 8 }}>
 				<AppButton
 					title="Save"
-					textStyle={{ fontWeight: 'bold' }}
-					typo="sm"
+					// textStyle={{ fontWeight: 'bold' }}
+					typo="xs"
 					onPress={handleSubmitProfile}
 				/>
 			</View>
