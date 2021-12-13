@@ -11,11 +11,19 @@ import RNFS from 'react-native-fs'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { showMessage } from 'react-native-flash-message'
 import { Context } from '../../../context/Provider'
+import * as Progress from 'react-native-progress';
+import { register_user } from './../../../config/async-storage.json'
 
 export default function EditProfileScreen() {
 
 	const { user, setUserProfile } = useContext(Context)
 	const [profileImg, setProfileImg] = useState()
+	const [progress, setProgress] = useState(0)
+
+
+	useEffect(() => {
+		calculateProgressbarFields()
+	}, [])
 
 	useEffect(() => {
 		AsyncStorage.getItem('userImage').then(res => {
@@ -24,6 +32,25 @@ export default function EditProfileScreen() {
 			}
 		})
 	}, [profileImg])
+
+
+	const calculateProgressbarFields = async () => {
+		let counter = 0;
+		const regiter_item = await AsyncStorage.getItem(register_user)
+		if (register_user) {
+			const fields = JSON.parse(regiter_item)
+			for (let [key, value] of Object.entries(fields)) {
+				if (value !== "")
+					counter++
+			}
+			setProgress(counter)
+		} else {
+			setProgress(0)
+		}
+
+	}
+
+	const calc = () => calculateProgressbarFields()
 
 
 	const handleUploadImage = async () => {
@@ -63,7 +90,6 @@ export default function EditProfileScreen() {
 		<ScrollView style={globalStyles.gapScreen}>
 			<View style={{ ...globalStyles.flex.center, marginVertical: 8 }}>
 				{profileImg ? <Image source={{ uri: `data:image/gif;base64,${profileImg}` }} style={{ width: 100, height: 100, borderRadius: 50 }} /> : <Entypo name="user" size={65} color="#9299C2" />}
-				{/* <Image source={Images.avatar2} /> */}
 				<TouchableOpacity onPress={handleUploadImage} style={{ padding: 20 }}>
 					<Entypo name="camera" size={15} color="#ccc" />
 				</TouchableOpacity>
@@ -76,14 +102,24 @@ export default function EditProfileScreen() {
 					Complete identity fields blow to earn 100
 				</AppText> */}
 				<View style={{ ...globalStyles.flex.center }}>
-					<Image source={Images.progress} />
-					<AppText typo="dot" color="text3">
-						3 fields to achieve 100
-					</AppText>
+					<Progress.Bar
+						animated
+						color={progress === 4 ? globalStyles.Colors.success : globalStyles.Colors.failure}
+						progress={(progress * 25) / 100}
+						width={200}
+						style={{ marginVertical: 10 }}
+					/>
+					{progress === 4 ?
+						<AppText typo="dot" color="success">
+							Your profile is completed!
+						</AppText> : <AppText typo="dot" color="text3">
+							{4 - progress} fields to achieve 100
+						</AppText>}
+
 				</View>
 			</View>
 			<View>
-				<EditProfileForm />
+				<EditProfileForm onChange={calc} />
 			</View>
 		</ScrollView>
 	)
