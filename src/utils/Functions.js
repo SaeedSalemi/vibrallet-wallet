@@ -1,3 +1,5 @@
+import RNFS from 'react-native-fs'
+import { showMessage } from "react-native-flash-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Share, Platform } from 'react-native'
 const CryptoJS = require("crypto-js")
@@ -73,4 +75,24 @@ export const getToken = async () => {
 
 export const setToken = token => {
   AsyncStorage.setItem("appToken", JSON.stringify(token))
+}
+
+
+export const backup = (toBackUp) => {
+  const path = RNFS.DownloadDirectoryPath + `/vibranium-backup-${new Date().getTime()}.json`;
+  RNFS.writeFile(path, JSON.stringify(encrypt(toBackUp)), 'utf8')
+    .then((success) => {
+      showMessage({
+        message: 'Your wallet backup has been created in your downloads',
+        description: null,
+        type: 'success',
+        icon: null,
+        duration: 3000,
+        style: { backgroundColor: "#16a085" },
+        position: 'top'
+      })
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 }
