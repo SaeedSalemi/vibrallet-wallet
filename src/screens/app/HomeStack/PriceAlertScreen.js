@@ -24,16 +24,6 @@ export default function PriceAlertScreen({ route }) {
 		AsyncStorage.getItem("alerts").then((data) => {
 			state.items = JSON.parse(data)
 			setState({ ...state })
-			// ==================
-			// Object.entries(state.items).forEach(item => {
-			// 	item[1].map((_item, i) => {
-			// 		alert(i)
-			// 		return <View key={i}>
-
-			// 		</View>
-			// 	})
-			// })
-
 		})
 
 	}, [])
@@ -45,11 +35,9 @@ export default function PriceAlertScreen({ route }) {
 	return (
 		<Screen edges={['bottom']}>
 			{/* {show ? <PriceAlerts /> : <NoPriceAlert />} */}
-
-
-
 			<View style={{ flex: 1 }}>
-				{Object.keys(state.items).length > 0 ? <View style={{ flex: 1 }}>
+
+				{state.items && Object.keys(state.items).length > 0 ? <View style={{ flex: 1 }}>
 					{Object.keys(state.items).map(function (key) {
 						return state.items[key].map((_item, i) => {
 							return <PriceItem key={i} logo={_item.logo} name={_item.name} price={_item.price} type={_item.alert_type} status={_item.status} />
