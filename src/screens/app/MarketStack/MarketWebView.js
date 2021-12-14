@@ -18,7 +18,7 @@ export default function MarketWebView({ route, navigation }) {
       <ScrollView>
         <View style={{ marginVertical: 2, height: 750 }}>
           <WebView
-            source={{ uri: `https://coinmarketcap.com/currencies/${name}/` }}
+            source={{ uri: `https://coinmarketcap.com/currencies/${coin.name.toLowerCase().replace(" ", "-")}/` }}
             style={{ marginTop: 20 }}
           />
         </View>
