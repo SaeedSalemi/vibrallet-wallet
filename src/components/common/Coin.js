@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useLayoutEffect } from 'react'
 import { View, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import { routes } from '../../config/routes'
 import { globalStyles } from '../../config/styles'
@@ -25,7 +25,7 @@ export default function Coin({
 	onPress,
 	onHideHandler
 }) {
-
+	const __balance = useReduxWallet(coin)
 	const { navigate } = useNavigation()
 	// const getSVGUri = useSVGChart(`${coin.symbol}USDT`)
 	const [isLoading, setIsLoading] = useState(true)
@@ -38,7 +38,7 @@ export default function Coin({
 
 	const [coinLogo, setCoinLogo] = useState('')
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		try {
 			new HttpService("",
 				{
@@ -64,7 +64,7 @@ export default function Coin({
 		}
 	}, [coin.symbol])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		new HttpService("", {
 			"uniqueId": "abc1",
 			"action": "quotedPrice",
@@ -82,14 +82,17 @@ export default function Coin({
 	}, [])
 
 
-	useEffect(() => {
-		state.balance =	useReduxWallet(coin);
+	useLayoutEffect(() => {
+		// state.balance =	useReduxWallet(coin);
+		state.balance = 0;
 		// state.balance =  getCoinBalance([coin.symbol])
 		// state.balance = coin.balance
 		state.amount = state.balance * state.rate
 		setState({ ...state })
 	}, [])
-	
+
+
+
 	return (
 		<SwapableRow
 			leftItems={[
@@ -192,7 +195,7 @@ export default function Coin({
 							<AppText typo="tiny">
 								{/* {state.balance} 	{coin.symbol} */}
 								{/* {getCoinBalance(coin)} 	{coin.symbol} */}
-								{0} 	{coin.symbol}
+								{0}{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
 								size={15}
