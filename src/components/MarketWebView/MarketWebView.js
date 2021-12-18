@@ -7,7 +7,7 @@ const MarketWebView = (props) => {
   return (
     <WebView
       style={{ width: "100%" }}
-      source={{ uri: `https://coinmarketcap.com/currencies/${props.name}` }}
+      source={{ uri: props.cmcUrl }}
     />
   )
 
