@@ -108,7 +108,7 @@ const SplashScreen = ({ navigation }) => {
 					// style={styles.staterLogo}
 					source={Images.vib_starterLogoSub}
 				/>
-				<AppText typo="dot" color="text3">Version 1.35</AppText>
+				<AppText typo="dot" color="text3">Version 1.40</AppText>
 			</TouchableOpacity>
 		</Screen>
 	)
