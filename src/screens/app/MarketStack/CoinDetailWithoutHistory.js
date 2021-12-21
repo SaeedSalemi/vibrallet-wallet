@@ -89,9 +89,9 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		limit: 6,
 	})
 
-	const [__data, set_data] = useState()
+	// const [__data, set_data] = useState()
 
-	const [__chart, setChart] = useState()
+	// const [__chart, setChart] = useState()
 
 	useEffect(() => {
 		// chartDates()
@@ -127,11 +127,16 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 						}
 					});
 					console.log('----  DATA  --> ', items)
-					// console.log('debug dani 2', items)
 					items.map(i => {
 						let check = moment(i.date, 'YYYY/MM/DD');
 						let _m = check.format('M');
-						i.date = MONTHS[_m - 1]
+						let _d = check.format("D")
+						console.log('dani debugger 2', _d)
+						if (state.timeframe === "4h" || state.timeframe === "1d") {
+							i.date = `${_d} ${MONTHS[_m - 1]}`
+						} else {
+							i.date = MONTHS[_m - 1]
+						}
 					})
 					state.coinHistory = items
 					setState({ ...state })
@@ -144,8 +149,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 	}, [state.limit])
 
 
-	useEffect(() => {
-
+	useLayoutEffect(() => {
 		new HttpService("", {
 			"uniqueId": "abc1",
 			"action": "quotedPrice",
@@ -322,8 +326,8 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					style={{ ...globalStyles.flex.center, marginVertical: 18, flex: 1 }}
 				>
 					<Image source={Images.marketImage} />
-					<AppText color="text2">No transactions yet</AppText>
-					<AppText color="text3">Your transactions will appear here.</AppText>
+					<AppText typo="tiny" color="text2">No transactions yet</AppText>
+					<AppText typo="xs" color="text3">Your transactions will appear here.</AppText>
 				</View>
 				<View
 					style={{
