@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useContext } from 'react'
+import React, { useMemo, useState, useEffect, useContext, createRef, useLayoutEffect } from 'react'
 import { View, Pressable } from 'react-native'
 import AppButton from '../common/AppButton'
 import AppInput from '../common/AppInput/AppInput'
@@ -21,7 +21,6 @@ export default function EditProfileForm({ navigation, onChange }) {
 
 	const { navigate } = useNavigation()
 
-	const [retData, setRetData] = useState({})
 
 	const [countries, setCountries] = useState()
 
@@ -30,10 +29,24 @@ export default function EditProfileForm({ navigation, onChange }) {
 	const [username, setUsername] = useState()
 	const [email, setEmail] = useState()
 
+	useLayoutEffect(() => {
+		new HttpService("", {
+			"uniqueId": "123",
+			"action": "getCountries"
+		}).Post(response => {
+
+			if (response) {
+				setCountries(response)
+			}
+
+		})
+	}, [])
+
 	useEffect(() => {
 
 		AsyncStorage.getItem(register_user).then(userData => {
-			if (userData) {
+			console.log('dani debugger', userData)
+			if (userData !== null) {
 				let parsedUserData = JSON.parse(userData)
 				if (parsedUserData.username)
 					setUsername(parsedUserData.username)
@@ -45,23 +58,9 @@ export default function EditProfileForm({ navigation, onChange }) {
 				if (parsedUserData.phone)
 					setPhone(parsedUserData.phone)
 			}
+		}).catch(error => {
+			console.log('app storage', error)
 		})
-
-
-
-
-		// get countries list
-		new HttpService("", {
-			"uniqueId": "123",
-			"action": "getCountries"
-		}).Post(response => {
-
-			if (response) {
-				setCountries(response)
-			}
-
-		})
-
 	}, [])
 
 
