@@ -125,10 +125,11 @@ export default function UserCoins() {
 								{item.balance} {item.symbol}
 							</AppText>
 						</View>
-						<View>
+						<View >
 							<SvgUri
-								// width={100}
+								width={120}
 								uri={item.svgUri}
+							// uri={"https://api.vibrallet.com/dl/priceChart/price-chart-BTC-30m-7-250x50.svg"}
 							/>
 						</View>
 					</View>
