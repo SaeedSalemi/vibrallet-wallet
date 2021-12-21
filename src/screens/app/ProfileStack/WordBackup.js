@@ -36,6 +36,8 @@ export default function WordBackup({ navigation }) {
 	const [googleInformation, setGoogleInformation] = useState({})
 	const [backupPlan, setBackupPlan] = useState()
 
+	const [loading, setLoading] = useState(false)
+
 	const dispatch = useDispatch()
 	const { navigate } = navigation
 	const [backup, setBackup] = useState('')
@@ -70,7 +72,7 @@ export default function WordBackup({ navigation }) {
 		})
 	}, [])
 
-	const supportedCoins = () => {
+	const supportedCoins = (xhr_response) => {
 
 		try {
 			new HttpService("", {
@@ -112,6 +114,7 @@ export default function WordBackup({ navigation }) {
 						}
 						setCoinsToSupport(items)
 						AsyncStorage.setItem("supportedCoins", JSON.stringify(items)).then().catch()
+						xhr_response(items)
 					}
 				} catch (error) {
 					console.log('debug error', error)
@@ -167,19 +170,22 @@ export default function WordBackup({ navigation }) {
 
 
 	const handleAddWallet = () => {
+		setLoading(true)
 		dispatch(finalCreateWallet(backup))
-		supportedCoins()
-
-		showMessage({
-			message: 'Your wallet has been created successfully',
-			description: null,
-			type: 'success',
-			icon: null,
-			duration: 2000,
-			style: { backgroundColor: "#16a085" },
-			position: 'top'
+		supportedCoins(xhr_response => {
+			showMessage({
+				message: 'Your wallet has been created successfully',
+				description: null,
+				type: 'success',
+				icon: null,
+				duration: 2000,
+				style: { backgroundColor: "#16a085" },
+				position: 'top'
+			})
+			setLoading(false)
+			navigation.navigate(routes.appTab)
 		})
-		navigation.navigate(routes.appTab)
+
 	}
 
 	const backupList = backup.split(' ').map((word, i) => `${i + 1}. ${word}`)
@@ -347,6 +353,7 @@ export default function WordBackup({ navigation }) {
 				</View>
 			</View>
 			<AppButton
+				loading={loading}
 				title="Create Wallet"
 				style={{ fontWeight: 'bold' }}
 				onPress={handleAddWallet}
