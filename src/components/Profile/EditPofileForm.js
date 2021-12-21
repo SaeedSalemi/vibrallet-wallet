@@ -18,16 +18,17 @@ import { register_user } from '../../config/async-storage.json'
 export default function EditProfileForm({ navigation, onChange }) {
 
 	const { setUserData } = useContext(Context)
-
 	const { navigate } = useNavigation()
-
-
 	const [countries, setCountries] = useState()
-
 	const [country, setCountry] = useState({ title: '' })
 	const [phone, setPhone] = useState()
 	const [username, setUsername] = useState()
 	const [email, setEmail] = useState()
+
+	const usernameRef = createRef()
+	const emailRef = createRef()
+	const phoneRef = createRef()
+	const countryRef = createRef()
 
 	useLayoutEffect(() => {
 		new HttpService("", {
@@ -125,6 +126,8 @@ export default function EditProfileForm({ navigation, onChange }) {
 				icon={"user"}
 				onChangeText={text => setUsername(text)}
 				value={username}
+				ref={usernameRef}
+				onSubmitEditing={() => emailRef.current.focus()}
 			/>
 
 			<AppInput
@@ -133,6 +136,8 @@ export default function EditProfileForm({ navigation, onChange }) {
 				icon={"envelope"}
 				onChangeText={text => setEmail(text)}
 				value={email}
+				ref={emailRef}
+				onSubmitEditing={() => phoneRef.current.focus()}
 			/>
 
 			<AppInput
@@ -142,6 +147,7 @@ export default function EditProfileForm({ navigation, onChange }) {
 				keyboardType={'numeric'}
 				onChangeText={text => setPhone(text)}
 				value={phone}
+				ref={phoneRef}
 			/>
 
 			<View>
