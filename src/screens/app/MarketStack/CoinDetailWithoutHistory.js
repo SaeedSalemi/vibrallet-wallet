@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, View, Dimensions } from 'react-native'
+import React, { useEffect, useState, useLayoutEffect } from 'react'
+import { Image, ScrollView, View, Dimensions, ActivityIndicator } from 'react-native'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
 import AppText from '../../../components/common/AppText'
@@ -8,10 +8,10 @@ import CoinDetailChartItem from '../../../components/Market/CoinDetailChartItem'
 import AppButton from '../../../components/common/AppButton'
 import { routes } from '../../../config/routes'
 import { useSelector } from 'react-redux'
-import { AreaChart, YAxis, XAxis } from 'react-native-svg-charts'
+// import { AreaChart, YAxis, XAxis } from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
 import HttpService from '../../../services/HttpService'
-import { SvgUri } from 'react-native-svg'
+// import { SvgUri } from 'react-native-svg'
 import { Context } from '../../../context/Provider'
 import moment from 'moment'
 
@@ -37,10 +37,15 @@ import {
 // 	{ title: '1Y' },
 // 	{ title: 'ALL' },
 // ]
-// const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export default function CoinDetailWithoutHistory({ route, navigation }) {
 	const { coin } = route.params || {}
+
+
+
+	const [loading, setLoading] = useState(false)
+
 
 	const data = [
 		{ label: 'Jan', value: 500 },
@@ -89,19 +94,20 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 	const [__chart, setChart] = useState()
 
 	useEffect(() => {
-		chartDates()
-	//chartValues()
-	let result = state.coinHistory.map(p => parseFloat(p.value).toFixed(2));
-	console.log('chartValues RESULT:', result);
-	setChart([
-		{
-			data: result
-		}]);
+		// chartDates()
+		//chartValues()
+		// let result = state.coinHistory.map(p => parseFloat(p.value).toFixed(2));
+		// console.log('chartValues RESULT:', result);
+		// setChart([
+		// 	{
+		// 		data: result
+		// 	}]);
 	}, [])
 
 
 	useEffect(() => {
 		console.log('---- LOAD DATA --> ', state.timeframe, state.limit)
+		setLoading(true)
 		new HttpService("",
 			{
 				"uniqueId": "abc",
@@ -113,16 +119,26 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				}
 			}).Post(res => {
 
-				const items = res.data.rates.map(item => {
-					return {
-						date: moment(item.key),
-						value: item.value
-					}
-				});
-				console.log('----  DATA  --> ', items)
-
-				state.coinHistory = items
-				setState({ ...state })
+				if (res) {
+					const items = res.data.rates.map(item => {
+						return {
+							date: moment(item.key),
+							value: item.value
+						}
+					});
+					console.log('----  DATA  --> ', items)
+					// console.log('debug dani 2', items)
+					items.map(i => {
+						let check = moment(i.date, 'YYYY/MM/DD');
+						let _m = check.format('M');
+						i.date = MONTHS[_m - 1]
+					})
+					state.coinHistory = items
+					setState({ ...state })
+					setLoading(false)
+				} else {
+					alert('data is not available')
+				}
 
 			})
 	}, [state.limit])
@@ -178,120 +194,91 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		setState({ ...state, limit: limit, timeframe })
 	}
 
-
-
-
-	let chartDates = () => {
-
-		let format = 'MM-DD';
-		if (state.timeframe == '4h') {
-			format = 'DD';
-		} else if (state.timeframe == '1d') {
-			format = 'MM-DD';
-		} else if (state.timeframe == '1W') {
-			format = 'MM-DD';
-		} else if (state.timeframe == '1M') {
-			format = 'MMM';
-		}
-
-		let result = state.coinHistory.map(p => p.date.format(format));
-		console.log('chartDates RESULT:', result);
-		set_data(result)
-		//return result;
-	};
-
-	let chartValues = () => {
-		let result = state.coinHistory.map(p => parseFloat(p.value).toFixed(2));
-		console.log('chartValues RESULT:', result);
-		setChart([
-			{
-				data: result
-			}]);
-		//return result;
-	};
-
 	return (
-		<ScrollView >
-			<View style={{ ...globalStyles.flex.center, marginVertical: 8 }}>
-				<View style={{
-					backgroundColor: globalStyles.Colors.inputColor2,
-					height: 45,
-					...globalStyles.flex.center,
-					borderRadius: 8,
-					paddingHorizontal: 8,
-					paddingVertical: 0,
-					marginHorizontal: 2
-				}}>
-					<Image resizeMode={"stretch"}
-						style={{ width: 28, height: 28, }} source={{ uri: coin.logo }} />
-				</View>
-				<AppText color="text2">{coin.name} Balance</AppText>
-				<AppText bold typo="md">
-					{coin.balance} {coin.symbol}
-				</AppText>
-				<View
-					style={{
-						...globalStyles.flex.row,
-						alignItems: 'center',
-					}}
-				>
-					<AppText color="text3" typo="tiny">
-						{state.timeframe} Change
+		<Screen>
+			<ScrollView >
+				<View style={{ ...globalStyles.flex.center, marginVertical: 8 }}>
+					<View style={{
+						backgroundColor: globalStyles.Colors.inputColor2,
+						height: 45,
+						...globalStyles.flex.center,
+						borderRadius: 8,
+						paddingHorizontal: 8,
+						paddingVertical: 0,
+						marginHorizontal: 2
+					}}>
+						<Image resizeMode={"stretch"}
+							style={{ width: 28, height: 28, }} source={{ uri: coin.logo }} />
+					</View>
+					<AppText color="text2">{coin.name} Balance</AppText>
+					<AppText bold typo="md">
+						{coin.balance} {coin.symbol}
 					</AppText>
-					<AppText
-						color={state.percentChange > 0 ? 'success' : 'failure'}
-						typo="dot"
-						style={{ marginHorizontal: 4 }}>
-						{state.percentChange}
-					</AppText>
+					<View
+						style={{
+							...globalStyles.flex.row,
+							alignItems: 'center',
+						}}
+					>
+						<AppText color="text3" typo="tiny">
+							{state.timeframe} Change
+						</AppText>
+						<AppText
+							color={state.percentChange > 0 ? 'success' : 'failure'}
+							typo="dot"
+							style={{ marginHorizontal: 4 }}>
+							{state.percentChange}
+						</AppText>
+					</View>
 				</View>
-			</View>
-			<View style={{ ...globalStyles.flex.row, marginVertical: 24 }}>
-				<LineChart
-					// data={{
-					// 	labels: __data,
-					// 	datasets: __chart
-					// }}
-					data={{
-						labels: state.coinHistory.map(p => p.date.format(format)),
-						datasets: [
-						  {
-							data: state.coinHistory.map(p => parseFloat(p.value))
-						  }
-						]
-					  }}
-					width={Dimensions.get("window").width} // from react-native
-					height={220}
-					yAxisLabel="$"
-					yAxisSuffix="k"
-					yAxisInterval={1} // optional, defaults to 1
-					verticalLabelRotation={30}
-					chartConfig={{
-						backgroundColor: "#e26a00",
-						backgroundGradientFrom: "#fb8c00",
-						backgroundGradientTo: "#ffa726",
-						decimalPlaces: 2, // optional, defaults to 2dp
-						color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-						labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-						style: {
-							borderRadius: 16
-						},
-						propsForDots: {
-							r: "6",
-							strokeWidth: "2",
-							stroke: "#ffa726"
-						}
-					}}
-					bezier
-					style={{
-						marginVertical: 8,
-						borderRadius: 16
-					}}
-				/>
-			</View>
-			{/* <View style={{ height: 10, justifyContent: 'center', paddingLeft: 5, paddingRight: 50 }}> */}
+				<View style={{ ...globalStyles.flex.row, marginVertical: 6 }}>
+					{state.coinHistory && state.coinHistory.length > 0 ? <LineChart
+						data={{
+							labels: state.coinHistory.map(item => item.date),
+							datasets: [
+								{
+									data: state.coinHistory.map(item => parseFloat(item.value).toFixed(2))
+								}
+							]
+						}}
+						width={Dimensions.get("window").width - 20} // from react-native
+						height={220}
+						yAxisLabel="$"
+						yAxisSuffix="k"
+						yAxisInterval={1} // optional, defaults to 1
+						verticalLabelRotation={30}
+						chartConfig={{
+							backgroundColor: "#e26a00",
+							backgroundGradientFrom: "#9B68EB",
+							backgroundGradientTo: "#7037C9",
+							decimalPlaces: 2, // optional, defaults to 2dp
+							propsForLabels: {
+								fontSize: 10
+							},
+							color: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
+							labelColor: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
+							style: {
+								borderRadius: 16,
+								alignItems: 'center',
+							},
+							propsForDots: {
+								r: "4",
+								strokeWidth: "2",
+								stroke: "#9B68EB"
+							}
+						}}
+						bezier
+						style={{
+							marginVertical: 4,
+							borderRadius: 12
+						}}
+					/> : <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+						<ActivityIndicator color={"white"} size="large" />
+					</View>}
+				</View>
+				{/* <View style={{ height: 10, justifyContent: 'center', paddingLeft: 5, paddingRight: 50 }}> */}
 
-			{/* <View style={{ ...globalStyles.flex.row }}>
+				{/* <View style={{ ...globalStyles.flex.row }}>
 				{state.coinHistory.map((item, index) => (
 					<AppText
 						style={{ marginHorizontal: 16 }}
@@ -315,57 +302,58 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 
 			</View> */}
-			<View
-				style={{
-					...globalStyles.flex.row,
-					justifyContent: 'space-evenly',
-					marginVertical: 24,
-				}}
-			>
-				{chartItems.map((item, index) => (
-					<CoinDetailChartItem
-						key={index}
-						title={item.title}
-						active={item.active}
-						onSelectChange={handleSelectChange}
+				<View
+					style={{
+						...globalStyles.flex.row,
+						justifyContent: 'space-evenly',
+						marginVertical: 24,
+					}}
+				>
+					{chartItems.map((item, index) => (
+						<CoinDetailChartItem
+							key={index}
+							title={item.title}
+							active={item.active}
+							onSelectChange={handleSelectChange}
+						/>
+					))}
+				</View>
+				<View
+					style={{ ...globalStyles.flex.center, marginVertical: 18, flex: 1 }}
+				>
+					<Image source={Images.marketImage} />
+					<AppText color="text2">No transactions yet</AppText>
+					<AppText color="text3">Your transactions will appear here.</AppText>
+				</View>
+				<View
+					style={{
+						...globalStyles.flex.row,
+						...globalStyles.gapScreen,
+						justifyContent: 'space-between',
+					}}
+				>
+					<AppButton
+						title="Recieve"
+						icon="arrow-downward"
+						customStyle={{
+							flex: 0.48,
+							backgroundColor: globalStyles.Colors.success,
+						}}
+						onPress={() => {
+							navigation.navigate(routes['receive'], { coin: coin })
+						}}
 					/>
-				))}
-			</View>
-			<View
-				style={{ ...globalStyles.flex.center, marginVertical: 18, flex: 1 }}
-			>
-				<Image source={Images.marketImage} />
-				<AppText color="text2">No transactions yet</AppText>
-				<AppText color="text3">Your transactions will appear here.</AppText>
-			</View>
-			<View
-				style={{
-					...globalStyles.flex.row,
-					...globalStyles.gapScreen,
-					justifyContent: 'space-between',
-				}}
-			>
-				<AppButton
-					title="Recieve"
-					icon="arrow-downward"
-					customStyle={{
-						flex: 0.48,
-						backgroundColor: globalStyles.Colors.success,
-					}}
-					onPress={() => {
-						navigation.navigate(routes['receive'], { coin: coin })
-					}}
-				/>
-				<AppButton
-					title="Send"
-					icon="arrow-upward"
-					customStyle={{
-						flex: 0.48,
-						backgroundColor: globalStyles.Colors.failure,
-					}}
-					onPress={() => navigation.navigate(routes['send'], { coin: coin })}
-				/>
-			</View>
-		</ScrollView>
+					<AppButton
+						title="Send"
+						icon="arrow-upward"
+						customStyle={{
+							flex: 0.48,
+							backgroundColor: globalStyles.Colors.failure,
+						}}
+						onPress={() => navigation.navigate(routes['send'], { coin: coin })}
+					/>
+				</View>
+			</ScrollView>
+		</Screen>
 	)
 }
