@@ -6,7 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AppIcon from '../AppIcon'
 import AppText from '../AppText'
 
-export default function AppInput({
+const AppInput = React.forwardRef(({
 	label,
 	alertIcon,
 	icon,
@@ -27,7 +27,7 @@ export default function AppInput({
 	IconComponent,
 	password,
 	...restProps
-}) {
+}, ref) => {
 	const [secure, setSecure] = useState(!!password)
 
 	const handleEndIconPress = () => {
@@ -122,6 +122,7 @@ export default function AppInput({
 				>
 					<TextInput
 						type="text"
+						ref={ref}
 						placeholderTextColor={globalStyles.Colors.text3}
 						placeholder={placeholder}
 						onChangeText={onChangeText}
@@ -176,4 +177,7 @@ export default function AppInput({
 			) : null}
 		</View>
 	)
-}
+})
+
+
+export default AppInput
