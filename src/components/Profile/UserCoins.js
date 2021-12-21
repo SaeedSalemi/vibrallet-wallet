@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext } from 'react'
+import React, { useRef, useState, useEffect, useContext, useLayoutEffect } from 'react'
 import { View, Image, Dimensions } from 'react-native'
 import AppText from '../common/AppText'
 import { Images } from '../../assets'
@@ -48,7 +48,7 @@ export default function UserCoins() {
 	const { coins, hideCoinHandler } = useContext(Context)
 
 	const [data, setData] = useState([])
-	useEffect(() => {
+	useLayoutEffect(() => {
 		for (let item of coins) {
 			try {
 				new HttpService("",
@@ -56,17 +56,16 @@ export default function UserCoins() {
 						"uniqueId": "123",
 						"action": "priceChart",
 						"data": {
+							// "symbol": `${item.symbol}`,
 							"symbol": `${item.symbol}`,
 							"timeframe": "30m",
-							"limit": 440,
+							"limit": 7,
 							"responseType": "url",
-							"height": 50,
-							"width": 250,
+							"width": 100,
+							"height": 50
 						}
 					}).Post(res => {
 						if (res?.success === true) {
-							// setState(res.data.url)
-							// setCoinLogo(res.data.url)
 							item.svgUri = res.data.url
 						}
 					})
@@ -92,7 +91,6 @@ export default function UserCoins() {
 				<View
 					style={{ ...globalStyles.flex.between, ...globalStyles.flex.row }}
 				>
-					{/* <View>{item.icon}</View> */}
 					<View>
 						<Image resizeMode={"stretch"}
 							style={{ width: 30, height: 30, }} source={{ uri: item.logo }} />
@@ -129,7 +127,7 @@ export default function UserCoins() {
 						</View>
 						<View>
 							<SvgUri
-								width={100}
+								// width={100}
 								uri={item.svgUri}
 							/>
 						</View>
