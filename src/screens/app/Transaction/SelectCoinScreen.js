@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/core'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { ScrollView, View } from 'react-native'
 // import { TouchableOpacity } from 'react-native-gesture-handler'
 // import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
@@ -21,7 +21,7 @@ export default function SelectCoinScreen({ navigation, route }) {
 		rate: 0,
 		percentChange: 0,
 	})
-	useEffect(() => {
+	useLayoutEffect(() => {
 		for (let item of coins) {
 			new HttpService("", {
 				"uniqueId": "abc1",
