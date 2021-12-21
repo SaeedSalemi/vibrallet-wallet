@@ -17,6 +17,8 @@ import { register_user } from '../../config/async-storage.json'
 
 export default function EditProfileForm({ navigation, onChange }) {
 
+	const [submitting, setSubmitting] = useState(false)
+
 	const { setUserData } = useContext(Context)
 	const { navigate } = useNavigation()
 	const [countries, setCountries] = useState()
@@ -96,6 +98,7 @@ export default function EditProfileForm({ navigation, onChange }) {
 	}, [])
 
 	const handleSubmitProfile = () => {
+		setSubmitting(true)
 		const registerInformation = {
 			email: email || '',
 			username: username || '',
@@ -115,6 +118,7 @@ export default function EditProfileForm({ navigation, onChange }) {
 				position: 'top'
 			})
 			onChange()
+			setSubmitting(false)
 		})
 	}
 
@@ -190,6 +194,7 @@ export default function EditProfileForm({ navigation, onChange }) {
 			</View>
 			<View style={{ marginVertical: 8 }}>
 				<AppButton
+					loading={submitting}
 					title="Save"
 					// textStyle={{ fontWeight: 'bold' }}
 					typo="xs"
