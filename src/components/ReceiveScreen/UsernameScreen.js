@@ -47,13 +47,13 @@ export default function UsernameScreen({ route }) {
 					{/* <Image source={Images.avatar3} style={{ marginVertical: 12 }} /> */}
 					{userProfile ? <Image source={{ uri: `${userProfile}` }} style={{ width: 80, height: 80, borderRadius: 50 }} /> : <Entypo
 						name="user"
-						size={60}
-						color={globalStyles.Colors.inputColor2}
+						size={80}
+						color={globalStyles.Colors.text2}
 					/>}
 					<AppText bold typo="md">
 						{userProvider.username ? userProvider.username : 'Login'}
 					</AppText>
-					<TouchableOpacity onPress={() => {
+					{userProvider.username && <TouchableOpacity onPress={() => {
 						if (userProvider.username) {
 							Clipboard.setString(userProvider.username)
 							showMessage({
@@ -80,14 +80,15 @@ export default function UsernameScreen({ route }) {
 						<AppText typo="dot" color="text3">
 							Click to copy
 						</AppText>
-					</TouchableOpacity>
+					</TouchableOpacity>}
+
 				</View>
 				<View style={{ marginVertical: 30, flex: 1 }}>
 					<AppInput
 						endText="Set"
 						keyboardType="numeric"
 						label="Advanced"
-						placeholder={`Set ${coin.slug} amount`}
+						placeholder={`Set ${coin.name} amount`}
 					/>
 				</View>
 			</ScrollView>
