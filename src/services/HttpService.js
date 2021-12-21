@@ -98,6 +98,7 @@ export default class HttpService {
         this.check_status(error)
         if (err) {
           // console.error(error)
+          console.log('POST ERROR', error)
           err(error.response)
         }
       }).then(async (response) => {
@@ -112,6 +113,7 @@ export default class HttpService {
       })
 
     } catch (e) {
+      console.log('XHR POST ERROR', e)
       if (this.url !== "mobile_log") {
         // func.exeption("err getting"+this.url+" = " + e);
         // console.error(e)
