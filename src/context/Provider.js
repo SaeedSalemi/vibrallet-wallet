@@ -10,7 +10,7 @@ import { useReduxWallet } from '../hooks/useReduxWallet';
 import useWalletConnect from '../hooks/useWalletConnect';
 import HttpService from '../services/HttpService';
 import { getToken } from '../utils/Functions';
-import { Linking } from 'react-native'
+import { Linking, Platform } from 'react-native'
 
 export const Context = createContext()
 
@@ -123,12 +123,12 @@ const MainProvider = props => {
           },
           url: 'https://api.vibrallet.com',
           responseType: 'json',
-          timeout: this.time_out,
+          timeout: Platform.OS === "android" ? 10000 : 12000,
           headers: {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/json',
           },
-          maxRedirects: this.maxRedirects,
+          maxRedirects: 1,
         }).catch((error) => {
           console.log(error)
           console.log("amr", "token error", error)
