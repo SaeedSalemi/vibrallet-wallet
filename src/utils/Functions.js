@@ -91,8 +91,10 @@ export const gettingBackup = (toBackUp, text = "Your wallet backup has been crea
         style: { backgroundColor: "#16a085" },
         position: 'top'
       })
+      return true
     })
     .catch((err) => {
       console.log('Error in backup process', err.message);
+      return false
     });
 }
