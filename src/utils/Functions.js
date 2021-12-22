@@ -78,12 +78,12 @@ export const setToken = token => {
 }
 
 
-export const gettingBackup = (toBackUp) => {
+export const gettingBackup = (toBackUp, text = "Your wallet backup has been created in your downloads") => {
   const path = RNFS.DownloadDirectoryPath + `/vibranium-backup-${new Date().getTime()}.json`;
   RNFS.writeFile(path, JSON.stringify(encrypt(toBackUp)), 'utf8')
     .then((success) => {
       showMessage({
-        message: 'Your wallet backup has been created in your downloads',
+        message: text,
         description: null,
         type: 'success',
         icon: null,
@@ -93,6 +93,6 @@ export const gettingBackup = (toBackUp) => {
       })
     })
     .catch((err) => {
-      console.log(err.message);
+      console.log('Error in backup process', err.message);
     });
 }
