@@ -60,6 +60,7 @@ import MarketWebView from '../screens/app/MarketStack/MarketWebView'
 import CreateAccountWithEmailScreen from '../screens/authentication/CreateAccountWithEmailScreen'
 import SetPriceAlertScreen from '../screens/app/HomeStack/SetPriceAlertScreen'
 import DAppWebView from '../screens/app/HomeStack/DAppWebView'
+import WelcomeScreen from '../screens/WelcomeScreen'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -253,6 +254,12 @@ export function AppStackNavigation() {
 				}}
 				name={routes.editProfile}
 				component={EditProfileScreen}
+			/>
+
+			<AppStack.Screen
+				name={routes.welcome}
+				options={{ headerShown: false }}
+				component={WelcomeScreen}
 			/>
 			<AppStack.Screen
 				name={routes.profileRewards}
