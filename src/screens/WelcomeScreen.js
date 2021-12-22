@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import Screen from '../components/Screen'
 
@@ -18,6 +18,12 @@ const WelcomeScreen = ({ navigation }) => {
 	const handleCreateNewWallet = () => {
 		dispatch(setLoggedIn(true, true))
 	}
+
+	useEffect(() => {
+		navigation.addListener('beforeRemove', (e) => {
+			e.preventDefault();
+		})
+	}, [])
 
 	return (
 		<Screen style={defaultStyles.screen}>
