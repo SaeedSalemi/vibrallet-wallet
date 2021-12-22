@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useMemo, useContext } from 'react'
+import React, { useEffect, useState, useMemo, useContext, useLayoutEffect, useCallback } from 'react'
 import {
 	FlatList,
 	TouchableOpacity,
 	View,
+	RefreshControl
 } from 'react-native'
 
 import Coin from '../../components/common/Coin'
@@ -43,18 +44,33 @@ const ChartItems = ({ iconColor, title, value }) => {
 	)
 }
 
-export default function WalletScreen() {
+export default function WalletScreen({ navigation }) {
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
 	const [state, setState] = useState({ allSupportedCoins: [] })
 	const { coins, setCoin } = useContext(Context)
 	const [totalAmount, setTotalAmount] = useState(0)
 
+	const [refreshing, setRefreshing] = React.useState(false);
+	const handleRefresh = () => {
+		setRefreshing(true)
+		setTimeout(() => setRefreshing(false), 1000)
+	}
+
+
+
+	useEffect(() => {
+		navigation.addListener('beforeRemove', (e) => {
+			e.preventDefault();
+		})
+	}, [])
+
+
 	useEffect(() => {
 		setState({ ...state, allSupportedCoins: coins })
 	}, [])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 
 		for (let i of coins) {
 			new HttpService("", {
@@ -75,6 +91,13 @@ export default function WalletScreen() {
 		}, 0)
 		setTotalAmount(totalAmount)
 	}, [])
+
+	const onRefresh = () => {
+		setRefreshing(true)
+		setTimeout(() => {
+			setRefreshing(false)
+		}, 100)
+	}
 
 
 	// const totalAmount = useMemo(() => {
@@ -166,12 +189,11 @@ export default function WalletScreen() {
 	}
 
 
+
 	return (
 		<Screen>
 			<Header route={routes.wallet} />
-
 			<View style={{ flex: 1, paddingHorizontal: 8, marginVertical: 24 }}>
-
 				{/* =============== Charts ================= */}
 				<View
 					style={{
@@ -305,17 +327,23 @@ export default function WalletScreen() {
 					<FlatList
 						style={{ marginVertical: 16 }}
 						data={filteredCoins}
-						renderItem={({ item, index }) => (
-							<Coin
-								coin={item}
-								index={index}
-								length={data.length}
-								onPress={() => {
-									navigate(routes.coinDetailWithoutHistory, { coin: item })
-								}}
-								onHideHandler={hideCoinHandler}
-							/>
-						)}
+						refreshControl={
+							<RefreshControl
+								refreshing={false}
+								onRefresh={() => {
+									setRefreshing(!refreshing)
+								}} />
+						}
+						renderItem={({ item, index }) => <Coin
+							isRefresh={refreshing}
+							coin={item}
+							index={index}
+							length={data.length}
+							onPress={() => {
+								navigate(routes.coinDetailWithoutHistory, { coin: item })
+							}}
+							onHideHandler={hideCoinHandler}
+						/>}
 						keyExtractor={(_, index) => index.toString()}
 					/>
 				</View>
