@@ -14,3 +14,14 @@ export function reset(resetAction) {
 		navigationRef.dispatch(CommonActions.reset(resetAction))
 	}
 }
+
+export const changeStack = (stackName) => {
+	resetRoot(stackName)
+}
+
+const resetRoot = (routeName) => {
+	navigationRef.current?.resetRoot({
+		index: 0,
+		routes: [{ name: routeName }],
+	});
+}
