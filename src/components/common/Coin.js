@@ -23,7 +23,7 @@ export default function Coin({
 	hideDetails,
 	hasSwitch,
 	onPress,
-	onHideHandler
+	onHideHandler,
 }) {
 	const __balance = useReduxWallet(coin)
 	const { navigate } = useNavigation()
@@ -65,6 +65,21 @@ export default function Coin({
 	}, [coin.symbol])
 
 	useLayoutEffect(() => {
+		getLatestPrice()
+	}, [])
+
+
+	useLayoutEffect(() => {
+		// state.balance =	useReduxWallet(coin);
+		state.balance = 0;
+		// state.balance =  getCoinBalance([coin.symbol])
+		// state.balance = coin.balance
+		state.amount = state.balance * state.rate
+		setState({ ...state })
+	}, [])
+
+
+	const getLatestPrice = () => {
 		new HttpService("", {
 			"uniqueId": "abc1",
 			"action": "quotedPrice",
@@ -79,17 +94,7 @@ export default function Coin({
 			})
 			setIsLoading(false)
 		})
-	}, [])
-
-
-	useLayoutEffect(() => {
-		// state.balance =	useReduxWallet(coin);
-		state.balance = 0;
-		// state.balance =  getCoinBalance([coin.symbol])
-		// state.balance = coin.balance
-		state.amount = state.balance * state.rate
-		setState({ ...state })
-	}, [])
+	}
 
 
 
