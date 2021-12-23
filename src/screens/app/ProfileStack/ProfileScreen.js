@@ -17,8 +17,17 @@ import { routes } from '../../../config/routes'
 import { encrypt, gettingBackup } from '../../../utils/Functions'
 import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/native'
+import { changeStack, reset } from '../../../utils/navigation'
+import { useDispatch } from 'react-redux'
+import { setLoggedIn } from '../../../redux/modules/appSettings'
+// import { changeStack } from '../../../hooks/changeStack'
 // import walletManager from '../../../blockchains/walletManager'
+
+
+
 export default function ProfileScreen({ navigation }) {
+	const dispatch = useDispatch()
 	const [isLoggingOut, setIsLoggingOut] = useState(false)
 
 	const getStoredMnemonic = async () => {
@@ -36,6 +45,7 @@ export default function ProfileScreen({ navigation }) {
 		setIsLoggingOut(true)
 		const { backup: _mnemonic } = await getStoredMnemonic()
 		gettingBackup(_mnemonic)
+		dispatch(setLoggedIn(false))
 		await AsyncStorage.clear()
 		showMessage({
 			message: 'Your are logged out.',
@@ -46,7 +56,6 @@ export default function ProfileScreen({ navigation }) {
 			style: { backgroundColor: "#16a085" },
 			position: 'top'
 		})
-		navigation.navigate(routes.welcome)
 		setIsLoggingOut(false)
 	}
 
