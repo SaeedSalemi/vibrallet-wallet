@@ -11,6 +11,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { SvgUri } from 'react-native-svg'
 import { Context } from '../../context/Provider'
 import HttpService from '../../services/HttpService'
+import { SvgCssUri } from 'react-native-svg';
 
 const slideShowItems = [
 	{
@@ -126,10 +127,15 @@ export default function UserCoins() {
 							</AppText>
 						</View>
 						<View >
-							<SvgUri
+							{/* <SvgUri
 								width={120}
 								uri={item.svgUri}
 							// uri={"https://api.vibrallet.com/dl/priceChart/price-chart-BTC-30m-7-250x50.svg"}
+							/> */}
+
+							<SvgCssUri
+								width="100%"
+								uri={item.svgUri}
 							/>
 						</View>
 					</View>
