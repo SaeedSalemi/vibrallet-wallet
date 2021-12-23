@@ -19,6 +19,7 @@ import { useNavigation } from '@react-navigation/core'
 import { showMessage } from 'react-native-flash-message'
 import { Context } from '../../context/Provider'
 import HttpService from '../../services/HttpService'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const ChartItems = ({ iconColor, title, value }) => {
 	return (
@@ -54,8 +55,26 @@ export default function WalletScreen({ navigation }) {
 	const [state, setState] = useState({ allSupportedCoins: [] })
 	const { coins, setCoin } = useContext(Context)
 	const [totalAmount, setTotalAmount] = useState(0)
-
 	const [filteredCoins, setFilteredCoins] = useState([])
+
+
+	useLayoutEffect(() => {
+		checkExistsWallet()
+	}, [])
+
+
+	const checkExistsWallet = async () => {
+		const persist = await AsyncStorage.getItem('persist:root')
+		if (persist !== null) {
+			let item = JSON.parse(persist)
+			if (item !== null) {
+				let wallets = JSON.parse(item["wallets"])
+				if (wallets["data"] === null) {
+					navigation.replace(routes.newWallet, { no_back: true })
+				}
+			}
+		}
+	}
 
 
 	useEffect(() => {
