@@ -76,6 +76,7 @@ export function AppTabNavigation() {
 			}}
 			tabBar={props => <TabBar {...props} />}
 			initialRouteName={routes.wallet}
+			name="AppStack"
 		>
 			<AppTab.Screen name={routes.wallet} component={WalletScreen} />
 			<AppTab.Screen name={routes.home} component={HomeScreen} />
@@ -256,11 +257,11 @@ export function AppStackNavigation() {
 				component={EditProfileScreen}
 			/>
 
-			<AppStack.Screen
+			{/* <AppStack.Screen
 				name={routes.welcome}
 				options={{ headerShown: false }}
 				component={WelcomeScreen}
-			/>
+			/> */}
 			<AppStack.Screen
 				name={routes.profileRewards}
 				component={ProfileRewardsScreen}
