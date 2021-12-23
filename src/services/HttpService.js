@@ -19,7 +19,7 @@ export default class HttpService {
     this.headers = {
       'X-Requested-With': 'XMLHttpRequest',
       'Content-Type': 'application/json',
-      "token": axios.defaults.token || "123"
+      "token": axios.defaults.token || ""
     }
 
   }
