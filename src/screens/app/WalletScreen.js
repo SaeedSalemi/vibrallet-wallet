@@ -44,6 +44,10 @@ const ChartItems = ({ iconColor, title, value }) => {
 	)
 }
 
+const wait = timeout => {
+	return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 export default function WalletScreen({ navigation }) {
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
@@ -51,11 +55,25 @@ export default function WalletScreen({ navigation }) {
 	const { coins, setCoin } = useContext(Context)
 	const [totalAmount, setTotalAmount] = useState(0)
 
+	const [filteredCoins, setFilteredCoins] = useState([])
+
+
+	useEffect(() => {
+		setFilteredCoins(coins.filter(c => !c.hide))
+	}, [])
+
 	const [refreshing, setRefreshing] = React.useState(false);
-	const handleRefresh = () => {
-		setRefreshing(true)
-		setTimeout(() => setRefreshing(false), 1000)
-	}
+
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		setFilteredCoins([])
+		wait(500).then(() => {
+			setFilteredCoins(coins.filter(c => !c.hide))
+			setRefreshing(false)
+		});
+	}, []);
+
+
 
 
 
@@ -92,12 +110,6 @@ export default function WalletScreen({ navigation }) {
 		setTotalAmount(totalAmount)
 	}, [])
 
-	const onRefresh = () => {
-		setRefreshing(true)
-		setTimeout(() => {
-			setRefreshing(false)
-		}, 100)
-	}
 
 
 	// const totalAmount = useMemo(() => {
@@ -165,9 +177,11 @@ export default function WalletScreen({ navigation }) {
 		],
 	}
 
-	const filteredCoins = useMemo(() => {
-		return coins.filter(c => !c.hide)
-	}, [JSON.stringify(coins)])
+
+
+	// const filteredCoins = useMemo(() => {
+	// 	return coins.filter(c => !c.hide)
+	// }, [JSON.stringify(coins)])
 
 
 	const hideCoinHandler = coin => {
@@ -327,15 +341,8 @@ export default function WalletScreen({ navigation }) {
 					<FlatList
 						style={{ marginVertical: 16 }}
 						data={filteredCoins}
-						refreshControl={
-							<RefreshControl
-								refreshing={false}
-								onRefresh={() => {
-									setRefreshing(!refreshing)
-								}} />
-						}
+						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 						renderItem={({ item, index }) => <Coin
-							isRefresh={refreshing}
 							coin={item}
 							index={index}
 							length={data.length}
