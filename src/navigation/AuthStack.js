@@ -33,6 +33,7 @@ export function AuthStackNavigation() {
 				headerBackVisible: false,
 				headerLeft: props => <BackButton navigation={navigation} {...props} />,
 			})}
+			name="AuthStack"
 		>
 
 			{/* <AuthStack.Screen
