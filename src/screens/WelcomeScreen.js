@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, View, Image } from 'react-native'
+import React, { useEffect, usef } from 'react'
+import { StyleSheet, View, Image, BackHandler } from 'react-native'
 import Screen from '../components/Screen'
 
 import AppButton from '../components/common/AppButton'
@@ -11,6 +11,7 @@ import SvgUri from 'react-native-svg-uri'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn } from '../redux/modules/appSettings'
 import { CommonActions } from '@react-navigation/routers'
+import { useFocusEffect } from '@react-navigation/native'
 const defaultStyles = globalStyles()
 
 const WelcomeScreen = ({ navigation }) => {
@@ -19,11 +20,37 @@ const WelcomeScreen = ({ navigation }) => {
 		dispatch(setLoggedIn(true, true))
 	}
 
-	useEffect(() => {
-		navigation.addListener('beforeRemove', (e) => {
-			e.preventDefault();
-		})
-	}, [])
+
+	// useEffect(() => {
+	// 	BackHandler.addEventListener('hardwareBackPress', async () => {
+	// 		// this.goBack(); // works best when the goBack is async
+	// 		return false;
+	// 	});
+	// }, [])
+
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		const onBackPress = () => {
+	// 			if (isSelectionModeEnabled()) {
+	// 				disableSelectionMode();
+	// 				return true;
+	// 			} else {
+	// 				return false;
+	// 			}
+	// 		};
+
+	// 		BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+	// 		return () =>
+	// 			BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+	// 	}, [isSelectionModeEnabled, disableSelectionMode])
+	// );
+
+	// useEffect(() => {
+	// 	navigation.addListener('beforeRemove', (e) => {
+	// 		e.preventDefault();
+	// 	})
+	// }, [])
 
 	return (
 		<Screen style={defaultStyles.screen}>
