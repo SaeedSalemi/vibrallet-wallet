@@ -140,7 +140,7 @@ export function AppStackNavigation() {
 
 			<AppTab.Screen
 				name={"RestoreScreen"}
-				component={RewardsScreen}
+				component={RestoreScreen}
 				options={{ headerShown: false }}
 			/>
 			<AppTab.Screen
