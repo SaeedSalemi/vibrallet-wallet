@@ -24,13 +24,14 @@ const defaultStyles = globalStyles()
 const RestoreModalScreen = ({ navigation }) => {
 	const [isFile, setIsFile] = useState(true)
 	const dispatch = useDispatch()
-	const { navigate } = useNavigation()
 
 	const handleToggle = () => setIsFile(!isFile)
 
 	const [fileUri, setFileUri] = useState('')
+	const [loading, setLoading] = useState(false)
 
 	const handleFilePicker = async () => {
+
 		try {
 			const res = await DocumentPicker.pickSingle({
 				type: [DocumentPicker.types.allFiles],
@@ -47,7 +48,7 @@ const RestoreModalScreen = ({ navigation }) => {
 	}
 
 	const handleRestore = () => {
-
+		setLoading(true)
 
 		if (fileUri !== "") {
 			RNFS.readFile(fileUri.uri, 'utf8').then(content => {
@@ -96,11 +97,8 @@ const RestoreModalScreen = ({ navigation }) => {
 			}).catch(error => {
 				console.log('error read file', error)
 			})
+			setLoading(false)
 		}
-
-
-
-
 	}
 
 	return (
@@ -154,7 +152,7 @@ const RestoreModalScreen = ({ navigation }) => {
 						)}
 					</View>
 				</View>
-				<AppButton typo="sm" title="Restore" onPress={handleRestore} />
+				<AppButton loading={loading} typo="sm" title="Restore" onPress={handleRestore} />
 			</View>
 		</Screen>
 	)
