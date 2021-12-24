@@ -86,7 +86,7 @@ export default function WalletScreen({ navigation }) {
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setFilteredCoins([])
-		wait(500).then(() => {
+		wait(0).then(() => {
 			setFilteredCoins(coins.filter(c => !c.hide))
 			setRefreshing(false)
 		});
