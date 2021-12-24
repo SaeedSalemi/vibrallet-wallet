@@ -142,6 +142,13 @@ export function AppStackNavigation() {
 				name={"RestoreScreen"}
 				component={RestoreScreen}
 				options={{ headerShown: false }}
+				options={{
+					headerTitle: ({ route }) => (
+						<AppText typo="md" bold>
+							Restore Wallet
+						</AppText>
+					),
+				}}
 			/>
 			<AppTab.Screen
 				name={"backup"}
