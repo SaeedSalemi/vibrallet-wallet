@@ -17,7 +17,9 @@ const defaultStyles = globalStyles()
 const WelcomeScreen = ({ navigation }) => {
 	const dispatch = useDispatch()
 	const handleCreateNewWallet = () => {
-		dispatch(setLoggedIn(true, true))
+		// TODO: refactor setLoggedIn
+		dispatch(setLoggedIn(true))
+		navigation.navigate(routes.newWallet)
 	}
 
 
