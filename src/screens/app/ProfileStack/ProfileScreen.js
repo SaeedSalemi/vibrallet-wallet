@@ -16,15 +16,13 @@ import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn } from '../../../redux/modules/appSettings'
-import { useNavigation } from '@react-navigation/native'
-import { navigate, reset } from '../../../utils/navigation'
+import { navigate } from '../../../utils/navigation'
 
 
 
 export default function ProfileScreen({ navigation }) {
 	const dispatch = useDispatch()
 	const [isLoggingOut, setIsLoggingOut] = useState(false)
-	// const { navigate } = useNavigation()
 
 	const getStoredMnemonic = async () => {
 		const persist = await AsyncStorage.getItem('persist:root')
