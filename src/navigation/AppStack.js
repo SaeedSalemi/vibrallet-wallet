@@ -61,6 +61,10 @@ import CreateAccountWithEmailScreen from '../screens/authentication/CreateAccoun
 import SetPriceAlertScreen from '../screens/app/HomeStack/SetPriceAlertScreen'
 import DAppWebView from '../screens/app/HomeStack/DAppWebView'
 import WelcomeScreen from '../screens/WelcomeScreen'
+import HeaderTitle from './HeaderTitle'
+import CreateAccountWithPhoneScreen from '../screens/authentication/CreateAccountWithPhoneScreen'
+import VerifyPhoneScreen from '../screens/authentication/VerifyPhoneScreen'
+import RestoreModalScreen from '../screens/authentication/RestoreModalScreen'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -76,7 +80,6 @@ export function AppTabNavigation() {
 			}}
 			tabBar={props => <TabBar {...props} />}
 			initialRouteName={routes.wallet}
-			name="AppStack"
 		>
 			<AppTab.Screen name={routes.wallet} component={WalletScreen} />
 			<AppTab.Screen name={routes.home} component={HomeScreen} />
@@ -93,6 +96,7 @@ export function AppStackNavigation() {
 
 	return (
 		<AppStack.Navigator
+			name="AppStack"
 			screenOptions={({ navigation }) => ({
 				headerStyle: {
 					backgroundColor: globalStyles.Colors.bckColor,
@@ -138,18 +142,7 @@ export function AppStackNavigation() {
 				})}
 			/>
 
-			<AppTab.Screen
-				name={"RestoreScreen"}
-				component={RestoreScreen}
-				options={{ headerShown: false }}
-				options={{
-					headerTitle: ({ route }) => (
-						<AppText typo="md" bold>
-							Restore Wallet
-						</AppText>
-					),
-				}}
-			/>
+			{/* AAAAAAAAAAAAAAAAAAAAAAAAAa */}
 			<AppTab.Screen
 				name={"backup"}
 				component={BackupScreen}
@@ -594,6 +587,50 @@ export function AppStackNavigation() {
 					),
 				}}
 			/>
+
+			<AppTab.Screen
+				name={"RestoreScreen"}
+				component={RestoreScreen}
+				options={{ headerShown: false }}
+				options={{
+					headerTitle: ({ route }) => (
+						<AppText typo="md" bold>
+							Restore Wallet
+						</AppText>
+					),
+				}}
+			/>
+
+			{/* Screened Moved from the auth stack to app stack */}
+
+			<AppStack.Screen
+				name={routes.welcome}
+				options={{ headerShown: false }}
+				component={WelcomeScreen}
+			/>
+
+			<AppStack.Screen
+				name={routes.createWalletPhone}
+				options={{
+					headerTitle: () => <HeaderTitle>Create With Phone</HeaderTitle>,
+				}}
+				component={CreateAccountWithPhoneScreen}
+			/>
+			<AppStack.Screen
+				name={routes.verifyPhone}
+				options={{ headerTitle: () => <HeaderTitle>Verify Phone</HeaderTitle> }}
+				component={VerifyPhoneScreen}
+			/>
+
+			<AppStack.Screen
+				name={routes.restore}
+				options={{
+					headerTitle: () => <HeaderTitle>Restore Wallet</HeaderTitle>,
+				}}
+				component={RestoreModalScreen}
+			/>
+
+
 		</AppStack.Navigator>
 	)
 }
