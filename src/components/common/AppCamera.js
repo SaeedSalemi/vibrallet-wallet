@@ -1,5 +1,6 @@
-import React, { useRef } from 'react'
-import { RNCamera } from 'react-native-camera'
+import React, { useRef, useState, useEffect } from 'react'
+// import { RNCamera } from 'react-native-camera'
+import { Camera } from 'expo-camera';
 import AppButton from '../common/AppButton'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Modal, View } from 'react-native'
@@ -7,17 +8,28 @@ import { globalStyles } from '../../config/styles'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 
 export default function AppCamera({ show, onClose, qr, onQR }) {
+
+	const [hasPermission, setHasPermission] = useState(null);
+	const [type, setType] = useState(Camera.Constants.Type.back);
+
 	const rnCameraRef = useRef(null)
 	const handleOnRead = qrData => {
 		onQR(qrData)
 	}
+
+	useEffect(() => {
+		(async () => {
+			const { status } = await Camera.requestPermissionsAsync();
+			setHasPermission(status === 'granted');
+		})();
+	}, []);
 
 	return (
 		<Modal visible={show} onRequestClose={onClose} animationType="slide">
 			{qr ? (
 				<QRCodeScanner
 					onRead={handleOnRead}
-					flashMode={RNCamera.Constants.FlashMode.auto}
+					flashMode={Camera.Constants.FlashMode.auto}
 					showMarker
 					customMarker={
 						<View
@@ -92,13 +104,13 @@ export default function AppCamera({ show, onClose, qr, onQR }) {
 					}
 				/>
 			) : (
-				<RNCamera
+				<Camera
 					ref={rnCameraRef}
 					style={{
 						flex: 1,
 					}}
-					type={RNCamera.Constants.Type.back}
-					flashMode={RNCamera.Constants.FlashMode.on}
+					type={Camera.Constants.Type.back}
+					flashMode={Camera.Constants.FlashMode.on}
 				>
 					<SafeAreaView style={{ flex: 1 }}>
 						<AppButton
@@ -118,7 +130,7 @@ export default function AppCamera({ show, onClose, qr, onQR }) {
 							title="Close"
 						/>
 					</SafeAreaView>
-				</RNCamera>
+				</Camera>
 			)}
 		</Modal>
 	)
