@@ -57,6 +57,56 @@ const RestoreModalScreen = ({ navigation }) => {
 	}
 
 	const handleRestore = () => {
+		setLoading(true)
+		// restore from file
+		if (isFile) {
+			if (fileUri !== "") {
+				RNFS.readFile(fileUri.uri, 'utf8').then(async (content) => {
+					let decoded = decrypt(JSON.parse(content))
+
+					if (decoded == '') {
+						showMessage({
+							message: 'File is empty',
+							description: null,
+							type: 'danger',
+							icon: null,
+							duration: 4500,
+							style: { backgroundColor: "#e74c3c" },
+							position: 'top'
+						})
+						setLoading(false)
+						return
+					} else {
+
+						dispatch(setLoggedIn(true, false))
+						dispatch(initCreateWallet('vibrallet_backup'))
+						dispatch(finalCreateWallet(decoded))
+						setUser({ username: true })
+
+						supportedCoins(xhr_response => {
+							if (xhr_response)
+								showMessage({
+									message: 'Your wallet has been restored.',
+									description: null,
+									type: 'success',
+									icon: null,
+									duration: 3000,
+									style: { backgroundColor: "#16a085" },
+									position: 'top'
+								})
+							setLoading(false)
+							navigation.replace(routes.appTab)
+						}, decoded)
+
+					}
+				}).catch(error => {
+					console.log('error read file', error)
+				})
+				// setLoading(false)
+			}
+		} else {
+
+		}
 
 	}
 
