@@ -23,12 +23,12 @@ const WelcomeScreen = ({ navigation }) => {
 	}
 
 
-	// useEffect(() => {
-	// 	BackHandler.addEventListener('hardwareBackPress', async () => {
-	// 		// this.goBack(); // works best when the goBack is async
-	// 		return false;
-	// 	});
-	// }, [])
+	useEffect(() => {
+		BackHandler.addEventListener('hardwareBackPress', async () => {
+			// this.goBack(); // works best when the goBack is async
+			return false;
+		});
+	}, [])
 
 	// useFocusEffect(
 	// 	React.useCallback(() => {
