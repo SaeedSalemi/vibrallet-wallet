@@ -11,24 +11,20 @@ import ProfileMainRouteSection from '../../../components/Profile/ProfileMainRout
 import { globalStyles } from '../../../config/styles'
 import Header from '../../../components/Header/Header'
 import { routes } from '../../../config/routes'
-// import { useDispatch } from 'react-redux'
-// import { setLoggedIn } from '../../../redux/modules/appSettings'
-// import RNFS from 'react-native-fs'
-import { encrypt, gettingBackup } from '../../../utils/Functions'
+import { gettingBackup } from '../../../utils/Functions'
 import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useNavigation } from '@react-navigation/native'
-import { changeStack, reset } from '../../../utils/navigation'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn } from '../../../redux/modules/appSettings'
-// import { changeStack } from '../../../hooks/changeStack'
-// import walletManager from '../../../blockchains/walletManager'
+import { useNavigation } from '@react-navigation/native'
+import { navigate, reset } from '../../../utils/navigation'
 
 
 
 export default function ProfileScreen({ navigation }) {
 	const dispatch = useDispatch()
 	const [isLoggingOut, setIsLoggingOut] = useState(false)
+	// const { navigate } = useNavigation()
 
 	const getStoredMnemonic = async () => {
 		const persist = await AsyncStorage.getItem('persist:root')
@@ -57,6 +53,7 @@ export default function ProfileScreen({ navigation }) {
 			position: 'top'
 		})
 		setIsLoggingOut(false)
+		navigate(routes.welcome)
 	}
 
 	return (
