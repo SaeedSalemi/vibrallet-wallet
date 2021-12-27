@@ -22,11 +22,7 @@ import bitcoinManager from '../../blockchains/BitcoinManager'
 import ethManager from '../../blockchains/EthManager'
 import bscManager from '../../blockchains/BscManager'
 import { finalCreateWallet, initCreateWallet } from '../../redux/modules/wallets'
-import { CommonActions } from '@react-navigation/native';
-import { StackActions } from '@react-navigation/native';
-import { reset } from '../../utils/navigation'
-import { changeStack } from '../../hooks/changeStack'
-import { useNavigation } from '@react-navigation/core'
+import Clipboard from '@react-native-community/clipboard'
 
 const defaultStyles = globalStyles()
 
@@ -165,8 +161,12 @@ const RestoreModalScreen = ({ navigation }) => {
 									placeholderTextColor={defaultStyles.Colors.darkTextColor}
 									color={defaultStyles.Colors.textColor}
 									onChangeText={text => setTypedMnonic(text)}
+									value={typedMnonic}
 								/>
-								<TouchableOpacity onPress={() => { }}><AppText style={styles.paste}>Paste</AppText></TouchableOpacity>
+								<TouchableOpacity onPress={async () => {
+									const copiedText = await Clipboard.getString()
+									setTypedMnonic(copiedText)
+								}}><AppText style={styles.paste}>Paste</AppText></TouchableOpacity>
 								<AppIcon name="scan" style={styles.icon} />
 							</View>
 						)}
