@@ -38,7 +38,7 @@ export const resetWallets = () => ({
 })
 
 const initialState = {
-	data: null,
+	data: [],
 	create: null,
 }
 
