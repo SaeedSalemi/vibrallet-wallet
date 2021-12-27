@@ -1,4 +1,5 @@
 {
   "token": "token",
-  "register_user": "regUser"
+  "register_user": "regUser",
+  "persist_root": "persist:root"
 }
