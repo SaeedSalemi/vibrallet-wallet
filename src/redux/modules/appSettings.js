@@ -1,7 +1,7 @@
 import { takeEvery, put } from 'redux-saga/effects'
-import { routes } from '../../config/routes'
-import { navigate, reset } from '../../utils/navigation'
 import { resetWallets } from './wallets'
+// import { routes } from '../../config/routes'
+// import { navigate, reset } from '../../utils/navigation'
 
 export const SET_LOGGED_IN = 'SET_LOGGED_IN'
 export const setLoggedIn = (isLoggedIn, navigateToWallet) => ({
