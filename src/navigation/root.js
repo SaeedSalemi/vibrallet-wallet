@@ -36,7 +36,9 @@ export default function RootNavigation() {
 	return (
 		<>
 			<NavigationContainer ref={navigationRef}>
-				{isLoggedIn ? <AppStackNavigation /> : <AuthStackNavigation />}
+				{/* {isLoggedIn ? <AppStackNavigation /> : <AuthStackNavigation />} */}
+				{/* {isLoggedIn ? : <AuthStackNavigation />} */}
+				<AppStackNavigation />
 			</NavigationContainer>
 			<Modal visible={authPass} onDismiss={() => null}>
 				<WelcomeBack
