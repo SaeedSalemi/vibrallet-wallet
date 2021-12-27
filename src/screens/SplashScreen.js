@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { StyleSheet, Image, TouchableOpacity } from 'react-native'
 import Screen from './../components/Screen'
 import Colors from './../assets/Colors'
@@ -8,15 +8,13 @@ import { routes } from '../config/routes'
 import AppText from '../components/common/AppText'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Network from 'expo-network';
+import { checkExistsWallet } from '../utils/WalletFunctions'
 
 const SplashScreen = ({ navigation }) => {
-	// const { navigate } = navigation
 	const { navigate } = useNavigation()
 
-
-	useEffect(() => {
+	useLayoutEffect(() => {
 		checkNetwork()
-		checkExistsWallet()
 	}, [])
 
 
@@ -37,48 +35,33 @@ const SplashScreen = ({ navigation }) => {
 	}
 
 
-	const checkExistsWallet = async () => {
-		const persist = await AsyncStorage.getItem('persist:root')
-		if (persist !== null) {
-			let item = JSON.parse(persist)
-			if (item !== null) {
-				let wallets = JSON.parse(item["wallets"])
-				if (wallets["data"] === null) {
-					navigation.replace(routes.newWallet, { no_back: true })
-				} else {
-					setTimeout(() => {
-						navigate(routes.appTab)
-					}, 700)
-				}
+	useEffect(() => {
+		checkExistsWallet().then(wallet => {
+			if (wallet) {
+				setTimeout(() => navigation.replace(routes.appTab), 100)
+			} else {
+				navigation.replace(routes.welcome)
 			}
-		}
-	}
+		}).catch(err => { console.log('splash screen catch', err) })
+	}, [])
 
 
-	// useEffect(() => {
-	// 	if (checkGeneratedWallet()) {
-	// 		setTimeout(() => {
-	// 			navigate(routes.appTab)
-	// 		}, 700)
-	// 	} else {
-	// 		navigation.replace(routes.newWallet, { no_back: true })
-	// 	}
-
-	// }, [])
-
-	// const checkGeneratedWallet = async () => {
+	// const checkExistsWallet = async () => {
 	// 	const persist = await AsyncStorage.getItem('persist:root')
-	// 	if (persist === null) return false
-	// 	else return true
+	// 	if (persist !== null) {
+	// 		let item = JSON.parse(persist)
+	// 		if (item !== null) {
+	// 			let wallets = JSON.parse(item["wallets"])
+	// 			if (wallets["data"] === null) {
+	// 				navigation.replace(routes.newWallet, { no_back: true })
+	// 			} else {
+	// 				setTimeout(() => {
+	// 					navigate(routes.appTab)
+	// 				}, 700)
+	// 			}
+	// 		}
+	// 	}
 	// }
-
-
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		navigate(routes.appTab)
-	// 		// navigation.replace(routes.appTab, { no_back: true })
-	// 	}, 700)
-	// }, [])
 
 	return (
 		<Screen style={styles.screen}>
