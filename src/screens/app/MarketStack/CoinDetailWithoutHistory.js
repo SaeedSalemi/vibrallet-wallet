@@ -18,8 +18,6 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 export default function CoinDetailWithoutHistory({ route, navigation }) {
 	const { coin } = route.params || {}
 
-
-
 	const [loading, setLoading] = useState(false)
 
 
@@ -40,8 +38,9 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 	const [chartItems, setChartItems] = useState([
 		{ title: '1D', active: true },
-		{ title: '1W' },
+		{ title: '7D' },
 		{ title: '1M' },
+		{ title: '6M' },
 		{ title: '1Y' },
 		{ title: 'ALL' },
 	])
@@ -83,7 +82,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 							value: item.value
 						}
 					});
-					console.log('----  DATA  --> ', items)
+					// console.log('----  DATA  --> ', items)
 					items.map(i => {
 						let check = moment(i.date, 'YYYY/MM/DD');
 						let _m = check.format('M');
