@@ -82,17 +82,19 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 							value: item.value
 						}
 					});
-					// console.log('----  DATA  --> ', items)
+					console.log('dani debug ', items)
 					items.map(i => {
-						let check = moment(i.date, 'YYYY/MM/DD');
+						let check = moment(i.date, 'YYYY/MM/DD HH:MM');
 						let _m = check.format('M');
 						let _d = check.format("D")
-						console.log('dani debugger 2', _d)
+						let _time = check.format("HH:MM")
+						console.log('dani debugger 3 ', _time)
 						if (state.timeframe === "4h" || state.timeframe === "1d") {
 							i.date = `${_d} ${MONTHS[_m - 1]}`
 						} else {
 							i.date = MONTHS[_m - 1]
 						}
+
 					})
 					state.coinHistory = items
 					setState({ ...state })
@@ -123,18 +125,25 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		let timeframe = '4h';
 		switch (title.toLowerCase()) {
 			case '1d':
-				limit = 6
-				timeframe = '4h';
+				limit = 48
+				timeframe = '5m';
 				break
-			case '1w':
-				limit = 7
-				timeframe = '1d';
+			case '7d':
+				limit = 84
+				timeframe = '30m';
 				break
 			case '1m':
-				limit = 7
-				timeframe = '1W';
+				limit = 30
+				timeframe = '1d';
+				break
+			case '6m':
+				limit = 180
+				timeframe = '1d';
 				break
 			case '1y':
+				limit = 365
+				timework = '1d'
+				break
 			case 'all':
 				limit = 12;
 				timeframe = '1M';
