@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, TouchableOpacity, View } from 'react-native'
+import { Alert, TouchableOpacity, View, Platform } from 'react-native'
 import AppButton from '../../../components/common/AppButton'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import AppText from '../../../components/common/AppText'
 import Screen from '../../../components/Screen'
 import { globalStyles } from '../../../config/styles'
-import TouchID from 'react-native-touch-id'
+// import TouchID from 'react-native-touch-id'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import * as LocalAuthentication from 'expo-local-authentication';
 
 export default function WelcomeBack({ password, onUnlockPress, useTouchId }) {
 	const [value, setValue] = useState('')
-	const [isTouchIdSupported, setSupported] = useState(false)
+
+
+	const [isBiometricSupported, setIsBiometricSupported] = useState(false)
 
 	useEffect(() => {
-		TouchID.isSupported()
-			.then(() => {
-				setSupported(true)
-			})
-			.catch(error => {
-				// Failure code
-				console.log(error)
-			})
+		async function checkBiometricSupport() {
+			const isSupported = await LocalAuthentication.hasHardwareAsync();
+			setIsBiometricSupported(isSupported)
+		}
+		checkBiometricSupport()
 	}, [])
+
+	const [isTouchIdSupported, setSupported] = useState(false)
+
+	// useEffect(() => {
+	// 	TouchID.isSupported()
+	// 		.then(() => {
+	// 			setSupported(true)
+	// 		})
+	// 		.catch(error => {
+	// 			// Failure code
+	// 			console.log(error)
+	// 		})
+	// }, [])
 
 	const handleUnlock = () => {
 		if (password === value) {
@@ -31,20 +44,29 @@ export default function WelcomeBack({ password, onUnlockPress, useTouchId }) {
 		}
 	}
 
-	const handleTouchId = () => {
-		TouchID.authenticate(
-			'To continue using your account with your fingerprint',
-			true
-		)
-			.then(() => {
-				onUnlockPress?.()
-			})
-			.catch(error => {
-				Alert.alert(
-					'Authentication Failed! you can try again or enter your password.'
-				)
-			})
+	const handleAuthBiometric = async () => {
+		try {
+			await LocalAuthentication.authenticateAsync('Unlock');
+			onUnlockPress?.()
+		} catch (e) {
+			console.log(e)
+		}
 	}
+
+	// const handleTouchId = () => {
+	// 	TouchID.authenticate(
+	// 		'To continue using your account with your fingerprint',
+	// 		true
+	// 	)
+	// 		.then(() => {
+	// 			onUnlockPress?.()
+	// 		})
+	// 		.catch(error => {
+	// 			Alert.alert(
+	// 				'Authentication Failed! you can try again or enter your password.'
+	// 			)
+	// 		})
+	// }
 
 	return (
 		<Screen style={{ ...globalStyles.gapScreen }} edges={['bottom']}>
@@ -64,10 +86,12 @@ export default function WelcomeBack({ password, onUnlockPress, useTouchId }) {
 					value={value}
 					onChangeText={text => setValue(text)}
 				/>
-				{isTouchIdSupported && useTouchId ? (
+				{/* {isTouchIdSupported && useTouchId ? ( */}
+				{isBiometricSupported && useTouchId ? (
 					<TouchableOpacity
 						style={{ marginVertical: 24, alignItems: 'center' }}
-						onPress={handleTouchId}
+						// onPress={handleTouchId}
+						onPress={handleAuthBiometric}
 					>
 						<FontAwesome5
 							name="fingerprint"
