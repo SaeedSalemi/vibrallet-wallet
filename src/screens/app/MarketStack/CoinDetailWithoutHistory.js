@@ -7,36 +7,12 @@ import { Images } from '../../../assets'
 import CoinDetailChartItem from '../../../components/Market/CoinDetailChartItem'
 import AppButton from '../../../components/common/AppButton'
 import { routes } from '../../../config/routes'
-import { useSelector } from 'react-redux'
-// import { AreaChart, YAxis, XAxis } from 'react-native-svg-charts'
-import * as shape from 'd3-shape'
 import HttpService from '../../../services/HttpService'
-// import { SvgUri } from 'react-native-svg'
 import { Context } from '../../../context/Provider'
 import moment from 'moment'
 
-// import  D3BarChart  from '../../../components/BarChart/D3BarChart'
-// import { Chart, Line, Area, HorizontalAxis, VerticalAxis } from 'react-native-responsive-linechart'
+import { LineChart } from "react-native-chart-kit";
 
-import {
-	LineChart,
-	// BarChart,
-	// PieChart,
-	// ProgressChart,
-	// ContributionGraph,
-	// StackedBarChart
-} from "react-native-chart-kit";
-
-
-// const values = ['$1850', '$1750', '$1650', '$1550']
-// const dates = ['5 Nov', '10 Nov', '15 Nov', '25 Nov', '30 Nov']
-// const chartItems = [
-// 	{ title: '1D' },
-// 	{ title: '1W' },
-// 	{ title: '1M' },
-// 	{ title: '1Y' },
-// 	{ title: 'ALL' },
-// ]
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export default function CoinDetailWithoutHistory({ route, navigation }) {
@@ -70,10 +46,6 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		{ title: 'ALL' },
 	])
 
-
-	// const { coinManager, getACoin } = useContext(Context)
-	// const [isLoading, setIsLoading] = useState(true)
-
 	const [state, setState] = useState({
 		address: '',
 		amount: '',
@@ -88,21 +60,6 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		timeframe: "4h",
 		limit: 6,
 	})
-
-	// const [__data, set_data] = useState()
-
-	// const [__chart, setChart] = useState()
-
-	useEffect(() => {
-		// chartDates()
-		//chartValues()
-		// let result = state.coinHistory.map(p => parseFloat(p.value).toFixed(2));
-		// console.log('chartValues RESULT:', result);
-		// setChart([
-		// 	{
-		// 		data: result
-		// 	}]);
-	}, [])
 
 
 	useEffect(() => {
