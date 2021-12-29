@@ -281,32 +281,6 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 							<ActivityIndicator color={"white"} size="large" />
 						</View>}
 				</View>
-				{/* <View style={{ height: 10, justifyContent: 'center', paddingLeft: 5, paddingRight: 50 }}> */}
-
-				{/* <View style={{ ...globalStyles.flex.row }}>
-				{state.coinHistory.map((item, index) => (
-					<AppText
-						style={{ marginHorizontal: 16 }}
-						color="text3"
-						typo="dot"
-						key={index}
-					>
-						{item.day === 0 ? '' : item.day} {item.date}
-					</AppText>
-				))}
-
-
-				{/ * <XAxis
-					// style={{ marginHorizontal: -10 }}
-					data={state.coinHistory.map(item => item.date)}
-					formatLabel={(value, index) => state.coinHistory.map(item => item.date)[value]}
-					contentInset={{ left: 10, right: 10 }}
-					// contentInset={{ left: 10, right: 10 }}
-					svg={{ fontSize: 10, fill: 'gray' }}
-				/> * /}
-
-
-			</View> */}
 				<View
 					style={{
 						...globalStyles.flex.row,
