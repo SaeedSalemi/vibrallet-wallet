@@ -111,10 +111,8 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 
 		var dd = date.getDate();
 		var mm = date.getMonth() + 1;
-		// var yyyy = date.getFullYear();
 		if (dd < 10) { dd = '0' + dd }
 		if (mm < 10) { mm = '0' + mm }
-		// date = mm + '/' + dd
 		date = `${MONTHS[mm - 1]} ${dd}`
 		return date
 	}
@@ -124,62 +122,6 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		var mm = date.getMonth();
 		if (dd < 10) { dd = '0' + dd }
 		return dayDelimiter ? `${MONTHS[mm]} ${dd}` : MONTHS[mm]
-	}
-
-
-	const renderLables = () => {
-
-		let labels = []
-		const length = state.coinHistory.length
-		// 1d
-		if (state.timeframe === "5m" && state.limit === 48) {
-
-			let first = moment(state.coinHistory[0].date, 'HH:MM')
-			labels.push(first.format("HH:MM"))
-
-			let middle = moment(state.coinHistory[Math.round((length - 1) / 2)].date, "HH:MM")
-			labels.push(middle.format("HH:MM"))
-
-			let last = moment(state.coinHistory[length - 1].date, "HH:MM")
-			labels.push(last.format('HH:MM'))
-		}
-
-		// 7d
-		// if (state.timeframe === "1d" && state.limit === 7) {
-		// 	for (let i = 0; i < 7; i++) {
-		// 		let d = new Date();
-		// 		d.setDate(d.getDate() - i);
-		// 		labels.push(formatDate(d))
-		// 	}
-		// 	labels.reverse()
-		// }
-
-		// 1m
-		if (state.timeframe === "1d" && state.limit === 30) {
-
-
-		}
-
-		// 6m
-		if (state.timeframe === "1w" && state.limit === 180) {
-			for (let i = 6; i >= 0; i--) {
-				let d = new Date();
-				d.setMonth(d.getMonth() - i);
-				labels.push(formatMonths(d) + " ")
-			}
-		}
-
-		// 1y
-		if (state.timeframe === "1w" && state.limit === 365) {
-			for (let i = 12; i > 0; i--) {
-				let d = new Date();
-				d.setMonth(d.getMonth() - i);
-				labels.push(formatMonths(d, false) + " ")
-			}
-
-		}
-
-		return labels
 	}
 
 	const handleSelectChange = (title) => {
