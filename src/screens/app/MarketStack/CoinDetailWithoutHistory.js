@@ -9,14 +9,12 @@ import AppButton from '../../../components/common/AppButton'
 import { routes } from '../../../config/routes'
 import HttpService from '../../../services/HttpService'
 import moment from 'moment'
-
 import { LineChart } from "react-native-chart-kit";
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export default function CoinDetailWithoutHistory({ route, navigation }) {
 	const { coin } = route.params || {}
-
 	const [loading, setLoading] = useState(false)
 	const [chartLables, setChartLables] = useState([])
 	const [chartItems, setChartItems] = useState([
@@ -43,9 +41,8 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		limit: 48,
 	})
 
+	useLayoutEffect(() => {
 
-	useEffect(() => {
-		console.log('---- LOAD DATA --> ', state.timeframe, state.limit)
 		setLoading(true)
 		new HttpService("",
 			{
@@ -68,6 +65,17 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					});
 					state.coinHistory = items
 					setState({ ...state })
+
+					const labels = []
+					let first = moment(items[0].date, 'HH:MM')
+					labels.push(first.format("HH:MM"))
+					let middle = moment(items[Math.round((items.length - 1) / 2)].date, "HH:MM")
+					labels.push(middle.format("HH:MM"))
+					let last = moment(items[items.length - 1].date, "HH:MM")
+					labels.push(last.format('HH:MM'))
+					setChartLables(labels)
+
+
 					setLoading(false)
 				} else {
 					alert('data is not available')
