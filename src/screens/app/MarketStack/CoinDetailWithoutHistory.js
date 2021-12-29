@@ -8,7 +8,6 @@ import CoinDetailChartItem from '../../../components/Market/CoinDetailChartItem'
 import AppButton from '../../../components/common/AppButton'
 import { routes } from '../../../config/routes'
 import HttpService from '../../../services/HttpService'
-import { Context } from '../../../context/Provider'
 import moment from 'moment'
 
 import { LineChart } from "react-native-chart-kit";
@@ -19,23 +18,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 	const { coin } = route.params || {}
 
 	const [loading, setLoading] = useState(false)
-
-
-	const data = [
-		{ label: 'Jan', value: 500 },
-		{ label: 'Feb', value: 312 },
-		{ label: 'Mar', value: 424 },
-		{ label: 'Apr', value: 745 },
-		{ label: 'May', value: 89 },
-		{ label: 'Jun', value: 434 },
-		{ label: 'Jul', value: 650 },
-		{ label: 'Aug', value: 980 },
-		{ label: 'Sep', value: 123 },
-		{ label: 'Oct', value: 186 },
-		{ label: 'Nov', value: 689 },
-		{ label: 'Dec', value: 643 }
-	]
-
+	const [chartLables, setChartLables] = useState([])
 	const [chartItems, setChartItems] = useState([
 		{ title: '1D', active: true },
 		{ title: '7D' },
@@ -56,8 +39,8 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		percentChange: 0,
 		// 
 		coinHistory: [],
-		timeframe: "4h",
-		limit: 6,
+		timeframe: "5m",
+		limit: 48,
 	})
 
 
@@ -76,26 +59,13 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 			}).Post(res => {
 
 				if (res) {
+
 					const items = res.data.rates.map(item => {
 						return {
 							date: moment(item.key),
 							value: item.value
 						}
 					});
-					console.log('dani debug ', items)
-					items.map(i => {
-						let check = moment(i.date, 'YYYY/MM/DD HH:MM');
-						let _m = check.format('M');
-						let _d = check.format("D")
-						let _time = check.format("HH:MM")
-						console.log('dani debugger 3 ', _time)
-						if (state.timeframe === "4h" || state.timeframe === "1d") {
-							i.date = `${_d} ${MONTHS[_m - 1]}`
-						} else {
-							i.date = MONTHS[_m - 1]
-						}
-
-					})
 					state.coinHistory = items
 					setState({ ...state })
 					setLoading(false)
@@ -120,17 +90,126 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		})
 	}, [])
 
+
+	// items.map((i, idx) => {
+	// 	let check = moment(i.date, 'YYYY/MM/DD HH:MM');
+	// 	let _m = check.format('M');
+	// 	let _d = check.format("D")
+	// 	let _time = check.format("HH:MM")
+	// 	console.log('by select chart item', { limit: state.limit, timeframe: state.timeframe })
+
+	// 	if (state.timeframe === "4h" || state.timeframe === "1d") {
+	// 		i.date = `${_d} ${MONTHS[_m - 1]}`
+	// 	} else {
+	// 		i.date = MONTHS[_m - 1]
+	// 	}
+
+	// })
+
+
+	function formatDate(date) {
+
+		var dd = date.getDate();
+		var mm = date.getMonth() + 1;
+		// var yyyy = date.getFullYear();
+		if (dd < 10) { dd = '0' + dd }
+		if (mm < 10) { mm = '0' + mm }
+		// date = mm + '/' + dd
+		date = `${MONTHS[mm - 1]} ${dd}`
+		return date
+	}
+
+	const formatMonths = (date, dayDelimiter = true) => {
+		var dd = date.getDate();
+		var mm = date.getMonth();
+		if (dd < 10) { dd = '0' + dd }
+		return dayDelimiter ? `${MONTHS[mm]} ${dd}` : MONTHS[mm]
+	}
+
+
+	const renderLables = () => {
+
+		let labels = []
+		const length = state.coinHistory.length
+		// 1d
+		if (state.timeframe === "5m" && state.limit === 48) {
+
+			let first = moment(state.coinHistory[0].date, 'HH:MM')
+			labels.push(first.format("HH:MM"))
+
+			let middle = moment(state.coinHistory[Math.round((length - 1) / 2)].date, "HH:MM")
+			labels.push(middle.format("HH:MM"))
+
+			let last = moment(state.coinHistory[length - 1].date, "HH:MM")
+			labels.push(last.format('HH:MM'))
+		}
+
+		// 7d
+		// if (state.timeframe === "1d" && state.limit === 7) {
+		// 	for (let i = 0; i < 7; i++) {
+		// 		let d = new Date();
+		// 		d.setDate(d.getDate() - i);
+		// 		labels.push(formatDate(d))
+		// 	}
+		// 	labels.reverse()
+		// }
+
+		// 1m
+		if (state.timeframe === "1d" && state.limit === 30) {
+
+
+		}
+
+		// 6m
+		if (state.timeframe === "1w" && state.limit === 180) {
+			for (let i = 6; i >= 0; i--) {
+				let d = new Date();
+				d.setMonth(d.getMonth() - i);
+				labels.push(formatMonths(d) + " ")
+			}
+		}
+
+		// 1y
+		if (state.timeframe === "1w" && state.limit === 365) {
+			for (let i = 12; i > 0; i--) {
+				let d = new Date();
+				d.setMonth(d.getMonth() - i);
+				labels.push(formatMonths(d, false) + " ")
+			}
+
+		}
+
+		return labels
+	}
+
 	const handleSelectChange = (title) => {
 		let limit = 6
 		let timeframe = '4h';
+		let labels = []
 		switch (title.toLowerCase()) {
 			case '1d':
 				limit = 48
 				timeframe = '5m';
+				labels = []
+				let first = moment(state.coinHistory[0].date, 'HH:MM')
+				labels.push(first.format("HH:MM"))
+				let middle = moment(state.coinHistory[Math.round((state.coinHistory.length - 1) / 2)].date, "HH:MM")
+				labels.push(middle.format("HH:MM"))
+				let last = moment(state.coinHistory[state.coinHistory.length - 1].date, "HH:MM")
+				labels.push(last.format('HH:MM'))
+				setChartLables(labels)
 				break
 			case '7d':
-				limit = 84
-				timeframe = '30m';
+				limit = 7
+				timeframe = '1d';
+				labels = []
+				for (let i = 0; i < 7; i++) {
+					let d = new Date();
+					d.setDate(d.getDate() - i);
+					labels.push(formatDate(d))
+				}
+				labels.reverse()
+				setChartLables(labels)
 				break
 			case '1m':
 				limit = 30
@@ -138,11 +217,26 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 				break
 			case '6m':
 				limit = 180
-				timeframe = '1d';
+				timeframe = '1w';
+				labels = []
+				for (let i = 6; i >= 0; i--) {
+					let d = new Date();
+					d.setMonth(d.getMonth() - i);
+					labels.push(formatMonths(d))
+				}
+				setChartLables(labels)
+
 				break
 			case '1y':
 				limit = 365
-				timework = '1d'
+				timeframe = '1w'
+				labels = []
+				for (let i = 12; i > 0; i--) {
+					let d = new Date();
+					d.setMonth(d.getMonth() - i);
+					labels.push(formatMonths(d, false))
+				}
+				setChartLables(labels)
 				break
 			case 'all':
 				limit = 12;
@@ -159,7 +253,6 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 			return item
 		})
 		setChartItems(items)
-		// timeframe: title
 		setState({ ...state, limit: limit, timeframe })
 	}
 
@@ -201,49 +294,50 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					</View>
 				</View>
 				<View style={{ ...globalStyles.flex.row, marginVertical: 6 }}>
-					{state.coinHistory && state.coinHistory.length > 0 ? <LineChart
-						data={{
-							labels: state.coinHistory.map(item => item.date),
-							datasets: [
-								{
-									data: state.coinHistory.map(item => parseFloat(item.value).toFixed(2))
+					{state.coinHistory && state.coinHistory.length > 0 ?
+						<LineChart
+							data={{
+								labels: chartLables,
+								datasets: [
+									{
+										data: state.coinHistory.map(item => parseFloat(item.value).toFixed(2))
+									}
+								]
+							}}
+							width={Dimensions.get("window").width - 20} // from react-native
+							height={220}
+							yAxisLabel="$"
+							yAxisSuffix="k"
+							yAxisInterval={1} // optional, defaults to 1
+							verticalLabelRotation={30}
+							chartConfig={{
+								backgroundColor: "#e26a00",
+								backgroundGradientFrom: "#9B68EB",
+								backgroundGradientTo: "#7037C9",
+								decimalPlaces: 2, // optional, defaults to 2dp
+								propsForLabels: {
+									fontSize: 10
+								},
+								color: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
+								labelColor: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
+								style: {
+									borderRadius: 16,
+									alignItems: 'center',
+								},
+								propsForDots: {
+									r: "2",
+									strokeWidth: "1",
+									stroke: "#9B68EB"
 								}
-							]
-						}}
-						width={Dimensions.get("window").width - 20} // from react-native
-						height={220}
-						yAxisLabel="$"
-						yAxisSuffix="k"
-						yAxisInterval={1} // optional, defaults to 1
-						verticalLabelRotation={30}
-						chartConfig={{
-							backgroundColor: "#e26a00",
-							backgroundGradientFrom: "#9B68EB",
-							backgroundGradientTo: "#7037C9",
-							decimalPlaces: 2, // optional, defaults to 2dp
-							propsForLabels: {
-								fontSize: 10
-							},
-							color: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
-							labelColor: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
-							style: {
-								borderRadius: 16,
-								alignItems: 'center',
-							},
-							propsForDots: {
-								r: "4",
-								strokeWidth: "2",
-								stroke: "#9B68EB"
-							}
-						}}
-						bezier
-						style={{
-							marginVertical: 4,
-							borderRadius: 12
-						}}
-					/> : <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-						<ActivityIndicator color={"white"} size="large" />
-					</View>}
+							}}
+							bezier
+							style={{
+								marginVertical: 4,
+								borderRadius: 12
+							}}
+						/> : <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+							<ActivityIndicator color={"white"} size="large" />
+						</View>}
 				</View>
 				{/* <View style={{ height: 10, justifyContent: 'center', paddingLeft: 5, paddingRight: 50 }}> */}
 
