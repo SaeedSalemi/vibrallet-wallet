@@ -39,11 +39,15 @@ export default function EditProfileScreen() {
 		const regiter_item = await AsyncStorage.getItem(register_user)
 		if (register_user) {
 			const fields = JSON.parse(regiter_item)
-			for (let [key, value] of Object.entries(fields)) {
-				if (value !== "")
-					counter++
+			if (fields) {
+				for (let [key, value] of Object.entries(fields)) {
+					if (value !== "")
+						counter++
+				}
+				setProgress(counter)
+			} else {
+				setProgress(0)
 			}
-			setProgress(counter)
 		} else {
 			setProgress(0)
 		}
