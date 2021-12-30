@@ -20,22 +20,23 @@ export default function BackupScreen({ navigation }) {
   const [backup, setBackup] = useState('')
 
   useEffect(() => {
-    const words = WalletManager.generateMnemonic()
-    setBackup(words)
+    // const words = WalletManager.generateMnemonic()
+    // setBackup(words)
+
   }, [])
 
   const handleAddWallet = () => {
-    dispatch(finalCreateWallet(backup))
-    showMessage({
-      message: 'Your wallet has been created successfully',
-      description: null,
-      type: 'success',
-      icon: null,
-      duration: 2000,
-      style: { backgroundColor: "#16a085" },
-      position: 'top'
-    })
-    navigation.navigate(routes.appTab)
+    // dispatch(finalCreateWallet(backup))
+    // showMessage({
+    //   message: 'Your wallet has been created successfully',
+    //   description: null,
+    //   type: 'success',
+    //   icon: null,
+    //   duration: 2000,
+    //   style: { backgroundColor: "#16a085" },
+    //   position: 'top'
+    // })
+    // navigation.navigate(routes.appTab)
   }
 
   const backupList = backup.split(' ').map((word, i) => `${i + 1}. ${word}`)
@@ -46,22 +47,6 @@ export default function BackupScreen({ navigation }) {
 
 
   const handleBackup = () => {
-    const path = RNFS.DownloadDirectoryPath + `/vibranium-backup-${new Date().getTime()}.json`;
-    RNFS.writeFile(path, JSON.stringify(encrypt(backup)), 'utf8')
-      .then((success) => {
-        showMessage({
-          message: 'Your wallet backup has been created in your downloads',
-          description: null,
-          type: 'success',
-          icon: null,
-          duration: 3000,
-          style: { backgroundColor: "#16a085" },
-          position: 'top'
-        })
-      })
-      .catch((error) => {
-        console.log(error.message)
-      });
   }
 
 
@@ -82,7 +67,6 @@ export default function BackupScreen({ navigation }) {
         >
           <View
             style={{
-              // flex: 1,
               alignSelf: 'stretch',
               paddingHorizontal: 16,
               paddingVertical: 8,
