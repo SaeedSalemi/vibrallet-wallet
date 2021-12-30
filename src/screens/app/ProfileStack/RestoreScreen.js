@@ -21,68 +21,73 @@ const RestoreModalScreen = ({ navigation }) => {
   const [isFile, setIsFile] = useState(true)
   const dispatch = useDispatch()
 
+  const [loading, setLoading] = useState(false)
+
   const handleToggle = () => setIsFile(!isFile)
 
   const [fileUri, setFileUri] = useState('')
 
   const handleFilePicker = async () => {
-    try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      })
-      setFileUri(res)
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log('error', err)
-      } else {
-        throw err
-      }
-    }
+    alert('salam')
+    // try {
+    //   const res = await DocumentPicker.pickSingle({
+    //     type: [DocumentPicker.types.allFiles],
+    //   })
+    //   setFileUri(res)
+    // } catch (err) {
+    //   if (DocumentPicker.isCancel(err)) {
+    //     console.log('error', err)
+    //   } else {
+    //     throw err
+    //   }
+    // }
   }
 
   const handleRestore = async () => {
     if (fileUri !== "") {
-      RNFS.readFile(fileUri.uri, 'utf8').then(content => {
-        const key = "persist:root"
-        let decode = decrypt(JSON.parse(content))
-        AsyncStorage.getItem(key).then(persist => {
-          if (persist !== null) {
-            let item = JSON.parse(persist)
+      setLoading(true)
+      // RNFS.readFile(fileUri.uri, 'utf8').then(content => {
+      //   const key = "persist:root"
+      //   let decode = decrypt(JSON.parse(content))
+      //   AsyncStorage.getItem(key).then(persist => {
+      //     if (persist !== null) {
+      //       let item = JSON.parse(persist)
 
-            const clonePersist = JSON.parse(persist);
-            if (item !== null) {
-              let wallets = JSON.parse(item["wallets"])
-              if (wallets["data"] === null) {
-                clonePersist
-                const _walletData = {
-                  create: null,
-                  data: [
-                    { name: 'vibrallet_backup', backup: decode }
-                  ]
-                }
-                clonePersist["wallets"] = JSON.stringify(_walletData)
-                AsyncStorage.removeItem(key).then(result => {
+      //       const clonePersist = JSON.parse(persist);
+      //       if (item !== null) {
+      //         let wallets = JSON.parse(item["wallets"])
+      //         if (wallets["data"] === null) {
+      //           clonePersist
+      //           const _walletData = {
+      //             create: null,
+      //             data: [
+      //               { name: 'vibrallet_backup', backup: decode }
+      //             ]
+      //           }
+      //           clonePersist["wallets"] = JSON.stringify(_walletData)
+      //           AsyncStorage.removeItem(key).then(result => {
 
-                  AsyncStorage.setItem(key, JSON.stringify(clonePersist))
-                  showMessage({
-                    message: 'Your wallet has been restored.',
-                    description: null,
-                    type: 'success',
-                    icon: null,
-                    duration: 3000,
-                    style: { backgroundColor: "#16a085" },
-                    position: 'top'
-                  })
-                  setUser({ username: true })
-                  dispatch(setLoggedIn(true))
-                })
-              }
-            }
-          } else { }
-        })
-      }).catch(error => {
-        console.log('error read file', error)
-      })
+      //             AsyncStorage.setItem(key, JSON.stringify(clonePersist))
+      //             showMessage({
+      //               message: 'Your wallet has been restored.',
+      //               description: null,
+      //               type: 'success',
+      //               icon: null,
+      //               duration: 3000,
+      //               style: { backgroundColor: "#16a085" },
+      //               position: 'top'
+      //             })
+      //             setUser({ username: true })
+      //             dispatch(setLoggedIn(true))
+      //           })
+      //         }
+      //       }
+      //     } else { }
+      //   })
+      // }).catch(error => {
+      //   console.log('error read file', error)
+      // })
+      setLoading(false)
     }
 
   }
@@ -138,7 +143,7 @@ const RestoreModalScreen = ({ navigation }) => {
             )}
           </View>
         </View>
-        <AppButton typo="sm" title="Restore" onPress={handleRestore} />
+        <AppButton loading={loading} typo="sm" title="Restore" onPress={handleRestore} />
       </View>
     </Screen>
   )
