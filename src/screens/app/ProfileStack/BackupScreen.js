@@ -56,6 +56,24 @@ export default function WordBackup({ navigation }) {
   useLayoutEffect(() => {
 
     checkExistsWallet().then(wallet => {
+      if (wallet) {
+        getStoredMnemonic()
+          .then(mnemonic => {
+            if (mnemonic) {
+              setBackup(mnemonic.backup)
+            }
+          }).catch(err => { console.log('getStoredMnemonic in profile stack error', err) })
+      } else {
+        showMessage({
+          message: `There is a problem to retrieve your wallet. Please, try again.`,
+          description: null,
+          type: 'danger',
+          icon: null,
+          duration: 3000,
+          style: { backgroundColor: "#e74c3c" },
+          position: 'top'
+        })
+      }
     }).catch(err => { console.log('splash screen catch', err) })
   }, [])
 
