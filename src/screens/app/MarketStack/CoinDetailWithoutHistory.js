@@ -10,6 +10,7 @@ import { routes } from '../../../config/routes'
 import HttpService from '../../../services/HttpService'
 import moment from 'moment'
 import { LineChart } from "react-native-chart-kit";
+import { useQuery } from 'react-query'
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -40,6 +41,35 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 		timeframe: "5m",
 		limit: 48,
 	})
+
+
+	const fetchData = (symbol, timeframe = "4m", limit = 48) => {
+		return new Promise((resolve, reject) => {
+			const data = {
+				"uniqueId": "abc",
+				"action": "historicalPrice",
+				"data": {
+					"symbol": `${symbol}USDT`,
+					"timeframe": timeframe,
+					"limit": limit
+				}
+			}
+			new HttpService("", data).Post(xhr_response => {
+				const _data = xhr_response.data.rates.map(item => {
+					return {
+						date: moment(item.key),
+						value: item.value
+					}
+				});
+				resolve(_data)
+			})
+		})
+	}
+
+
+	const { data, status } = useQuery('prices', fetchData)
+
+	console.log('from use Query data', data)
 
 	useLayoutEffect(() => {
 
