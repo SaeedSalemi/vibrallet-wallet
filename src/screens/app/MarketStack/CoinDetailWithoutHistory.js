@@ -67,9 +67,9 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 	}
 
 
-	const { data, status } = useQuery('prices', fetchData)
+	// const { data, status } = useQuery('prices', fetchData)
 
-	console.log('from use Query data', data)
+	// console.log('from use Query data', data)
 
 	useLayoutEffect(() => {
 
@@ -96,14 +96,17 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					state.coinHistory = items
 					setState({ ...state })
 
-					const labels = []
-					let first = moment(items[0].date, 'HH:MM')
-					labels.push(first.format("HH:MM"))
-					let middle = moment(items[Math.round((items.length - 1) / 2)].date, "HH:MM")
-					labels.push(middle.format("HH:MM"))
-					let last = moment(items[items.length - 1].date, "HH:MM")
-					labels.push(last.format('HH:MM'))
-					setChartLables(labels)
+
+					if (state.timeframe === "5m" && state.limit === 48) {
+						const labels = []
+						let first = moment(items[0].date, 'HH:MM')
+						labels.push(first.format("HH:MM"))
+						let middle = moment(items[Math.round((items.length - 1) / 2)].date, "HH:MM")
+						labels.push(middle.format("HH:MM"))
+						let last = moment(items[items.length - 1].date, "HH:MM")
+						labels.push(last.format('HH:MM'))
+						setChartLables(labels)
+					}
 
 
 					setLoading(false)
@@ -170,14 +173,14 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 			case '1d':
 				limit = 48
 				timeframe = '5m';
-				labels = []
-				let first = moment(state.coinHistory[0].date, 'HH:MM')
-				labels.push(first.format("HH:MM"))
-				let middle = moment(state.coinHistory[Math.round((state.coinHistory.length - 1) / 2)].date, "HH:MM")
-				labels.push(middle.format("HH:MM"))
-				let last = moment(state.coinHistory[state.coinHistory.length - 1].date, "HH:MM")
-				labels.push(last.format('HH:MM'))
-				setChartLables(labels)
+				// labels = []
+				// let first = moment(state.coinHistory[0].date, 'HH:MM')
+				// labels.push(first.format("HH:MM"))
+				// let middle = moment(state.coinHistory[Math.round((state.coinHistory.length - 1) / 2)].date, "HH:MM")
+				// labels.push(middle.format("HH:MM"))
+				// let last = moment(state.coinHistory[state.coinHistory.length - 1].date, "HH:MM")
+				// labels.push(last.format('HH:MM'))
+				// setChartLables(labels)
 				break
 			case '7d':
 				limit = 7
