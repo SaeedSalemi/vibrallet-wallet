@@ -21,7 +21,10 @@ export const getStoredMnemonic = async () => {
 }
 
 
-
+/**
+ * Returns a boolean promise that resolves to the value of the existing wallet
+ * @return {Promise} 
+ */
 export const checkExistsWallet = async () => {
   const persist = await AsyncStorage.getItem(persist_root)
   if (persist) {
