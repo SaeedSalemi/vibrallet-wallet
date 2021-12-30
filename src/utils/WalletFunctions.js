@@ -3,6 +3,12 @@ import bitcoinManager from '../blockchains/BitcoinManager'
 import bscManager from '../blockchains/BscManager'
 import ethManager from '../blockchains/EthManager'
 import { persist_root } from './../config/async-storage.json'
+
+
+/**
+ * Returns a promise that resolves to the value of the stored mnemonic
+ * @return {Promise} 
+ */
 export const getStoredMnemonic = async () => {
   const persist = await AsyncStorage.getItem(persist_root)
   if (persist !== null) {
@@ -13,6 +19,7 @@ export const getStoredMnemonic = async () => {
     }
   }
 }
+
 
 
 export const checkExistsWallet = async () => {
