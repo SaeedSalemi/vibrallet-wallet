@@ -11,7 +11,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { SvgUri } from 'react-native-svg'
 import { Context } from '../../context/Provider'
 import HttpService from '../../services/HttpService'
-import { SvgCssUri } from 'react-native-svg';
+// import { SvgCssUri } from 'react-native-svg';
 
 const slideShowItems = [
 	{
@@ -57,13 +57,12 @@ export default function UserCoins() {
 						"uniqueId": "123",
 						"action": "priceChart",
 						"data": {
-							// "symbol": `${item.symbol}`,
 							"symbol": `${item.symbol}`,
-							"timeframe": "30m",
-							"limit": 7,
+							"timeframe": "1d",
+							"limit": 30,
 							"responseType": "url",
-							"width": 100,
-							"height": 50
+							"width": 250,
+							"height": 100
 						}
 					}).Post(res => {
 						if (res?.success === true) {
@@ -126,17 +125,12 @@ export default function UserCoins() {
 								{item.balance} {item.symbol}
 							</AppText>
 						</View>
-						<View >
-							{/* <SvgUri
-								width={120}
-								uri={item.svgUri}
-							// uri={"https://api.vibrallet.com/dl/priceChart/price-chart-BTC-30m-7-250x50.svg"}
-							/> */}
 
-							<SvgCssUri
-								width="100%"
+						<View>
+							{/* <SvgUri
+								width={screenWidth / 3}
 								uri={item.svgUri}
-							/>
+							/> */}
 						</View>
 					</View>
 				</View>
