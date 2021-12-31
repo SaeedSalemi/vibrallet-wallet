@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import HttpService from './../services/HttpService'
 
-const fetchHistoricalPrice = async () => {
+const fetchHistoricalPrice = () => {
 
   return new Promise((resovle, reject) => {
 
