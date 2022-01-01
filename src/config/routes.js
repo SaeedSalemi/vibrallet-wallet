@@ -63,4 +63,5 @@ export const routes = {
 	marketWebview: 'MarketWebView',
 	setPriceAlert: 'SetPriceAlert',
 	dAppWebview: 'DAppWebView',
+	dAppHistory: 'DAppHistory',
 }
