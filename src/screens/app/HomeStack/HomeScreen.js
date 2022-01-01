@@ -32,7 +32,10 @@ import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import DAppItem from '../../../components/DApps/DAppItem'
-
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import DAppHistoryScreen from './DAppHistoryScreen'
+import TopTabBar from '../../../navigation/TopTabBar'
+import DAppTabHeader from '../../../components/Home/DAppTabHeader'
 
 const ENTRIES1 = [
 	{
@@ -86,6 +89,18 @@ const SERVICES = [
 		route: routes.priceAlert,
 	},
 ]
+
+const DAppTabNavigatior = createMaterialTopTabNavigator()
+
+const AllDAppsNavigator = () => {
+	return (
+		<DAppTabNavigatior.Navigator tabBar={props => <TopTabBar {...props} />}>
+			<DAppTabNavigatior.Screen name={routes.dAppHistory} component={DAppHistoryScreen} />
+		</DAppTabNavigatior.Navigator>
+	)
+}
+
+
 
 const { width: screenWidth } = Dimensions.get('window')
 
@@ -232,7 +247,8 @@ const HomeScreen = ({ navigation }) => {
 		{
 			id: 3,
 			name: '1inch',
-			logo: 'https://app.1inch.io/assets/images/logo.svg',
+			// logo: 'https://app.1inch.io/assets/images/logo.svg',
+			logo: 'https://sushi.com/static/media/logo.dec926df.png',
 			description: 'This is test description',
 			url: 'https://app.1inch.io/'
 		}
@@ -362,9 +378,13 @@ const HomeScreen = ({ navigation }) => {
 							onChangeText={(text) => setSearchDApp(text)}
 							onSubmitEditing={searchFilterFunction}
 						/>
-						<AppText typo="tiny" color="text2" style={{ marginLeft: 10, marginBottom: 4 }}>
+						{/* <AppText typo="tiny" color="text2" style={{ marginLeft: 10, marginBottom: 4 }}>
 							All DApps
-						</AppText>
+						</AppText> */}
+						<View style={{ marginLeft: 10, marginBottom: 4 }}>
+							<DAppTabHeader isMarket={true} setIsMarket={true} />
+							<AllDAppsNavigator />
+						</View>
 					</View>
 					<ScrollView style={{ paddingHorizontal: 16, }}>
 						{filterdItems.map((item, i) => (
