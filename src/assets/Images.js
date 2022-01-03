@@ -48,7 +48,8 @@ const Images = {
 	volumeChart: require('./images/volume-chart.png'),
 	// starter
 	vib_starterLogo: require('./images/starter_large.png'),
-	vib_starterLogoSub: require('./images/starter_large_sub.png')
+	vib_starterLogoSub: require('./images/starter_large_sub.png'),
+	google: require('./images/google.png'),
 }
 
 export default Images
