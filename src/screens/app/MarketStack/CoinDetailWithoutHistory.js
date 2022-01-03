@@ -43,7 +43,7 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 	})
 
 
-	const fetchData = (symbol, timeframe = "4m", limit = 48) => {
+	const fetchData = (symbol, timeframe = "5m", limit = 48) => {
 		return new Promise((resolve, reject) => {
 			const data = {
 				"uniqueId": "abc",
@@ -62,14 +62,21 @@ export default function CoinDetailWithoutHistory({ route, navigation }) {
 					}
 				});
 				resolve(_data)
+			}, err => {
+				console.log('error in the request Historical price', err)
+				reject(err)
 			})
 		})
 	}
 
 
-	// const { data, status } = useQuery('prices', fetchData)
+	const { data, status } = useQuery('prices', fetchData)
 
-	// console.log('from use Query data', data)
+	console.log('from use Query data', data)
+
+	useEffect(() => {
+
+	}, [])
 
 	useLayoutEffect(() => {
 
