@@ -14,6 +14,9 @@ import HttpService from '../../services/HttpService'
 // import { useSelector } from 'react-redux'
 import { Context } from '../../context/Provider'
 import { useReduxWallet } from '../../hooks/useReduxWallet'
+import { getCoinBalance } from './../../utils/WalletFunctions'
+
+
 export default function Coin({
 	coin,
 	index,
@@ -37,6 +40,17 @@ export default function Coin({
 	})
 
 	const [coinLogo, setCoinLogo] = useState('')
+
+	const [coinBalance, setcoinBalance] = useState(0)
+
+	useLayoutEffect(() => {
+		getCoinBalance(coin).then(resultBalance => {
+			console.log("balance result", resultBalance)
+			setcoinBalance(resultBalance)
+		}).catch(errBalance => {
+			console.log('error in get balance', errBalance)
+		})
+	}, [])
 
 	useLayoutEffect(() => {
 		try {
@@ -200,7 +214,7 @@ export default function Coin({
 							<AppText typo="tiny">
 								{/* {state.balance} 	{coin.symbol} */}
 								{/* {getCoinBalance(coin)} 	{coin.symbol} */}
-								{0}{coin.symbol}
+								{coinBalance}{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
 								size={15}
