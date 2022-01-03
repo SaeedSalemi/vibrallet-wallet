@@ -38,6 +38,11 @@ export const checkExistsWallet = async () => {
   }
 }
 
+
+/**
+ * Returns a decimal promise that value of the coin
+ * @return {Promise} 
+ */
 export const getCoinBalance = async (coin) => {
   if (!coin)
     return 0
@@ -53,7 +58,7 @@ export const getCoinBalance = async (coin) => {
 
       return balance
     } catch (err) {
-      console.log('Weallet Function get Coin Balance from Network ', err)
+      console.log('Wallet Function get Coin Balance from Network ', err)
     }
   } else
     return 0
