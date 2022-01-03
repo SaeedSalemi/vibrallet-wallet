@@ -212,8 +212,6 @@ export default function Coin({
 					{hideDetails ? null : (
 						<View style={{ flex: 1, alignItems: 'flex-end' }}>
 							<AppText typo="tiny">
-								{/* {state.balance} 	{coin.symbol} */}
-								{/* {getCoinBalance(coin)} 	{coin.symbol} */}
 								{coinBalance}{coin.symbol}
 							</AppText>
 							{isLoading ? <ActivityIndicator
