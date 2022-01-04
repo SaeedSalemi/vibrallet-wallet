@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 
@@ -15,9 +15,44 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 
 
-const WalletConnectDAppScreen = ({ navigation }) => {
+const WalletConnectDAppScreen = ({ route, navigation }) => {
+  // const { coin, coinPrice } = route.params || {}
 
-  // const dispatch = useDispatch()
+  const [modalStatus, setModalStatus] = useState('reject')
+  const [state, setState] = useState()
+  const { pair } = useContext(Context)
+
+  useEffect(() => {
+    navigation.navigate(routes.itemPicker, {
+      items: [
+        { id: "approve", title: "Approve" },
+        { id: "reject", title: "Reject" },
+      ],
+      onSelect: (item) => {
+        if (item.id === "approve") {
+          setModalStatus('approve')
+          // check the route params is exists
+
+        }
+        else {
+          showMessage({
+            message: `You rejected connecting to wallet connect.`,
+            description: null,
+            type: 'danger',
+            icon: null,
+            duration: 2000,
+            style: { backgroundColor: "#e74c3c" },
+            position: 'top'
+          })
+          setModalStatus('reject')
+          navigation.pop()
+        }
+      }
+    })
+    // return () => {
+    //   cleanup
+    // }
+  }, [])
 
   const handleWalletConnect = () => {
 
