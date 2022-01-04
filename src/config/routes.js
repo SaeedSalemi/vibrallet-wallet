@@ -66,4 +66,5 @@ export const routes = {
 	dAppHistory: 'DAppHistory',
 	dAppDefy: 'DAppDefy',
 	dAppExchange: 'DAppExchange',
+	dAppMarket: 'dAppMarket',
 }
