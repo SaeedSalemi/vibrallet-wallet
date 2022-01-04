@@ -32,10 +32,11 @@ import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import DAppItem from '../../../components/DApps/DAppItem'
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+// import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import DAppHistoryScreen from './DAppHistoryScreen'
 import TopTabBar from '../../../navigation/TopTabBar'
 import DAppTabHeader from '../../../components/Home/DAppTabHeader'
+import DAppList from '../../../components/DApps/DAppList'
 
 const ENTRIES1 = [
 	{
@@ -90,15 +91,15 @@ const SERVICES = [
 	},
 ]
 
-const DAppTabNavigatior = createMaterialTopTabNavigator()
+// const DAppTabNavigatior = createMaterialTopTabNavigator()
 
-const AllDAppsNavigator = () => {
-	return (
-		<DAppTabNavigatior.Navigator tabBar={props => <TopTabBar {...props} />}>
-			<DAppTabNavigatior.Screen name={routes.dAppHistory} component={DAppHistoryScreen} />
-		</DAppTabNavigatior.Navigator>
-	)
-}
+// const AllDAppsNavigator = () => {
+// 	return (
+// 		<DAppTabNavigatior.Navigator tabBar={props => <TopTabBar {...props} />}>
+// 			<DAppTabNavigatior.Screen name={routes.dAppHistory} component={DAppHistoryScreen} />
+// 		</DAppTabNavigatior.Navigator>
+// 	)
+// }
 
 
 
@@ -236,79 +237,69 @@ const HomeScreen = ({ navigation }) => {
 	}
 
 
-	const DAPPSDATA = [
-		{
-			id: 0,
-			name: 'Sushi',
-			logo: 'https://sushi.com/static/media/logo.dec926df.png',
-			description: 'This is test description',
-			url: 'Sushi.com'
-		},
-		{
-			id: 3,
-			name: '1inch',
-			// logo: 'https://app.1inch.io/assets/images/logo.svg',
-			logo: 'https://sushi.com/static/media/logo.dec926df.png',
-			description: 'This is test description',
-			url: 'https://app.1inch.io/'
-		}
-		,
-		{
-			id: 4,
-			name: 'Bakeryswap',
-			logo: 'https://www.bakeryswap.org/static/media/logo.4e93c681.svg',
-			description: 'This is test description',
-			url: 'https://www.bakeryswap.org/#/home'
-		},
-		{
-			id: 1,
-			name: 'Pancakeswap',
-			logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
-			description: 'This is test description',
-			url: 'https://pancakeswap.finance/'
-		},
+	// const DAPPSDATA = [
+	// 	{
+	// 		id: 0,
+	// 		name: 'Sushi',
+	// 		logo: 'https://sushi.com/static/media/logo.dec926df.png',
+	// 		description: 'This is test description',
+	// 		url: 'Sushi.com'
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		name: '1inch',
+	// 		// logo: 'https://app.1inch.io/assets/images/logo.svg',
+	// 		logo: 'https://sushi.com/static/media/logo.dec926df.png',
+	// 		description: 'This is test description',
+	// 		url: 'https://app.1inch.io/'
+	// 	}
+	// 	,
+	// 	{
+	// 		id: 4,
+	// 		name: 'Bakeryswap',
+	// 		logo: 'https://www.bakeryswap.org/static/media/logo.4e93c681.svg',
+	// 		description: 'This is test description',
+	// 		url: 'https://www.bakeryswap.org/#/home'
+	// 	},
+	// 	{
+	// 		id: 1,
+	// 		name: 'Pancakeswap',
+	// 		logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+	// 		description: 'This is test description',
+	// 		url: 'https://pancakeswap.finance/'
+	// 	},
 
-	]
-
-
-	const [filterdItems, setFilterItems] = useState(DAPPSDATA)
-	const [searchDApp, setSearchDApp] = useState()
-	const arrayHolder = DAPPSDATA
-
-	const searchFilterFunction = () => {
-		const includes = str => str.toLowerCase().includes(searchDApp.toLowerCase())
-		const newData = arrayHolder.filter(item => {
-			if (includes(item.name) || includes(item.name)) {
-				return item
-			}
-		})
-		if (newData.length > 0) {
-			setFilterItems(newData)
-		} else {
-			// concat with array
-			const newDAppItem = {
-				name: 'Google',
-				url: `https://www.google.com/search?${searchDApp}`,
-				description: `https://www.google.com/search?${searchDApp}`,
-				// logo: 'https://image.similarpng.com/thumbnail/2020/12/Flat-design-Google-logo-design-Vector-PNG.png'
-				logo: 'https://w7.pngwing.com/pngs/249/19/png-transparent-google-logo-g-suite-google-guava-google-plus-company-text-logo.png'
-			}
-			// setFilterItems.push(prev => [...prev, newDAppItem])
-			setFilterItems(prev => [...prev, newDAppItem])
-			navigation.navigate(routes.dAppWebview, { name: 'Google', url: `https://www.google.com/search?q=${searchDApp}` })
-		}
-	}
+	// ]
 
 
-	// const searchFilterFunction = text => {
-	// 	const includes = str => str.toLowerCase().includes(text.toLowerCase())
+	// const [filterdItems, setFilterItems] = useState(DAPPSDATA)
+	// const [searchDApp, setSearchDApp] = useState()
+	// const arrayHolder = DAPPSDATA
+
+	// const searchFilterFunction = () => {
+	// 	const includes = str => str.toLowerCase().includes(searchDApp.toLowerCase())
 	// 	const newData = arrayHolder.filter(item => {
 	// 		if (includes(item.name) || includes(item.name)) {
 	// 			return item
-	// 		} 
+	// 		}
 	// 	})
-	// 	setFilterItems(newData)
+	// 	if (newData.length > 0) {
+	// 		setFilterItems(newData)
+	// 	} else {
+	// 		// concat with array
+	// 		const newDAppItem = {
+	// 			name: 'Google',
+	// 			url: `https://www.google.com/search?${searchDApp}`,
+	// 			description: `https://www.google.com/search?${searchDApp}`,
+	// 			// logo: 'https://image.similarpng.com/thumbnail/2020/12/Flat-design-Google-logo-design-Vector-PNG.png'
+	// 			logo: 'https://w7.pngwing.com/pngs/249/19/png-transparent-google-logo-g-suite-google-guava-google-plus-company-text-logo.png'
+	// 		}
+	// 		// setFilterItems.push(prev => [...prev, newDAppItem])
+	// 		setFilterItems(prev => [...prev, newDAppItem])
+	// 		navigation.navigate(routes.dAppWebview, { name: 'Google', url: `https://www.google.com/search?q=${searchDApp}` })
+	// 	}
 	// }
+
 
 	return (
 		<Screen style={styles.screen}>
@@ -365,40 +356,8 @@ const HomeScreen = ({ navigation }) => {
 					</View>
 				</View>
 				<View style={styles.listBarContainer}>
-
 					{/* ==================================================== */}
-					<View style={styles.listBarTitle}>
-
-						<AppInput
-							placeholder={"Search"}
-							icon={"search"}
-							// onChangeText={text => {
-							// 	searchFilterFunction(text)
-							// }}
-							onChangeText={(text) => setSearchDApp(text)}
-							onSubmitEditing={searchFilterFunction}
-						/>
-						{/* <AppText typo="tiny" color="text2" style={{ marginLeft: 10, marginBottom: 4 }}>
-							All DApps
-						</AppText> */}
-						<View style={{ marginLeft: 10, marginBottom: 4 }}>
-							<DAppTabHeader isMarket={true} setIsMarket={true} />
-							<AllDAppsNavigator />
-						</View>
-					</View>
-					<ScrollView style={{ paddingHorizontal: 16, }}>
-						{filterdItems.map((item, i) => (
-							<DAppItem
-								key={i}
-								onPress={() => {
-									navigation.navigate(routes.dAppWebview, { name: item.name, url: item.url })
-								}}
-								coin={item}
-								index={i}
-								length={DAPPSDATA.length}
-							/>
-						))}
-					</ScrollView>
+					<DAppList style={styles.listBarTitle} />
 					{/* ==================================================== */}
 					{/* <View style={styles.listBarTitle}>
 							<AppText bold>Steps to rewards</AppText>
