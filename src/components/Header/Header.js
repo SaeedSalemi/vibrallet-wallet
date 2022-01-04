@@ -17,6 +17,7 @@ import AppIcon from '../common/AppIcon'
 import AppText from '../common/AppText'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Context } from '../../context/Provider'
+import { showMessage } from 'react-native-flash-message'
 
 export default function Header({ route = routes.home, children }) {
 	const { navigate } = useNavigation()
@@ -38,6 +39,10 @@ export default function Header({ route = routes.home, children }) {
 	const [state, setState] = useState({
 		address: '',
 	})
+
+
+	const [qrStatus, setQrStatus] = useState(false)
+
 	const showCamera = () => {
 		setShow(true)
 	}
@@ -194,9 +199,11 @@ export default function Header({ route = routes.home, children }) {
 		setState({ ...state })
 		setShow(false)
 
-		if (qrData.data &&  qrData.data.startsWith("wc:")){
-			pair(qrData.data);
+		if (qrData.data && qrData.data.startsWith("wc:")) {
+			navigate(routes.walletConnect, { pairData: qrData.data })
+			// pair(qrData.data);
 		}
+
 	}
 
 	return (
