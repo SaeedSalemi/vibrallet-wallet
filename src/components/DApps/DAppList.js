@@ -9,6 +9,10 @@ import { routes } from '../../config/routes'
 import DAppTabHeader from '../Home/DAppTabHeader'
 import DAppHistoryScreen from '../../screens/app/HomeStack/DAppHistoryScreen'
 import DAppDefyScreen from '../../screens/app/HomeStack/DAppDefyScreen'
+import DAppExchangesScreen from '../../screens/app/HomeStack/DAppExchangesScreen'
+
+
+
 const DAppTabNavigatior = createMaterialTopTabNavigator()
 
 const AllDAppsNavigator = () => {
@@ -16,6 +20,7 @@ const AllDAppsNavigator = () => {
     <DAppTabNavigatior.Navigator tabBar={props => <TopTabBar {...props} />}>
       <DAppTabNavigatior.Screen name={routes.dAppHistory} component={DAppHistoryScreen} />
       <DAppTabNavigatior.Screen name={routes.dAppDefy} component={DAppDefyScreen} />
+      <DAppTabNavigatior.Screen name={routes.dAppExchange} component={DAppExchangesScreen} />
     </DAppTabNavigatior.Navigator>
   )
 }
