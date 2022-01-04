@@ -103,7 +103,19 @@ const DAppList = (props) => {
           <AllDAppsNavigator />
         </View>
       </View>
-
+      <ScrollView style={{ paddingHorizontal: 16, }}>
+        {filterdItems.map((item, i) => (
+          <DAppItem
+            key={i}
+            onPress={() => {
+              props.navigation.navigate(routes.dAppWebview, { name: item.name, url: item.url })
+            }}
+            coin={item}
+            index={i}
+            length={DAPPSDATA.length}
+          />
+        ))}
+      </ScrollView>
     </>
   )
 }
