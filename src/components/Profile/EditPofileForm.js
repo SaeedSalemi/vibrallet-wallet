@@ -48,7 +48,6 @@ export default function EditProfileForm({ navigation, onChange }) {
 	useEffect(() => {
 
 		AsyncStorage.getItem(register_user).then(userData => {
-			console.log('dani debugger', userData)
 			if (userData !== null) {
 				let parsedUserData = JSON.parse(userData)
 				if (parsedUserData.username)
