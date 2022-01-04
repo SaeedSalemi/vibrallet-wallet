@@ -64,4 +64,5 @@ export const routes = {
 	setPriceAlert: 'SetPriceAlert',
 	dAppWebview: 'DAppWebView',
 	dAppHistory: 'DAppHistory',
+	dAppDefy: 'DAppDefy',
 }
