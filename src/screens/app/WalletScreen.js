@@ -143,8 +143,6 @@ export default function WalletScreen({ navigation }) {
 	// 	return acc + (curr.balance * curr.price)
 	// }, 0)
 
-	console.log("totalAmount", totalAmount)
-
 	const pieData = useMemo(() => {
 		const length = state.allSupportedCoins.length
 
@@ -166,6 +164,7 @@ export default function WalletScreen({ navigation }) {
 				//amount == price * balance
 				//percent = amount / totalAmount
 				// const balance = ((aparseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
+				console.log('amr debugger', item)
 				const percent = ((item.balance * item.price) * 100) / totalAmount
 				console.log("info", item.balance, item.price, item.symbol, percent, totalAmount)
 				return {
@@ -185,16 +184,6 @@ export default function WalletScreen({ navigation }) {
 	// const series = []
 	const series = pieData.map(item => item.series)
 	const sliceColor = pieData.map(item => item.color)
-
-
-	const barData = {
-		labels: ['BTC', 'ETH', 'XRP', 'Others'],
-		datasets: [
-			{
-				// data: pieData.map(item => item.series),
-			},
-		],
-	}
 
 
 
