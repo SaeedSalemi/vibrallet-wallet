@@ -65,6 +65,7 @@ import HeaderTitle from './HeaderTitle'
 import CreateAccountWithPhoneScreen from '../screens/authentication/CreateAccountWithPhoneScreen'
 import VerifyPhoneScreen from '../screens/authentication/VerifyPhoneScreen'
 import RestoreModalScreen from '../screens/authentication/RestoreModalScreen'
+import WalletConnectDAppScreen from '../screens/app/HomeStack/WalletConnectDAppScreen'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -609,6 +610,18 @@ export function AppStackNavigation() {
 			/>
 
 			{/* Screened Moved from the auth stack to app stack */}
+
+			<AppStack.Screen
+				name={routes.walletConnect}
+				options={{
+					headerTitle: () => (
+						<AppText typo="md" bold>
+							Connect DApp
+						</AppText>
+					),
+				}}
+				component={WalletConnectDAppScreen}
+			/>
 
 			<AppStack.Screen
 				name={routes.welcome}
