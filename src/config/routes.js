@@ -65,4 +65,5 @@ export const routes = {
 	dAppWebview: 'DAppWebView',
 	dAppHistory: 'DAppHistory',
 	dAppDefy: 'DAppDefy',
+	dAppExchange: 'DAppExchange',
 }
