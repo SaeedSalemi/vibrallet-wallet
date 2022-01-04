@@ -119,10 +119,6 @@ const HomeScreen = ({ navigation }) => {
 		}
 	}
 
-	// const wallet = useSelector(state =>
-	// 	state.wallets.data ? state.wallets.data[0] : null
-	// )
-
 
 	useEffect(() => {
 		if (navigateToWallet) {
@@ -222,71 +218,6 @@ const HomeScreen = ({ navigation }) => {
 			</TouchableOpacity>
 		)
 	}
-
-
-	// const DAPPSDATA = [
-	// 	{
-	// 		id: 0,
-	// 		name: 'Sushi',
-	// 		logo: 'https://sushi.com/static/media/logo.dec926df.png',
-	// 		description: 'This is test description',
-	// 		url: 'Sushi.com'
-	// 	},
-	// 	{
-	// 		id: 3,
-	// 		name: '1inch',
-	// 		// logo: 'https://app.1inch.io/assets/images/logo.svg',
-	// 		logo: 'https://sushi.com/static/media/logo.dec926df.png',
-	// 		description: 'This is test description',
-	// 		url: 'https://app.1inch.io/'
-	// 	}
-	// 	,
-	// 	{
-	// 		id: 4,
-	// 		name: 'Bakeryswap',
-	// 		logo: 'https://www.bakeryswap.org/static/media/logo.4e93c681.svg',
-	// 		description: 'This is test description',
-	// 		url: 'https://www.bakeryswap.org/#/home'
-	// 	},
-	// 	{
-	// 		id: 1,
-	// 		name: 'Pancakeswap',
-	// 		logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
-	// 		description: 'This is test description',
-	// 		url: 'https://pancakeswap.finance/'
-	// 	},
-
-	// ]
-
-
-	// const [filterdItems, setFilterItems] = useState(DAPPSDATA)
-	// const [searchDApp, setSearchDApp] = useState()
-	// const arrayHolder = DAPPSDATA
-
-	// const searchFilterFunction = () => {
-	// 	const includes = str => str.toLowerCase().includes(searchDApp.toLowerCase())
-	// 	const newData = arrayHolder.filter(item => {
-	// 		if (includes(item.name) || includes(item.name)) {
-	// 			return item
-	// 		}
-	// 	})
-	// 	if (newData.length > 0) {
-	// 		setFilterItems(newData)
-	// 	} else {
-	// 		// concat with array
-	// 		const newDAppItem = {
-	// 			name: 'Google',
-	// 			url: `https://www.google.com/search?${searchDApp}`,
-	// 			description: `https://www.google.com/search?${searchDApp}`,
-	// 			// logo: 'https://image.similarpng.com/thumbnail/2020/12/Flat-design-Google-logo-design-Vector-PNG.png'
-	// 			logo: 'https://w7.pngwing.com/pngs/249/19/png-transparent-google-logo-g-suite-google-guava-google-plus-company-text-logo.png'
-	// 		}
-	// 		// setFilterItems.push(prev => [...prev, newDAppItem])
-	// 		setFilterItems(prev => [...prev, newDAppItem])
-	// 		navigation.navigate(routes.dAppWebview, { name: 'Google', url: `https://www.google.com/search?q=${searchDApp}` })
-	// 	}
-	// }
-
 
 	return (
 		<Screen style={styles.screen}>
