@@ -10,7 +10,13 @@ import DAppTabHeader from '../Home/DAppTabHeader'
 import DAppHistoryScreen from '../../screens/app/HomeStack/DAppHistoryScreen'
 const DAppTabNavigatior = createMaterialTopTabNavigator()
 
-
+const AllDAppsNavigator = () => {
+  return (
+    <DAppTabNavigatior.Navigator tabBar={props => <TopTabBar {...props} />}>
+      <DAppTabNavigatior.Screen name={routes.dAppHistory} component={DAppHistoryScreen} />
+    </DAppTabNavigatior.Navigator>
+  )
+}
 
 
 const DAPPSDATA = [
