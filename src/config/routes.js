@@ -67,4 +67,5 @@ export const routes = {
 	dAppDefy: 'DAppDefy',
 	dAppExchange: 'DAppExchange',
 	dAppMarket: 'dAppMarket',
+	walletConnect: 'WalletConnect',
 }
