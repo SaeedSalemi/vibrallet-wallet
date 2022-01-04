@@ -32,7 +32,6 @@ import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import AppInput from '../../../components/common/AppInput/AppInput'
 import DAppItem from '../../../components/DApps/DAppItem'
-// import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import DAppHistoryScreen from './DAppHistoryScreen'
 import TopTabBar from '../../../navigation/TopTabBar'
 import DAppTabHeader from '../../../components/Home/DAppTabHeader'
@@ -90,18 +89,6 @@ const SERVICES = [
 		route: routes.priceAlert,
 	},
 ]
-
-// const DAppTabNavigatior = createMaterialTopTabNavigator()
-
-// const AllDAppsNavigator = () => {
-// 	return (
-// 		<DAppTabNavigatior.Navigator tabBar={props => <TopTabBar {...props} />}>
-// 			<DAppTabNavigatior.Screen name={routes.dAppHistory} component={DAppHistoryScreen} />
-// 		</DAppTabNavigatior.Navigator>
-// 	)
-// }
-
-
 
 const { width: screenWidth } = Dimensions.get('window')
 
