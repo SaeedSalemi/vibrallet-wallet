@@ -8,12 +8,14 @@ import TopTabBar from '../../navigation/TopTabBar'
 import { routes } from '../../config/routes'
 import DAppTabHeader from '../Home/DAppTabHeader'
 import DAppHistoryScreen from '../../screens/app/HomeStack/DAppHistoryScreen'
+import DAppDefyScreen from '../../screens/app/HomeStack/DAppDefyScreen'
 const DAppTabNavigatior = createMaterialTopTabNavigator()
 
 const AllDAppsNavigator = () => {
   return (
     <DAppTabNavigatior.Navigator tabBar={props => <TopTabBar {...props} />}>
       <DAppTabNavigatior.Screen name={routes.dAppHistory} component={DAppHistoryScreen} />
+      <DAppTabNavigatior.Screen name={routes.dAppDefy} component={DAppDefyScreen} />
     </DAppTabNavigatior.Navigator>
   )
 }
