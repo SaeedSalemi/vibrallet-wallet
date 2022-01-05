@@ -1,24 +1,18 @@
-import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useContext } from 'react'
 import ethManager from '../blockchains/EthManager'
 import bscManager from '../blockchains/BscManager'
 import WalletConnect from "@walletconnect/client";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import { Context } from '../context/Provider'
+import { Context } from './../context/Provider'
 
 const useWalletConnect = ({ coins }) => {
-  // const { coinManager } = useContext(Context);
+  // const { setSessionRequestPair } = useContext(Context);
   const [connector, setConnector] = useState(null);
-
-  // const [state, setState] = useState({
-  //   wallet: {},
-  //   balance: 0,
-  // })
 
 
   let pair = async (uri) => {
-
-   
 
     // Create connector
     const connector = new WalletConnect(
@@ -43,16 +37,19 @@ const useWalletConnect = ({ coins }) => {
 
       // Handle Session Request
       console.log("session_request  ,,,", JSON.stringify(payload));
+      // setSessionRequest({ ...sessionRequest, payload: payload })
+
+
       let address = null;
       let chainId = payload.params[0].chainId;
 
-      if ( chainId === undefined || chainId == 1) {
+      if (chainId === undefined || chainId == 1) {
         address = coins.find(p => p.symbol == "ETH")?.address;
       } else if (chainId == 56) {
         address = coins.find(p => p.symbol == "BNB")?.address;
       }
 
-      if (!address || address == null){
+      if (!address || address == null) {
         return connector.rejectSession();
       }
 
@@ -64,6 +61,8 @@ const useWalletConnect = ({ coins }) => {
         ],
         chainId: chainId                 // required
       })
+
+      AsyncStorage.setItem("sessionRequest", JSON.stringify(payload));
 
       /* payload:
       {
@@ -204,7 +203,7 @@ const useWalletConnect = ({ coins }) => {
                   icon: meta && meta.icons && meta.icons[0],
                 },
                 // origin: WALLET_CONNECT_ORIGIN,
-              }, );
+              });
             }
             this.walletConnector.approveRequest({
               id: payload.id,
@@ -289,39 +288,10 @@ const useWalletConnect = ({ coins }) => {
 
     setConnector(connector);
   }
-  // const wallet = useSelector(state => {
-  //   state.wallets.data ? state.wallets.data[0] : null
-  // }
-  // )
-
-  // useEffect(() => {
-
-  //   if (wallet) {
-
-  //     const coinSelector = { ETH: ethManager, BSC: bscManager }
-  //     let selectedCoin = coinSelector[coinItem.slug];
-
-  //     selectedCoin.getWalletFromMnemonic(wallet.backup)
-  //       .then(wallet => {
-  //         state.wallet = wallet;
-  //         setState({ ...state });
-
-  //         selectedCoin.getBalance(wallet?.address, false).then(result => {
-  //           setState({ ...state, balance: result })
-  //           setIsLoading(false)
-  //         })
-  //       })
-  //       .catch(ex => console.error('balance wallet error', ex))
-
-  //   }
-  // }, [wallet])
-
 
 
   return {
-    pair
-    // wallet,
-    // balance: state.balance,
+    pair,
   }
 }
 
