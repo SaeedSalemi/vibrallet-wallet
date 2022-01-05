@@ -31,10 +31,6 @@ import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import AppInput from '../../../components/common/AppInput/AppInput'
-import DAppItem from '../../../components/DApps/DAppItem'
-import DAppHistoryScreen from './DAppHistoryScreen'
-import TopTabBar from '../../../navigation/TopTabBar'
-import DAppTabHeader from '../../../components/Home/DAppTabHeader'
 import DAppList from '../../../components/DApps/DAppList'
 
 const ENTRIES1 = [
