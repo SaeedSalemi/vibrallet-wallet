@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useLayoutEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 
@@ -7,56 +7,73 @@ import { Context } from '../../../context/Provider'
 import Screen from './../../../components/Screen'
 import AppText from './../../../components/common/AppText'
 import { routes } from '../../../config/routes'
-import AppInput from './../../../components/common/AppInput/AppInput'
 import AppButton from './../../../components/common/AppButton'
 import { globalStyles } from '../../../config/styles'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
 const WalletConnectDAppScreen = ({ route, navigation }) => {
-  // const { coin, coinPrice } = route.params || {}
+
+  const { pairData } = route.params || {}
 
   const [modalStatus, setModalStatus] = useState('reject')
   const [state, setState] = useState()
-  const { pair } = useContext(Context)
+  const { walletConnect, sessionRequestPair } = useContext(Context)
+  const [showModal, setShowModal] = useState(true)
 
   useEffect(() => {
-    navigation.navigate(routes.itemPicker, {
-      items: [
-        { id: "approve", title: "Approve" },
-        { id: "reject", title: "Reject" },
-      ],
-      onSelect: (item) => {
-        if (item.id === "approve") {
-          setModalStatus('approve')
-          // check the route params is exists
 
+    if (showModal)
+      navigation.navigate(routes.itemPicker, {
+        items: [
+          { id: "approve", title: "Approve" },
+          { id: "reject", title: "Reject" },
+        ],
+        onSelect: (item) => {
+          if (item.id === "approve") {
+            setModalStatus('approve')
+            // check the route params is exists
+            if (pairData) {
+              console.log('pair data params is', pairData)
+
+
+
+              walletConnect(pairData).then(() => {
+
+
+                console.log('get session request form the socket', sessionRequestPair)
+
+              }).catch(err => {
+                console.log('err in the wallet connect', err)
+              })
+            }
+          }
+          else {
+            showMessage({
+              message: `You rejected connecting to wallet connect.`,
+              description: null,
+              type: 'danger',
+              icon: null,
+              duration: 2000,
+              style: { backgroundColor: "#e74c3c" },
+              position: 'top'
+            })
+            setModalStatus('reject')
+            setShowModal(false)
+            navigation.pop()
+          }
         }
-        else {
-          showMessage({
-            message: `You rejected connecting to wallet connect.`,
-            description: null,
-            type: 'danger',
-            icon: null,
-            duration: 2000,
-            style: { backgroundColor: "#e74c3c" },
-            position: 'top'
-          })
-          setModalStatus('reject')
-          navigation.pop()
-        }
-      }
-    })
-    // return () => {
-    //   cleanup
-    // }
+      })
   }, [])
+
+
 
   const handleWalletConnect = () => {
 
-    navigation.navigate(routes.newWallet)
+    // navigation.navigate(routes.newWallet)
   }
 
   return (
