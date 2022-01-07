@@ -39,12 +39,12 @@ const WalletConnectDAppScreen = ({ route, navigation }) => {
             if (pairData) {
               console.log('pair data params is', pairData)
 
-
-
               walletConnect(pairData).then(() => {
 
-
                 console.log('get session request form the socket', sessionRequestPair)
+                if (sessionRequestPair) {
+                  setState(sessionRequestPair)
+                }
 
               }).catch(err => {
                 console.log('err in the wallet connect', err)
@@ -80,15 +80,17 @@ const WalletConnectDAppScreen = ({ route, navigation }) => {
     <Screen style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.flex}>
         <View style={styles.topTexts}>
-          <Image source={{ uri: `https://www.pngall.com/wp-content/uploads/10/PancakeSwap-Crypto-Logo-PNG.png` }}
+          <Image source={{ uri: `${state.params[0].peerMeta.icons[1] ? state.params[0].peerMeta.icons[1] : ''}` }}
             style={{ width: 50, height: 50, borderRadius: 50 }} />
 
           <View style={{ marginVertical: 12 }}>
-            <AppText typo="xs"> Description is going to show here</AppText>
+            <AppText bold typo="sm">
+              {state.params[0].peerMeta.name ? pairObj.params[0].peerMeta.name : ''}
+            </AppText>
           </View>
           <View style={{ marginVertical: 4 }}>
             <AppText typo="tiny" style={styles.topTextSub}>
-              https://panackeswap.finance
+              {state.params[0].peerMeta.url ? pairObj.params[0].peerMeta.url : ''}
             </AppText>
           </View>
         </View>
