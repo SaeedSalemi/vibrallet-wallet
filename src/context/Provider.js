@@ -2,15 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { createContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { showMessage } from 'react-native-flash-message';
-import { useSelector } from 'react-redux';
 import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
 import ethManager from '../blockchains/EthManager';
 import { useReduxWallet } from '../hooks/useReduxWallet';
-import useWalletConnect from '../hooks/useWalletConnect';
+// import useWalletConnect from '../hooks/useWalletConnect';
 import HttpService from '../services/HttpService';
 import { getToken } from '../utils/Functions';
 import { Linking, Platform } from 'react-native'
+import WalletConnect from "@walletconnect/client";
 
 export const Context = createContext()
 
@@ -39,10 +39,296 @@ const MainProvider = props => {
     FCASPageNumber: 1,
     FCASFilter: '',
 
-    MarketScreenActiveFilter: 'Market'
+    MarketScreenActiveFilter: 'Market',
+
+    sessionRequestPair: {}
   })
 
-  let walletConnect = useWalletConnect({ coins: state.coins });
+  const [connector, setConnector] = useState(null);
+
+  // let walletConnect = useWalletConnect({ coins: state.coins });
+  let walletConnect = async (uri) => {
+
+
+    const connector = new WalletConnect(
+      {
+        // Required
+        uri: uri,
+        // Required
+        clientMeta: {
+          description: "WalletConnect Vibranium",
+          url: "https://walletconnect.org",
+          icons: ["https://walletconnect.org/walletconnect-logo.png"],
+          name: "WalletConnect Vibranium",
+        },
+      }
+    );
+
+
+    // Subscribe to session requests
+    connector.on("session_request", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+
+      // Handle Session Request
+      console.log("session_request  ,,,", JSON.stringify(payload));
+      // setSessionRequest({ ...sessionRequest, payload: payload })
+
+      setState({ ...state, sessionRequestPair: payload })
+
+      let address = null;
+      let chainId = payload.params[0].chainId;
+
+      if (chainId === undefined || chainId == 1) {
+        address = state.coins.find(p => p.symbol == "ETH")?.address;
+      } else if (chainId == 56) {
+        address = state.coins.find(p => p.symbol == "BNB")?.address;
+      }
+
+      if (!address || address == null) {
+        return connector.rejectSession();
+      }
+
+      console.log('---->selected Address', address);
+      // Approve Session
+      connector.approveSession({
+        accounts: [                 // required
+          address
+        ],
+        chainId: chainId                 // required
+      })
+
+      AsyncStorage.setItem("sessionRequest", JSON.stringify(payload));
+
+      /* payload:
+      {
+        id: 1,
+        jsonrpc: '2.0'.
+        method: 'session_request',
+        params: [{
+          peerId: '15d8b6a3-15bd-493e-9358-111e3a4e6ee4',
+          peerMeta: {
+            name: "WalletConnect Example",
+            description: "Try out WalletConnect v1.0",
+            icons: ["https://example.walletconnect.org/favicon.ico"],
+            url: "https://example.walletconnect.org"
+          }
+        }]
+      }
+      */
+    });
+
+    // Subscribe to call requests
+    connector.on("call_request", async (error, payload) => {
+      if (error) {
+        throw error;
+      }
+
+      // Handle Call Request
+      console.log("call_request  -->", JSON.stringify(payload));
+
+      // connector.approveRequest({
+      //   id: 1,
+      //   result: "0x41791102999c339c844880b23950704cc43aa840f3739e365323cda4dfa89e7a"
+      // });
+
+      /* payload:
+      {
+        id: 1,
+        jsonrpc: '2.0'.
+        method: 'eth_sign',
+        params: [
+          "0xbc28ea04101f03ea7a94c1379bc3ab32e65e62d3",
+          "My email is john@doe.com - 1537836206101"
+        ]
+      }
+      */
+
+      let address = null;
+      // let privateKey = null;
+
+      let chainId = payload.params[0].chainId;
+      let selectedNetwork = null
+      let selectedCoin = null
+      if (chainId == 1) {
+        selectedNetwork = ethManager;
+        selectedCoin = state.coins.find(p => p.symbol == "ETH");;
+      } else if (chainId == 56) {
+        selectedNetwork = bscManager;
+        selectedCoin = state.coins.find(p => p.symbol == "BNB");
+      }
+
+      if (payload.method) {
+        if (payload.method === 'eth_sendTransaction') {
+          try {
+            const txParams = {};
+            txParams.to = payload.params[0].to;
+            txParams.from = payload.params[0].from;
+            txParams.value = payload.params[0].value;
+            txParams.gas = payload.params[0].gas;
+            txParams.gasLimit = payload.params[0].gasLimit;
+            txParams.gasPrice = payload.params[0].gasPrice;
+            txParams.data = payload.params[0].data;
+            const hash = await selectedNetwork.sendTransaction(txParams, selectedCoin.privateKey);
+            connector.approveRequest({
+              id: payload.id,
+              result: hash,
+            });
+          } catch (error) {
+            connector.rejectRequest({
+              id: payload.id,
+              error,
+            });
+          }
+        } else if (payload.method === 'eth_sign') {
+          let rawSig = null;
+          try {
+            if (payload.params[2]) {
+              throw new Error('Autosign is not currently supported');
+              // Leaving this in case we want to enable it in the future
+              // once WCIP-4 is defined: https://github.com/WalletConnect/WCIPs/issues/4
+              // rawSig = await KeyringController.signPersonalMessage({
+              // 	data: payload.params[1],
+              // 	from: payload.params[0]
+              // });
+            } else {
+              const data = payload.params[1];
+              const from = payload.params[0];
+              rawSig = await selectedNetwork.signTransaction({
+                data,
+                from,
+                meta: {
+                  title: meta && meta.name,
+                  url: meta && meta.url,
+                  icon: meta && meta.icons && meta.icons[0],
+                },
+                origin: WALLET_CONNECT_ORIGIN,
+              }, selectedCoin.privateKey);
+            }
+            connector.approveRequest({
+              id: payload.id,
+              result: rawSig,
+            });
+          } catch (error) {
+            connector.rejectRequest({
+              id: payload.id,
+              error,
+            });
+          }
+        } else if (payload.method === 'personal_sign') {
+          let rawSig = null;
+          try {
+            if (payload.params[2]) {
+              throw new Error('Autosign is not currently supported');
+              // Leaving this in case we want to enable it in the future
+              // once WCIP-4 is defined: https://github.com/WalletConnect/WCIPs/issues/4
+              // rawSig = await KeyringController.signPersonalMessage({
+              // 	data: payload.params[1],
+              // 	from: payload.params[0]
+              // });
+            } else {
+              const data = payload.params[0];
+              const from = payload.params[1];
+
+              rawSig = await selectedNetwork.signTransaction({
+                data,
+                from,
+                meta: {
+                  title: meta && meta.name,
+                  url: meta && meta.url,
+                  icon: meta && meta.icons && meta.icons[0],
+                },
+                // origin: WALLET_CONNECT_ORIGIN,
+              });
+            }
+            this.walletConnector.approveRequest({
+              id: payload.id,
+              result: rawSig,
+            });
+          } catch (error) {
+            this.walletConnector.rejectRequest({
+              id: payload.id,
+              error,
+            });
+          }
+        } else if (payload.method === 'eth_signTypedData' || payload.method === 'eth_signTypedData_v3') {
+          const { TypedMessageManager } = Engine.context;
+          try {
+            const rawSig = await TypedMessageManager.addUnapprovedMessageAsync(
+              {
+                data: payload.params[1],
+                from: payload.params[0],
+                meta: {
+                  title: meta && meta.name,
+                  url: meta && meta.url,
+                  icon: meta && meta.icons && meta.icons[0],
+                },
+                origin: WALLET_CONNECT_ORIGIN,
+              },
+              'V3'
+            );
+
+            this.walletConnector.approveRequest({
+              id: payload.id,
+              result: rawSig,
+            });
+          } catch (error) {
+            this.walletConnector.rejectRequest({
+              id: payload.id,
+              error,
+            });
+          }
+        } else if (payload.method === 'eth_signTypedData_v4') {
+          const { TypedMessageManager } = Engine.context;
+          try {
+            const rawSig = await TypedMessageManager.addUnapprovedMessageAsync(
+              {
+                data: payload.params[1],
+                from: payload.params[0],
+                meta: {
+                  title: meta && meta.name,
+                  url: meta && meta.url,
+                  icon: meta && meta.icons && meta.icons[0],
+                },
+                origin: WALLET_CONNECT_ORIGIN,
+              },
+              'V4'
+            );
+
+            this.walletConnector.approveRequest({
+              id: payload.id,
+              result: rawSig,
+            });
+          } catch (error) {
+            this.walletConnector.rejectRequest({
+              id: payload.id,
+              error,
+            });
+          }
+        }
+        this.redirectIfNeeded();
+      }
+    });
+
+    connector.on("disconnect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+
+      console.log("disconnect  ", JSON.stringify(payload));
+
+
+      // Delete connector
+      setConnector(null);
+    });
+
+    setConnector(connector);
+
+
+  }
+
+
 
   // Market Fav Coins
   const [favCoins, setFavCoins] = useState([])
@@ -158,7 +444,14 @@ const MainProvider = props => {
     })
   }
   const setUserProfile = profile => {
+
     setState({ ...state, userProfile: profile })
+  }
+
+  const setSessionRequestPair = payload => {
+    alert('salam')
+    console.log('payload in the session request pair', payload)
+    setState({ ...state, sessionRequestPair: payload })
   }
 
   const getRegisteredUser = () => {
@@ -491,7 +784,7 @@ const MainProvider = props => {
       ...state, setUserData, getCoinBalance, setCoin, hideCoinHandler, dispatch, getACoin, setUserProfile,
       adder, deleteFav, favCoins, fcasFavCoins, changeMarketSort, marketPagination, setMarketSearchFilter, fetchData,
       fetchFCASData, adderFCASFAV, deleteFCASFav, fcasPagination, changeFCASSort, setCoinsToSupport, setFCASSearchFilter, setMarketScreenActiveFilter,
-      ...walletConnect
+      walletConnect, setSessionRequestPair,
     }}>
       {props.children}
     </Context.Provider>
