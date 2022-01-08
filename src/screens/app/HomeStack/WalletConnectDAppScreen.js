@@ -43,7 +43,7 @@ const WalletConnectDAppScreen = ({ route, navigation }) => {
 
                 console.log('get session request form the socket', sessionRequestPair)
                 // TODO: check if the session request obj is exists
-                if (sessionRequestPair) {
+                if (sessionRequestPair && Object.entries(sessionRequestPair).length) {
                   setState(sessionRequestPair)
 
                   console.log('dbg session request', sessionRequestPair)
@@ -83,7 +83,32 @@ const WalletConnectDAppScreen = ({ route, navigation }) => {
       <View style={styles.flex}>
         <View style={styles.topTexts}>
 
+          {
+            state && Object.keys(state).length > 0 ?
+              <Image source={{ uri: `${state && Object.entries(state).length ? state.params[0].peerMeta.icons[1] : ''}` }}
+                style={{ width: 50, height: 50, borderRadius: 50 }} />
+              : <></>
+          }
 
+          {
+            state && Object.entries(state).length > 0 ?
+              <View style={{ marginVertical: 8 }}>
+                <AppText bold typo="sm" style={{ textAlign: 'center' }}>
+                  {state ? state.params[0].peerMeta.name : ''} {'\n'}
+                  wants to connect to your wallet
+                </AppText>
+              </View>
+              : <></>
+          }
+          {
+            state && Object.entries(state).length > 0 ?
+              <View style={{ marginVertical: 4 }}>
+                <AppText typo="tiny" style={styles.topTextSub}>
+                  {state ? state.params[0].peerMeta.url : ''}
+                </AppText>
+              </View>
+              : <></>
+          }
         </View>
         <View style={styles.formGroup}>
           <View style={{ flexDirection: 'column' }}>
