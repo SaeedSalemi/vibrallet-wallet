@@ -80,24 +80,22 @@ const WalletConnectDAppScreen = ({ route, navigation }) => {
     <Screen style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.flex}>
         <View style={styles.topTexts}>
-          <Image source={{ uri: `${state.params[0].peerMeta.icons[1] ? state.params[0].peerMeta.icons[1] : ''}` }}
+
+          <Image source={{ uri: `${state ? state.params[0].peerMeta.icons[1] : ''}` }}
             style={{ width: 50, height: 50, borderRadius: 50 }} />
 
           <View style={{ marginVertical: 12 }}>
             <AppText bold typo="sm">
-              {state.params[0].peerMeta.name ? pairObj.params[0].peerMeta.name : ''}
+              {state ? pairObj.params[0].peerMeta.name : ''}
             </AppText>
           </View>
           <View style={{ marginVertical: 4 }}>
             <AppText typo="tiny" style={styles.topTextSub}>
-              {state.params[0].peerMeta.url ? pairObj.params[0].peerMeta.url : ''}
+              {state ? pairObj.params[0].peerMeta.url : ''}
             </AppText>
           </View>
         </View>
         <View style={styles.formGroup}>
-
-
-
           <View style={{ flexDirection: 'column' }}>
             <View style={{ flexDirection: 'row' }}>
               <FontAwesome5Icon style={{ marginHorizontal: 8 }}
@@ -128,7 +126,6 @@ const WalletConnectDAppScreen = ({ route, navigation }) => {
             onPress={handleWalletConnect}
           />
         </View>
-
       </View>
     </Screen>
   )
