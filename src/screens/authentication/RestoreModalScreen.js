@@ -10,7 +10,7 @@ import { setUser } from '../../utils/storage'
 import Feather from 'react-native-vector-icons/Feather'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn } from '../../redux/modules/appSettings'
-import DocumentPicker from 'react-native-document-picker'
+import * as DocumentPicker from 'expo-document-picker';
 import { decrypt } from '../../utils/Functions'
 import RNFS from 'react-native-fs'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -43,16 +43,47 @@ const RestoreModalScreen = ({ navigation }) => {
 
 	const handleFilePicker = async () => {
 		try {
-			const res = await DocumentPicker.pickSingle({
-				type: [DocumentPicker.types.allFiles],
-			})
-			setFileUri(res)
-		} catch (err) {
-			if (DocumentPicker.isCancel(err)) {
-				console.log('error', err)
+			const VALID_BACKUP_EXT = ".json"
+			let res = await DocumentPicker.getDocumentAsync({})
+			let uri = ''
+			if (res.type === 'success') {
+				uri = res.uri
 			} else {
-				throw err
+				showMessage({
+					message: `Warninng! Please check your file again.`,
+					description: null,
+					type: 'danger',
+					icon: null,
+					duration: 4000,
+					style: { backgroundColor: "#e67e22" },
+					position: 'top'
+				})
+				return
 			}
+			if (!uri.includes(VALID_BACKUP_EXT)) {
+				showMessage({
+					message: `File type is not valid! Please choose a correct backup file.`,
+					description: null,
+					type: 'danger',
+					icon: null,
+					duration: 4000,
+					style: { backgroundColor: "#e74c3c" },
+					position: 'top'
+				})
+				return
+			}
+			setFileUri(res)
+
+		} catch (err) {
+			showMessage({
+				message: `Warninng! something wrong has been happened! Please try again.`,
+				description: null,
+				type: 'danger',
+				icon: null,
+				duration: 4000,
+				style: { backgroundColor: "#e67e22" },
+				position: 'top'
+			})
 		}
 	}
 
@@ -60,7 +91,7 @@ const RestoreModalScreen = ({ navigation }) => {
 		setLoading(true)
 		// restore from file
 		if (isFile) {
-			if (fileUri !== "") {
+			if (fileUri.uri !== "") {
 				RNFS.readFile(fileUri.uri, 'utf8').then(async (content) => {
 					let decoded = decrypt(JSON.parse(content))
 
