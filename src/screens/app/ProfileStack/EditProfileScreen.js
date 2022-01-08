@@ -6,13 +6,17 @@ import AppText from '../../../components/common/AppText'
 import EditProfileForm from '../../../components/Profile/EditPofileForm'
 import { globalStyles } from '../../../config/styles'
 import Entypo from 'react-native-vector-icons/Entypo'
-import DocumentPicker from 'react-native-document-picker'
+// import DocumentPicker from 'react-native-document-picker'
+import * as DocumentPicker from 'expo-document-picker';
 import RNFS from 'react-native-fs'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { showMessage } from 'react-native-flash-message'
 import { Context } from '../../../context/Provider'
 import * as Progress from 'react-native-progress';
 import { register_user } from './../../../config/async-storage.json'
+
+
+const VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg']
 
 export default function EditProfileScreen() {
 
@@ -59,13 +63,43 @@ export default function EditProfileScreen() {
 
 	const handleUploadImage = async () => {
 		try {
-			const res = await DocumentPicker.pickSingle({
-				type: [DocumentPicker.types.images],
-				allowMultiSelection: false,
 
-			})
-			// setFileUri(res)
-			const uri = res.uri
+			let res = await DocumentPicker.getDocumentAsync({})
+			let uri = ''
+			console.log('document picks', res)
+			if (res.type === 'success') {
+				// this.parseFile(file.uri);
+				uri = res.uri
+			} else {
+				showMessage({
+					message: `Warninng! Please check your file again.`,
+					description: null,
+					type: 'danger',
+					icon: null,
+					duration: 4000,
+					style: { backgroundColor: "#e67e22" },
+					position: 'top'
+				})
+				return
+			}
+			let isValid = false
+			for (let _v of VALID_IMAGE_TYPES) {
+				if (uri.includes(_v))
+					isValid = true
+			}
+			if (!isValid) {
+				showMessage({
+					message: `File type is not valid! Please choose an image.`,
+					description: null,
+					type: 'danger',
+					icon: null,
+					duration: 4000,
+					style: { backgroundColor: "#e74c3c" },
+					position: 'top'
+				})
+				return
+			}
+
 			RNFS.readFile(uri, 'base64')
 				.then(res => {
 					AsyncStorage.setItem('userImage', res)
@@ -80,14 +114,16 @@ export default function EditProfileScreen() {
 						position: 'top'
 					})
 				});
-
-
 		} catch (err) {
-			if (DocumentPicker.isCancel(err)) {
-				console.log('error', err)
-			} else {
-				throw err
-			}
+			showMessage({
+				message: `Warninng! something wrong has been happened! Please try again.`,
+				description: null,
+				type: 'danger',
+				icon: null,
+				duration: 4000,
+				style: { backgroundColor: "#e67e22" },
+				position: 'top'
+			})
 		}
 	}
 	return (
