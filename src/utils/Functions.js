@@ -2,6 +2,7 @@ import RNFS from 'react-native-fs'
 import { showMessage } from "react-native-flash-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Share, Platform } from 'react-native'
+import * as Network from 'expo-network';
 const CryptoJS = require("crypto-js")
 
 
@@ -97,4 +98,26 @@ export const gettingBackup = (toBackUp, text = "Your wallet backup has been crea
       console.log('Error in backup process', err.message);
       return false
     });
+}
+
+
+
+/**
+ * Returns a status of the internet connection
+ * @return {Boolean} 
+ */
+export const checkNetworkStauts = () => {
+  Network.getNetworkStateAsync().then(status => {
+    if (!status.isConnected) {
+      showMessage({
+        message: 'Network connection not detected , please connect your phone to the internet connection and try again',
+        description: null,
+        type: 'danger',
+        icon: null,
+        duration: 8000,
+        style: { backgroundColor: "red" },
+        position: 'top'
+      })
+    }
+  })
 }
