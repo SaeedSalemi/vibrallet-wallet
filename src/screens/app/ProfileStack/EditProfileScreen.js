@@ -16,7 +16,7 @@ import * as Progress from 'react-native-progress';
 import { register_user } from './../../../config/async-storage.json'
 
 
-const VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg']
+const VALID_IMAGE_TYPES = ['.png', '.jpg', '.jpeg']
 
 export default function EditProfileScreen() {
 
