@@ -9,30 +9,14 @@ import AppText from '../components/common/AppText'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Network from 'expo-network';
 import { checkExistsWallet } from '../utils/WalletFunctions'
+import { checkNetworkStauts } from '../utils/Functions'
 
 const SplashScreen = ({ navigation }) => {
 	const { navigate } = useNavigation()
 
 	useLayoutEffect(() => {
-		checkNetwork()
+		checkNetworkStauts()
 	}, [])
-
-
-	const checkNetwork = () => {
-		Network.getNetworkStateAsync().then(status => {
-			if (!status.isConnected) {
-				showMessage({
-					message: 'Network connection not detected , please connect your phone to the internet connection and try again',
-					description: null,
-					type: 'danger',
-					icon: null,
-					duration: 8000,
-					style: { backgroundColor: "red" },
-					position: 'top'
-				})
-			}
-		})
-	}
 
 
 	useEffect(() => {
