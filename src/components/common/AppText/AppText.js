@@ -22,11 +22,11 @@ const AppText = ({ children, style, typo, bold, color, ...otherProps }) => {
 }
 const styles = StyleSheet.create({
 	appText: {
-		fontFamily: 'Poppins-Regular',
+		fontFamily: 'Roboto-Regular',
 	},
 	bold: {
 		// fontWeight: '500',
-		fontFamily: 'Poppins-Medium'
+		fontFamily: 'Roboto-Medium'
 	},
 })
 
