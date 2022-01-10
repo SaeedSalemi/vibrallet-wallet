@@ -17,10 +17,10 @@ const defaultStyles = () => {
 		textInput: {
 			color: '#fff',
 			fontSize: 14,
-			fontFamily: 'Poppins',
+			fontFamily: 'Roboto',
 		},
 		text: {
-			fontFamily: 'Poppins',
+			fontFamily: 'Roboto',
 			color: '#fff',
 		},
 		button: {
