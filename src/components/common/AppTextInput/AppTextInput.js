@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		color: defaultStyles.Colors.whiteColor,
-		fontFamily: 'Poppins',
+		fontFamily: 'Roboto-Regular',
 		width: '100%',
 		...setTypo('xs'),
 		paddingHorizontal: 8,
