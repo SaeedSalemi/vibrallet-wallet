@@ -131,7 +131,7 @@ const AppInput = React.forwardRef(({
 							paddingVertical: 16,
 							color: globalStyles.Colors.text1,
 							fontSize: globalStyles.typo.tiny,
-							fontFamily: 'Poppins-Regular',
+							fontFamily: 'Roboto-Regular',
 						}}
 						secureTextEntry={secure}
 						{...restProps}
