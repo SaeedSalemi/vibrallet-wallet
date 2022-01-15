@@ -1,6 +1,6 @@
+import React, { createContext, useEffect, useState, useMemo, useCallback, useLayoutEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import React, { createContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { showMessage } from 'react-native-flash-message';
 import bitcoinManager from '../blockchains/BitcoinManager';
 import bscManager from '../blockchains/BscManager';
@@ -45,6 +45,17 @@ const MainProvider = props => {
   })
 
   const [connector, setConnector] = useState(null);
+
+
+
+  /*
+  checking network connection globaly
+  */
+  // useLayoutEffect(() => {
+
+  // }, [])
+
+
 
   // let walletConnect = useWalletConnect({ coins: state.coins });
   let walletConnect = async (uri) => {
@@ -99,7 +110,7 @@ const MainProvider = props => {
         chainId: chainId                 // required
       })
 
-      AsyncStorage.setItem("sessionRequest", JSON.stringify(payload));
+      // AsyncStorage.setItem("sessionRequest", JSON.stringify(payload));
 
       /* payload:
       {
