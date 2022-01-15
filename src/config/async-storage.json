@@ -1,5 +1,6 @@
 {
   "token": "token",
   "register_user": "regUser",
-  "persist_root": "persist:root"
+  "persist_root": "persist:root",
+  "price_alerts": "price_alerts"
 }
