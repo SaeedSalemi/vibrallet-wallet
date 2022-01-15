@@ -98,6 +98,7 @@ export default function EditProfileForm({ navigation, onChange }) {
 
 	const handleSubmitProfile = () => {
 		setSubmitting(true)
+
 		const registerInformation = {
 			email: email || '',
 			username: username || '',
@@ -141,6 +142,10 @@ export default function EditProfileForm({ navigation, onChange }) {
 				value={email}
 				ref={emailRef}
 				onSubmitEditing={() => phoneRef.current.focus()}
+				keyboardType="email-address"
+				autoCorrect={false}
+				autoCapitalize="none"
+				textContentType="emailAddress"
 			/>
 
 			<AppInput
