@@ -40,6 +40,19 @@ const CreateAccountWithEmailScreen = ({ navigation }) => {
 			return
 		}
 
+		if (!email.isEmail()) {
+			showMessage({
+				message: `Your email address is not valid`,
+				description: null,
+				type: 'danger',
+				icon: null,
+				duration: 4000,
+				style: { backgroundColor: "#e74c3c" },
+				position: 'top'
+			})
+			return
+		}
+
 		const user = {
 			email
 		}
