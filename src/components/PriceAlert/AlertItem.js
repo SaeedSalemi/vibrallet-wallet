@@ -52,14 +52,14 @@ export default function AlertItem({ item, index, length }) {
 				<Image resizeMode={"stretch"}
 					style={{ width: 30, height: 30, }} source={{ uri: item.logo }} />
 				<View style={{ flex: 1, paddingHorizontal: 12 }}>
-					<AppText bold typo="sm">
+					<AppText bold typo="xs">
 						{item.name}
 					</AppText>
-					<AppText typo="dot" color="text3">
+					<AppText typo="tiny" color="text3">
 						{item.symbol}
 					</AppText>
 				</View>
-				<AppText typo="sm" bold>
+				<AppText typo="sm" bold color="text2">
 					{state}
 					{/* {item.lastPrice} */}
 				</AppText>
