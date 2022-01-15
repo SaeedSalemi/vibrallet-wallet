@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/core'
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, View, FlatList, RefreshControl } from 'react-native'
 // import { TouchableOpacity } from 'react-native-gesture-handler'
 // import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 // import AppIcon from '../../../components/common/AppIcon'
@@ -12,15 +12,37 @@ import { routes } from '../../../config/routes'
 import { useContext } from 'react'
 import { Context } from '../../../context/Provider'
 import HttpService from '../../../services/HttpService'
+import { showMessage } from 'react-native-flash-message'
 
+const wait = timeout => {
+	return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 export default function SelectCoinScreen({ navigation, route }) {
-	const { coins } = useContext(Context)
+	const { coins, setCoin } = useContext(Context)
 	console.log('coins in select coin', coins)
 	const [state, setState] = useState({
 		rate: 0,
 		percentChange: 0,
 	})
+
+	const [filteredCoins, setFilteredCoins] = useState([])
+	const [refreshing, setRefreshing] = React.useState(false);
+
+	useEffect(() => {
+		setFilteredCoins(coins.filter(c => !c.hide))
+	}, [])
+
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		setFilteredCoins([])
+		wait(0).then(() => {
+			setFilteredCoins(coins.filter(c => !c.hide))
+			setRefreshing(false)
+		});
+	}, []);
+
+
 	useLayoutEffect(() => {
 		for (let item of coins) {
 			new HttpService("", {
@@ -43,11 +65,33 @@ export default function SelectCoinScreen({ navigation, route }) {
 				return item
 			}
 		})
-		setFilterItems(newData)
+		// setFilterItems(newData)
+		setFilteredCoins(newData)
 	}
 
 	const { params } = useRoute()
 	const mode = params?.mode || 'send'
+
+
+	const hideCoinHandler = coin => {
+		showMessage({
+			message: `${coin.name} was hide successfully.`,
+			description: null,
+			type: 'success',
+			icon: null,
+			duration: 1000,
+			style: { backgroundColor: "#6BC0B1" },
+			position: 'top'
+		})
+		coins.map(item => {
+			if (item.name === coin.name) {
+				item.hide = true
+			}
+		})
+		setCoin(coins)
+	}
+
+
 
 	return (
 		<Screen edges={['bottom']}>
@@ -87,8 +131,25 @@ export default function SelectCoinScreen({ navigation, route }) {
 					All Coins
 				</AppText>
 				<View style={{ flex: 1, paddingVertical: 18 }}>
-					<ScrollView>
-						{filterdItems.map((coin, i) => (
+					<View>
+
+						<FlatList
+							style={{ marginVertical: 16 }}
+							data={filteredCoins}
+							refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+							renderItem={({ item, index }) => <Coin
+								coin={item}
+								index={index}
+								length={filteredCoins.length}
+								onPress={() => {
+									// navigate(routes.coinDetailWithoutHistory, { coin: item })
+									navigate(routes[mode], { coin: item })
+								}}
+								onHideHandler={hideCoinHandler}
+							/>}
+							keyExtractor={(_, index) => index.toString()}
+						/>
+						{/* {filterdItems.map((coin, i) => (
 							<Coin
 								key={i}
 								onPress={() =>
@@ -100,8 +161,8 @@ export default function SelectCoinScreen({ navigation, route }) {
 								noChart
 								noPrice
 							/>
-						))}
-					</ScrollView>
+						))} */}
+					</View>
 				</View>
 			</View>
 		</Screen>
