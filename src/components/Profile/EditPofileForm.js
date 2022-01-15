@@ -161,6 +161,7 @@ export default function EditProfileForm({ navigation, onChange }) {
 				autoCorrect={false}
 				autoCapitalize="none"
 				textContentType="emailAddress"
+				autoCompleteType="email"
 			/>
 
 			<AppInput
