@@ -105,6 +105,21 @@ export default function EditProfileForm({ navigation, onChange }) {
 			country: country ? country.title : '',
 			phone: phone || ''
 		}
+
+		if (email && !email.isEmail()) {
+			showMessage({
+				message: `Your email address is not valid`,
+				description: null,
+				type: 'danger',
+				icon: null,
+				duration: 4000,
+				style: { backgroundColor: "#e74c3c" },
+				position: 'top'
+			})
+			setSubmitting(false)
+			return
+		}
+
 		setUserData(registerInformation)
 		const data = JSON.stringify(registerInformation)
 		AsyncStorage.setItem(register_user, data).then(() => {
