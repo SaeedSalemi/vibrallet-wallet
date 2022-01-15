@@ -12,6 +12,7 @@ import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
 import { Images } from '../../../assets'
 import PriceItem from '../../../components/PriceAlert/PriceItem'
+import { price_alerts } from './../../../config/async-storage.json'
 
 export default function PriceAlertScreen({ route }) {
 	const show = route.params?.show
@@ -21,15 +22,12 @@ export default function PriceAlertScreen({ route }) {
 	})
 
 	useEffect(() => {
-		AsyncStorage.getItem("alerts").then((data) => {
+		AsyncStorage.getItem(price_alerts).then((data) => {
 			state.items = JSON.parse(data)
 			setState({ ...state })
 		})
 
 	}, [])
-
-
-
 
 
 	return (
