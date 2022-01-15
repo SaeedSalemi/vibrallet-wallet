@@ -11,7 +11,7 @@ import PriceCalculator from '../../../components/PriceAlert/PriceCalculator'
 import Screen from '../../../components/Screen'
 import { routes } from '../../../config/routes'
 import { globalStyles } from '../../../config/styles'
-
+import { price_alerts } from '../../../config/async-storage.json'
 export default function NewCoinAlertScreen({ route, navigation }) {
 	const { coin, coinPrice } = route.params || {}
 	const [state, setState] = useState({
@@ -20,6 +20,78 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 
 	coin.price = coinPrice
 	coin.lastPrice = coinPrice
+
+	const handleCreateAlert = async () => {
+		let localStoredPriceAlerts = await AsyncStorage.getItem(price_alerts)
+
+		if (localStoredPriceAlerts) {
+			const parsedPriceAlerts = JSON.parse(localStoredPriceAlerts)
+			// docs: coin local price is exsists
+
+			if (parsedPriceAlerts.hasOwnProperty(coin.symbol)) {
+
+				parsedPriceAlerts[coin.symbol].push({
+					price: state.price,
+					status: false,
+					logo: coin.logo,
+					name: coin.name,
+					alert_type: state.alert_type
+				})
+
+				// console.log('parsed to obj', parsedPriceAlerts)
+				await AsyncStorage.setItem(price_alerts, JSON.stringify(parsedPriceAlerts))
+			} else {
+
+				const newPriceAlertItem = {
+					[coin.symbol]: [
+						{
+							price: state.price,
+							status: false,
+							logo: coin.logo,
+							name: coin.name,
+							alert_type: state.alert_type
+						}
+					]
+				}
+
+				const mergeCoinObjects = Object.assign(parsedPriceAlerts, newPriceAlertItem)
+				await AsyncStorage.setItem(price_alerts, JSON.stringify(mergeCoinObjects))
+			}
+
+		} else {
+			// create a new price alert for a first time.
+
+			const newPriceAlertItem = {
+				[coin.symbol]: [
+					{
+						price: state.price,
+						status: false,
+						logo: coin.logo,
+						name: coin.name,
+						alert_type: state.alert_type
+					}
+				]
+			}
+
+			console.log("New Alert =>", newPriceAlertItem)
+
+			await AsyncStorage.setItem(price_alerts, JSON.stringify(newPriceAlertItem))
+
+		}
+
+
+		showMessage({
+			message: `Your Price has been set.`,
+			description: null,
+			type: 'success',
+			icon: null,
+			duration: 2500,
+			style: { backgroundColor: "#6BC0B1" },
+			position: 'top'
+		})
+		navigation.navigate(routes.appTab)
+
+	}
 
 	return (
 		<Screen
@@ -66,47 +138,7 @@ export default function NewCoinAlertScreen({ route, navigation }) {
 			</View>
 			<AppButton
 				title="Create Alert"
-				onPress={async () => {
-					let cacheAlerts = await AsyncStorage.getItem("alerts")
-					if (cacheAlerts) {
-						cacheAlerts = JSON.parse(cacheAlerts)
-						if (cacheAlerts.hasOwnProperty(coin.symbol)) {
-
-							cacheAlerts[coin.symbol].push({
-								price: state.price,
-								status: false,
-								logo: coin.logo,
-								name: coin.name,
-								alert_type: state.alert_type
-							})
-							await AsyncStorage.setItem("alerts", JSON.stringify(cacheAlerts))
-						} else {
-							const createdAlert = {
-								[coin.symbol]: [
-									{
-										price: state.price,
-										status: false,
-										logo: coin.logo,
-										name: coin.name,
-										alert_type: state.alert_type
-									}
-								]
-							}
-							const finalResult = Object.assign(cacheAlerts, createdAlert)
-							await AsyncStorage.setItem("alerts", JSON.stringify(finalResult))
-						}
-					}
-					showMessage({
-						message: `Your Price has been set`,
-						description: null,
-						type: 'success',
-						icon: null,
-						duration: 2500,
-						style: { backgroundColor: "#6BC0B1" },
-						position: 'top'
-					})
-					navigation.navigate(routes.appTab)
-				}}
+				onPress={handleCreateAlert}
 			/>
 		</Screen>
 	)
