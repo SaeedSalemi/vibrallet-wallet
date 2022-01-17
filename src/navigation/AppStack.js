@@ -66,6 +66,7 @@ import CreateAccountWithPhoneScreen from '../screens/authentication/CreateAccoun
 import VerifyPhoneScreen from '../screens/authentication/VerifyPhoneScreen'
 import RestoreModalScreen from '../screens/authentication/RestoreModalScreen'
 import WalletConnectDAppScreen from '../screens/app/HomeStack/WalletConnectDAppScreen'
+import VerifyRecoveryPhrase from '../screens/authentication/VerifyRecoveryPhrase'
 
 export const AppTab = createBottomTabNavigator()
 
@@ -621,6 +622,17 @@ export function AppStackNavigation() {
 					),
 				}}
 				component={WalletConnectDAppScreen}
+			/>
+			<AppStack.Screen
+				name={routes.verifyRecoveryPhrase}
+				options={{
+					headerTitle: () => (
+						<AppText typo="md" bold>
+							Verify recovery phrase
+						</AppText>
+					),
+				}}
+				component={VerifyRecoveryPhrase}
 			/>
 
 			<AppStack.Screen
