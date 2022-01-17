@@ -68,4 +68,5 @@ export const routes = {
 	dAppExchange: 'DAppExchange',
 	dAppMarket: 'dAppMarket',
 	walletConnect: 'WalletConnect',
+	verifyRecoveryPhrase: 'VerifyRecoveryPhrase',
 }
