@@ -1,49 +1,88 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import AppText from '../../components/common/AppText'
 import Screen from '../../components/Screen'
 
 import globalStyles from '../../config/styles'
-import { useTimer } from '../../hooks/useTimer'
-import { setLoggedIn } from '../../redux/modules/appSettings'
-import { setUser } from '../../utils/storage'
-import CodeInput from './CodeInput'
-import { CodeNotReceived } from './CodeNotReceived'
 const defaultStyles = globalStyles()
 
+
+import { getStoredMnemonic } from './../../utils/WalletFunctions'
+import AppButton from '../../components/common/AppButton'
+
 const VerifyRecoveryPhrase = ({ navigation }) => {
+  const [mnemonic, setMnemonic] = useState([])
+
+  const [mnemonicHolder, setMnemonicHolder] = useState([])
+
+  useLayoutEffect(() => {
+    getStoredMnemonic().then(mnemonic => {
+      if (mnemonic.backup) {
+        let shuffledArray = mnemonic.backup.split(' ').sort(() => Math.random() - 0.5)
+        setMnemonic(shuffledArray)
+      }
+    }).catch(err => {
+
+    })
+  }, [])
 
 
-  const [time, resetTimer] = useTimer(60)
-  const dispatch = useDispatch()
-
-  const handleVerify = () => {
-    dispatch(setLoggedIn(true))
-    setUser({ username: true })
-  }
 
   return (
     <Screen style={defaultStyles.screen} gap>
       <View style={styles.topTexts}>
-        <AppText>Code is sent to +21 983 823 32 32</AppText>
-        <AppText style={styles.topTextSub} typo="tiny">
-          Please enter the code to verify
+        <AppText bold typo="xl">Verify Recovery Phrase</AppText>
+        <AppText style={styles.topTextSub} typo="sm">
+          Tab the words to put them next to each other in correct order.
         </AppText>
-        <AppText style={styles.topTextSub} typo="tiny">
-          your phone.
-        </AppText>
+
       </View>
       <View style={styles.resendContainer}>
-        <CodeInput count={4} onReachedEnd={handleVerify} />
 
-        {time === 0 ? (
-          <CodeNotReceived resetTimer={resetTimer} />
-        ) : (
-          <AppText style={{ paddingTop: 24 }} typo="tiny">
-            {time}s
-          </AppText>
-        )}
+
+        <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginVertical: 12 }}>
+          {mnemonicHolder.length > 0 &&
+
+            mnemonicHolder.map((word, idx) => {
+              return <TouchableOpacity
+                key={word + '' + idx} style={{ margin: 6, paddingHorizontal: 6, paddingVertical: 8, borderRadius: 6, borderColor: 'white', borderWidth: .5 }}
+                onPress={() => handlePopFromHolder(word, idx)}
+              >
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                  <AppText color="text3">{idx + 1} </AppText>
+                  <AppText>{word}</AppText>
+                </View>
+              </TouchableOpacity>
+            })
+
+          }
+        </View>
+
+
+
+        <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginVertical: 12 }}>
+          {mnemonic.length > 0 &&
+
+            mnemonic.map((word, idx) => {
+              return <TouchableOpacity
+                key={word} style={{ margin: 6, paddingHorizontal: 6, paddingVertical: 8, borderRadius: 6, borderColor: 'white', borderWidth: .5 }}
+                onPress={() => handleToHolder(word, idx)}
+              >
+                <AppText>{word}</AppText>
+              </TouchableOpacity>
+            })
+
+          }
+        </View>
+
+      </View>
+
+      <View style={styles.continueButton}>
+        <AppButton
+          title="Continue"
+          typo="sm"
+          onPress={handleGotoAppStack}
+        />
       </View>
     </Screen>
   )
@@ -57,9 +96,18 @@ const styles = StyleSheet.create({
     marginVertical: 50,
     paddingTop: 20,
   },
+  continueButton: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    padding: 20,
+    width: '100%',
+  },
   topTextSub: {
     color: defaultStyles.Colors.darkTextColor,
     paddingTop: 4,
+    marginVertical: 12,
+    alignSelf: 'center',
+    textAlign: 'center'
   },
   formGroup: {
     flex: 3,
