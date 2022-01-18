@@ -40,6 +40,17 @@ const VerifyRecoveryPhrase = ({ navigation }) => {
   }
 
 
+  const handlePopFromHolder = (mnemonicItem, idx) => {
+
+    setMnemonic(state => [...state, mnemonicItem])
+
+
+    let leftMnemos = mnemonicHolder.filter(item => item !== mnemonicItem)
+    setMnemonicHolder(leftMnemos)
+
+  }
+
+
 
   return (
     <Screen style={defaultStyles.screen} gap>
