@@ -30,7 +30,6 @@ import Header from '../../../components/Header/Header'
 import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import AppInput from '../../../components/common/AppInput/AppInput'
 import DAppList from '../../../components/DApps/DAppList'
 
 const ENTRIES1 = [
