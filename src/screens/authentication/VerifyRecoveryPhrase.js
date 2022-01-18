@@ -51,6 +51,14 @@ const VerifyRecoveryPhrase = ({ navigation }) => {
   }
 
 
+  const handleGotoAppStack = () => {
+    if (mnemonicHolder.length !== 12) {
+      return
+    } else {
+
+    }
+  }
+
 
   return (
     <Screen style={defaultStyles.screen} gap>
