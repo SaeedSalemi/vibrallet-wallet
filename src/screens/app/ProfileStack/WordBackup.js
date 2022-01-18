@@ -14,25 +14,25 @@ import { routes } from '../../../config/routes'
 // import RNFS from 'react-native-fs'
 // import { encrypt } from '../../../utils/Functions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import HttpService from '../../../services/HttpService'
-import bitcoinManager from '../../../blockchains/BitcoinManager'
-import ethManager from '../../../blockchains/EthManager'
-import bscManager from '../../../blockchains/BscManager'
-import { Context } from '../../../context/Provider'
+// import HttpService from '../../../services/HttpService'
+// import bitcoinManager from '../../../blockchains/BitcoinManager'
+// import ethManager from '../../../blockchains/EthManager'
+// import bscManager from '../../../blockchains/BscManager'
+// import { Context } from '../../../context/Provider'
 import QRCode from 'react-native-qrcode-svg'
 import {
 	GoogleSignin,
 	GoogleSigninButton,
 	statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {
-	GDrive,
-	MimeTypes
-} from "@robinbobin/react-native-google-drive-api-wrapper";
+// import {
+// 	GDrive,
+// 	MimeTypes
+// } from "@robinbobin/react-native-google-drive-api-wrapper";
 import { gettingBackup } from '../../../utils/Functions'
 
 export default function WordBackup({ navigation }) {
-	const { setCoinsToSupport } = useContext(Context)
+	// const { setCoinsToSupport } = useContext(Context)
 	const [googleInformation, setGoogleInformation] = useState({})
 	const [backupPlan, setBackupPlan] = useState()
 
@@ -41,9 +41,11 @@ export default function WordBackup({ navigation }) {
 	const dispatch = useDispatch()
 	const { navigate } = navigation
 	const [backup, setBackup] = useState('')
-	const [state, setState] = useState({
-		preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
-	})
+
+
+	// const [state, setState] = useState({
+	// 	preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
+	// })
 
 	GoogleSignin.configure({
 		scopes: ['https://www.googleapis.com/auth/drive.readonly'], // [Android] what API you want to access on behalf of the user, default is email and profile
@@ -63,6 +65,7 @@ export default function WordBackup({ navigation }) {
 		const words = WalletManager.generateMnemonic()
 		AsyncStorage.setItem('isBackup', 'true')
 		setBackup(words)
+		// TODO: Async method.
 		AsyncStorage.getItem('isBackup').then(value => {
 			if (value === null) {
 
@@ -72,61 +75,61 @@ export default function WordBackup({ navigation }) {
 		})
 	}, [])
 
-	const supportedCoins = (xhr_response) => {
+	// const supportedCoins = (xhr_response) => {
 
-		try {
-			new HttpService("", {
-				"uniqueId": "abc1",
-				"action": "supportedCoins",
-			}).Post(async (response) => {
+	// 	try {
+	// 		new HttpService("", {
+	// 			"uniqueId": "abc1",
+	// 			"action": "supportedCoins",
+	// 		}).Post(async (response) => {
 
-				try {
-					if (response) {
-						console.log('supportedCoins WORD BACKYUp----> ', backup, response);
-						// if (wallet) {
-						const items = response
-						for (let item of items) {
-							item.balance = 0
-							item.color = state.preDefinedCoinsColors[item.symbol]
-							item.hide = false
-							item.fav = false
-							if (item.symbol === 'BTC') {
-								const coininfo = await bitcoinManager.getWalletFromMnemonic(backup)
-								item.publicKey = coininfo.publicKey
-								item.privateKey = coininfo.privateKey
-								item.address = coininfo.address
-								// item.balance = await bitcoinManager.getBalance(item.address)
-							}
-							if (item.symbol.toUpperCase() === 'ETH') {
-								const coininfo = await ethManager.getWalletFromMnemonic(backup)
-								item.publicKey = coininfo.publicKey
-								item.privateKey = coininfo.privateKey
-								item.address = coininfo.address
-								// item.balance = await ethManager.getBalance(item.address)
-							}
-							if (item.symbol.toUpperCase() === 'BNB') {
-								const coininfo = await bscManager.getWalletFromMnemonic(backup)
-								item.publicKey = coininfo.publicKey
-								item.privateKey = coininfo.privateKey
-								item.address = coininfo.address
-								// item.balance = await bscManager.getBalance(item.address)
-							}
-						}
-						setCoinsToSupport(items)
-						AsyncStorage.setItem("supportedCoins", JSON.stringify(items)).then().catch()
-						xhr_response(items)
-					}
-				} catch (error) {
-					console.log('debug error', error)
-				}
-			})
+	// 			try {
+	// 				if (response) {
+	// 					console.log('supportedCoins WORD BACKYUp----> ', backup, response);
+	// 					// if (wallet) {
+	// 					const items = response
+	// 					for (let item of items) {
+	// 						item.balance = 0
+	// 						item.color = state.preDefinedCoinsColors[item.symbol]
+	// 						item.hide = false
+	// 						item.fav = false
+	// 						if (item.symbol === 'BTC') {
+	// 							const coininfo = await bitcoinManager.getWalletFromMnemonic(backup)
+	// 							item.publicKey = coininfo.publicKey
+	// 							item.privateKey = coininfo.privateKey
+	// 							item.address = coininfo.address
+	// 							// item.balance = await bitcoinManager.getBalance(item.address)
+	// 						}
+	// 						if (item.symbol.toUpperCase() === 'ETH') {
+	// 							const coininfo = await ethManager.getWalletFromMnemonic(backup)
+	// 							item.publicKey = coininfo.publicKey
+	// 							item.privateKey = coininfo.privateKey
+	// 							item.address = coininfo.address
+	// 							// item.balance = await ethManager.getBalance(item.address)
+	// 						}
+	// 						if (item.symbol.toUpperCase() === 'BNB') {
+	// 							const coininfo = await bscManager.getWalletFromMnemonic(backup)
+	// 							item.publicKey = coininfo.publicKey
+	// 							item.privateKey = coininfo.privateKey
+	// 							item.address = coininfo.address
+	// 							// item.balance = await bscManager.getBalance(item.address)
+	// 						}
+	// 					}
+	// 					setCoinsToSupport(items)
+	// 					AsyncStorage.setItem("supportedCoins", JSON.stringify(items)).then().catch()
+	// 					xhr_response(items)
+	// 				}
+	// 			} catch (error) {
+	// 				console.log('debug error', error)
+	// 			}
+	// 		})
 
 
-		} catch (err) {
-			console.log(err)
-		}
+	// 	} catch (err) {
+	// 		console.log(err)
+	// 	}
 
-	}
+	// }
 
 
 	const signIn = async () => {
@@ -172,19 +175,23 @@ export default function WordBackup({ navigation }) {
 	const handleAddWallet = () => {
 		setLoading(true)
 		dispatch(finalCreateWallet(backup))
-		supportedCoins(xhr_response => {
-			showMessage({
-				message: 'Your wallet has been created successfully',
-				description: null,
-				type: 'success',
-				icon: null,
-				duration: 2000,
-				style: { backgroundColor: "#16a085" },
-				position: 'top'
-			})
-			setLoading(false)
-			navigation.navigate(routes.appTab)
-		})
+
+		// supportedCoins(xhr_response => {
+		// 	showMessage({
+		// 		message: 'Your wallet has been created successfully',
+		// 		description: null,
+		// 		type: 'success',
+		// 		icon: null,
+		// 		duration: 2000,
+		// 		style: { backgroundColor: "#16a085" },
+		// 		position: 'top'
+		// 	})
+		// 	setLoading(false)
+		// 	navigation.navigate(routes.appTab)
+		// })
+
+		setLoading(false)
+		navigation.navigate(routes.verifyRecoveryPhrase, { generatedMnemonic: backup })
 
 	}
 
