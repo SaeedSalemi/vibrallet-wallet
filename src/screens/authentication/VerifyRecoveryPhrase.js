@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useContext, useLayoutEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import AppText from '../../components/common/AppText'
 import Screen from '../../components/Screen'
@@ -9,21 +9,42 @@ const defaultStyles = globalStyles()
 
 import { getStoredMnemonic } from './../../utils/WalletFunctions'
 import AppButton from '../../components/common/AppButton'
+import { Context } from '../../context/Provider'
+import HttpService from '../../services/HttpService'
+import bitcoinManager from '../../blockchains/BitcoinManager'
+import ethManager from '../../blockchains/EthManager'
+import bscManager from '../../blockchains/BscManager'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { showMessage } from "react-native-flash-message";
+import { routes } from '../../config/routes'
 
-const VerifyRecoveryPhrase = ({ navigation }) => {
+const VerifyRecoveryPhrase = ({ route, navigation }) => {
+
+  const { generatedMnemonic } = route.params || {}
+  const { setCoinsToSupport } = useContext(Context)
+
+  const [state, setState] = useState({
+    preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
+  })
+
   const [mnemonic, setMnemonic] = useState([])
-
   const [mnemonicHolder, setMnemonicHolder] = useState([])
+  const [loading, setLoading] = useState(false)
+
 
   useLayoutEffect(() => {
-    getStoredMnemonic().then(mnemonic => {
-      if (mnemonic.backup) {
-        let shuffledArray = mnemonic.backup.split(' ').sort(() => Math.random() - 0.5)
-        setMnemonic(shuffledArray)
-      }
-    }).catch(err => {
+    if (generatedMnemonic) {
+      let shuffledArray = generatedMnemonic.split(' ').sort(() => Math.random() - 0.5)
+      setMnemonic(shuffledArray)
+    }
+    // getStoredMnemonic().then(mnemonic => {
+    //   if (mnemonic.backup) {
+    //     let shuffledArray = mnemonic.backup.split(' ').sort(() => Math.random() - 0.5)
+    //     setMnemonic(shuffledArray)
+    //   }
+    // }).catch(err => {
 
-    })
+    // })
   }, [])
 
 
@@ -52,12 +73,89 @@ const VerifyRecoveryPhrase = ({ navigation }) => {
 
 
   const handleGotoAppStack = () => {
+
     if (mnemonicHolder.length !== 12) {
       return
     } else {
-
+      setLoading(true)
+      supportedCoins(xhr_response => {
+        showMessage({
+          message: 'Your wallet has been created successfully',
+          description: null,
+          type: 'success',
+          icon: null,
+          duration: 2000,
+          style: { backgroundColor: "#16a085" },
+          position: 'top'
+        })
+        setLoading(false)
+        navigation.replace(routes.appTab)
+      })
     }
   }
+
+
+
+  const supportedCoins = (xhr_response) => {
+
+    try {
+      new HttpService("", {
+        "uniqueId": "abc1",
+        "action": "supportedCoins",
+      }).Post(async (response) => {
+
+        try {
+          if (response) {
+            console.log('supportedCoins WORD BACKYUp----> ', backup, response);
+            // if (wallet) {
+            const items = response
+            for (let item of items) {
+              item.balance = 0
+              item.color = state.preDefinedCoinsColors[item.symbol]
+              item.hide = false
+              item.fav = false
+              if (item.symbol === 'BTC') {
+                const coininfo = await bitcoinManager.getWalletFromMnemonic(backup)
+                item.publicKey = coininfo.publicKey
+                item.privateKey = coininfo.privateKey
+                item.address = coininfo.address
+                // item.balance = await bitcoinManager.getBalance(item.address)
+              }
+              if (item.symbol.toUpperCase() === 'ETH') {
+                const coininfo = await ethManager.getWalletFromMnemonic(backup)
+                item.publicKey = coininfo.publicKey
+                item.privateKey = coininfo.privateKey
+                item.address = coininfo.address
+                // item.balance = await ethManager.getBalance(item.address)
+              }
+              if (item.symbol.toUpperCase() === 'BNB') {
+                const coininfo = await bscManager.getWalletFromMnemonic(backup)
+                item.publicKey = coininfo.publicKey
+                item.privateKey = coininfo.privateKey
+                item.address = coininfo.address
+                // item.balance = await bscManager.getBalance(item.address)
+              }
+            }
+            setCoinsToSupport(items)
+            AsyncStorage.setItem("supportedCoins", JSON.stringify(items)).then().catch()
+            xhr_response(items)
+          }
+        } catch (error) {
+          console.log('debug error', error)
+        }
+      })
+
+
+    } catch (err) {
+      console.log(err)
+    }
+
+  }
+
+
+
+
+
 
 
   return (
@@ -111,6 +209,7 @@ const VerifyRecoveryPhrase = ({ navigation }) => {
 
       <View style={styles.continueButton}>
         <AppButton
+          loading={loading}
           title="Continue"
           typo="sm"
           onPress={handleGotoAppStack}
