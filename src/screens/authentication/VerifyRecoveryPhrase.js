@@ -37,14 +37,9 @@ const VerifyRecoveryPhrase = ({ route, navigation }) => {
       let shuffledArray = generatedMnemonic.split(' ').sort(() => Math.random() - 0.5)
       setMnemonic(shuffledArray)
     }
-    // getStoredMnemonic().then(mnemonic => {
-    //   if (mnemonic.backup) {
-    //     let shuffledArray = mnemonic.backup.split(' ').sort(() => Math.random() - 0.5)
-    //     setMnemonic(shuffledArray)
-    //   }
-    // }).catch(err => {
-
-    // })
+    return () => {
+      setMnemonic([])
+    }
   }, [])
 
 
@@ -74,10 +69,45 @@ const VerifyRecoveryPhrase = ({ route, navigation }) => {
 
   const handleGotoAppStack = () => {
 
+    const convertGeneratedMnemonicToArr = generatedMnemonic.split(' ')
+    // console.log('convertGeneratedMnemonicToArr', convertGeneratedMnemonicToArr)
+    // console.log('dani holder', mnemonicHolder)
+
     if (mnemonicHolder.length !== 12) {
       return
     } else {
       setLoading(true)
+
+      // validate the mnemonic phrase
+      let validate = false
+      let inx = 0
+      for (let i = 0; i <= convertGeneratedMnemonicToArr.length; i++) {
+        if (convertGeneratedMnemonicToArr[i] === mnemonicHolder[i]) {
+          validate = true
+        } else {
+          validate = false
+          inx = i
+          break;
+        }
+      }
+
+      // alert(` ${validate}, ${inx}`)
+
+      if (!validate) {
+
+        showMessage({
+          message: 'Your mnemonic phrase is not valid',
+          description: null,
+          type: 'success',
+          icon: null,
+          duration: 5000,
+          style: { backgroundColor: "#e74c3c" },
+          position: 'top'
+        })
+        setLoading(false)
+        return;
+      }
+
       supportedCoins(xhr_response => {
         showMessage({
           message: 'Your wallet has been created successfully',
