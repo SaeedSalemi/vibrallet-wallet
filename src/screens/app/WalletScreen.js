@@ -20,6 +20,7 @@ import { showMessage } from 'react-native-flash-message'
 import { Context } from '../../context/Provider'
 import HttpService from '../../services/HttpService'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { checkExistsWallet } from '../../utils/WalletFunctions'
 
 const ChartItems = ({ iconColor, title, value }) => {
 	return (
@@ -59,22 +60,12 @@ export default function WalletScreen({ navigation }) {
 
 
 	useLayoutEffect(() => {
-		checkExistsWallet()
-	}, [])
-
-
-	const checkExistsWallet = async () => {
-		const persist = await AsyncStorage.getItem('persist:root')
-		if (persist !== null) {
-			let item = JSON.parse(persist)
-			if (item !== null) {
-				let wallets = JSON.parse(item["wallets"])
-				if (wallets["data"] === null) {
-					navigation.replace(routes.newWallet, { no_back: true })
-				}
+		checkExistsWallet().then(wallet => {
+			if (!wallet) {
+				navigation.replace(routes.welcome)
 			}
-		}
-	}
+		}).catch(err => { console.log('splash screen catch', err) })
+	}, [])
 
 
 	useEffect(() => {
