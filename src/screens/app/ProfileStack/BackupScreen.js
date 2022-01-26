@@ -23,10 +23,10 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {
-  GDrive,
-  MimeTypes
-} from "@robinbobin/react-native-google-drive-api-wrapper";
+// import {
+//   GDrive,
+//   MimeTypes
+// } from "@robinbobin/react-native-google-drive-api-wrapper";
 import { gettingBackup } from '../../../utils/Functions'
 import { getStoredMnemonic, checkExistsWallet } from '../../../utils/WalletFunctions'
 
