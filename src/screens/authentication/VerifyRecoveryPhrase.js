@@ -23,6 +23,7 @@ const VerifyRecoveryPhrase = ({ route, navigation }) => {
   const { generatedMnemonic } = route.params || {}
   const { setCoinsToSupport } = useContext(Context)
 
+
   const [state, setState] = useState({
     preDefinedCoinsColors: { BTC: '#F47169', BNB: '#FFCC01', ETH: '#7037C9', },
   })
@@ -31,9 +32,12 @@ const VerifyRecoveryPhrase = ({ route, navigation }) => {
   const [mnemonicHolder, setMnemonicHolder] = useState([])
   const [loading, setLoading] = useState(false)
 
+  const [backup, setBackup] = useState()
+
 
   useLayoutEffect(() => {
     if (generatedMnemonic) {
+      setBackup(generatedMnemonic)
       let shuffledArray = generatedMnemonic.split(' ').sort(() => Math.random() - 0.5)
       setMnemonic(shuffledArray)
     }
@@ -136,7 +140,7 @@ const VerifyRecoveryPhrase = ({ route, navigation }) => {
 
         try {
           if (response) {
-            console.log('supportedCoins WORD BACKYUp----> ', generatedMnemonic, response);
+            console.log('supportedCoins WORD BACKYUp----> ', backup, response);
             // if (wallet) {
             const items = response
             for (let item of items) {
@@ -145,21 +149,21 @@ const VerifyRecoveryPhrase = ({ route, navigation }) => {
               item.hide = false
               item.fav = false
               if (item.symbol === 'BTC') {
-                const coininfo = await bitcoinManager.getWalletFromMnemonic(generatedMnemonic)
+                const coininfo = await bitcoinManager.getWalletFromMnemonic(backup)
                 item.publicKey = coininfo.publicKey
                 item.privateKey = coininfo.privateKey
                 item.address = coininfo.address
                 // item.balance = await bitcoinManager.getBalance(item.address)
               }
               if (item.symbol.toUpperCase() === 'ETH') {
-                const coininfo = await ethManager.getWalletFromMnemonic(generatedMnemonic)
+                const coininfo = await ethManager.getWalletFromMnemonic(backup)
                 item.publicKey = coininfo.publicKey
                 item.privateKey = coininfo.privateKey
                 item.address = coininfo.address
                 // item.balance = await ethManager.getBalance(item.address)
               }
               if (item.symbol.toUpperCase() === 'BNB') {
-                const coininfo = await bscManager.getWalletFromMnemonic(generatedMnemonic)
+                const coininfo = await bscManager.getWalletFromMnemonic(backup)
                 item.publicKey = coininfo.publicKey
                 item.privateKey = coininfo.privateKey
                 item.address = coininfo.address
