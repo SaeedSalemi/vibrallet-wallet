@@ -45,7 +45,7 @@ export default class HttpService {
           prgUpload(progress)
         } : null
       }).catch((error) => {
-        this.check_status(error)
+        // this.check_status(error)
         if (err) {
           // console.error(error)
           err(error.response)
@@ -95,7 +95,7 @@ export default class HttpService {
         } : null
 
       }).catch((error) => {
-        this.check_status(error)
+        // this.check_status(error)
         if (err) {
           // console.error(error)
           console.log('POST ERROR', error)
