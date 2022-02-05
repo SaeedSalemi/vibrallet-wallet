@@ -136,7 +136,7 @@ const VerifyRecoveryPhrase = ({ route, navigation }) => {
 
         try {
           if (response) {
-            console.log('supportedCoins WORD BACKYUp----> ', backup, response);
+            console.log('supportedCoins WORD BACKYUp----> ', generatedMnemonic, response);
             // if (wallet) {
             const items = response
             for (let item of items) {
@@ -145,21 +145,21 @@ const VerifyRecoveryPhrase = ({ route, navigation }) => {
               item.hide = false
               item.fav = false
               if (item.symbol === 'BTC') {
-                const coininfo = await bitcoinManager.getWalletFromMnemonic(backup)
+                const coininfo = await bitcoinManager.getWalletFromMnemonic(generatedMnemonic)
                 item.publicKey = coininfo.publicKey
                 item.privateKey = coininfo.privateKey
                 item.address = coininfo.address
                 // item.balance = await bitcoinManager.getBalance(item.address)
               }
               if (item.symbol.toUpperCase() === 'ETH') {
-                const coininfo = await ethManager.getWalletFromMnemonic(backup)
+                const coininfo = await ethManager.getWalletFromMnemonic(generatedMnemonic)
                 item.publicKey = coininfo.publicKey
                 item.privateKey = coininfo.privateKey
                 item.address = coininfo.address
                 // item.balance = await ethManager.getBalance(item.address)
               }
               if (item.symbol.toUpperCase() === 'BNB') {
-                const coininfo = await bscManager.getWalletFromMnemonic(backup)
+                const coininfo = await bscManager.getWalletFromMnemonic(generatedMnemonic)
                 item.publicKey = coininfo.publicKey
                 item.privateKey = coininfo.privateKey
                 item.address = coininfo.address
