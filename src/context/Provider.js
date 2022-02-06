@@ -11,6 +11,7 @@ import HttpService from '../services/HttpService';
 import { getToken } from '../utils/Functions';
 import { Linking, Platform } from 'react-native'
 import WalletConnect from "@walletconnect/client";
+import { checkNetworkStauts } from './../utils/Functions'
 
 export const Context = createContext()
 
@@ -54,6 +55,9 @@ const MainProvider = props => {
   // useLayoutEffect(() => {
 
   // }, [])
+
+
+
 
 
 
@@ -401,6 +405,7 @@ const MainProvider = props => {
   }, [])
 
   useEffect(() => {
+
     InitData()
   }, [])
 
@@ -427,8 +432,10 @@ const MainProvider = props => {
           },
           maxRedirects: 1,
         }).catch((error) => {
+          console.group("init token")
           console.log(error)
           console.log("amr", "token error", error)
+          console.groupEnd()
         }).then(async (response) => {
           console.log("amr", "token recivie", response.data)
           const token = response?.data.data.token
@@ -442,9 +449,11 @@ const MainProvider = props => {
   }
 
   const InitData = async () => {
-    await getTokenFromServer()
-    fetchData()
-    fetchFCASData()
+    if (await checkNetworkStauts()) {
+      await getTokenFromServer()
+      fetchData()
+      fetchFCASData()
+    }
   }
   // ===================== Profile 
 
