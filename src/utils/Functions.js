@@ -107,17 +107,21 @@ export const gettingBackup = (toBackUp, text = "Your wallet backup has been crea
  * @return {Boolean} 
  */
 export const checkNetworkStauts = () => {
-  Network.getNetworkStateAsync().then(status => {
-    if (!status.isConnected) {
-      showMessage({
-        message: 'Network connection not detected , please connect your phone to the internet connection and try again',
-        description: null,
-        type: 'danger',
-        icon: null,
-        duration: 8000,
-        style: { backgroundColor: "red" },
-        position: 'top'
-      })
-    }
+  return new Promise((resolve, reject) => {
+    Network.getNetworkStateAsync().then(status => {
+      if (!status.isConnected) {
+        showMessage({
+          message: 'Network connection not detected , please connect your phone to the internet connection and try again',
+          description: null,
+          type: 'danger',
+          icon: null,
+          duration: 8000,
+          style: { backgroundColor: "red" },
+          position: 'top'
+        })
+      }
+      resolve(status.isConnected)
+    })
   })
+
 }
