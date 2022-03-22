@@ -5,7 +5,7 @@ import { showMessage } from 'react-native-flash-message'
 
 export default class HttpService {
 	constructor(url, data, notif = false, notif_time = 1, version = '') {
-		// let token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJJRCI6IjYxNzk3YWVlOWY2YTM3YjA4YmUxNTI0YyIsImlhdCI6MTYzNTM1MTI3OCwiZXhwIjoxNjY2ODg3Mjc4fQ.jN-mFZaiKEY3OHIipuNjIBF29-bIJpMjJCjB4debblsckyHnUXXFZuDqM_Xpgx67sfQgzAFJCeeH6izws3x_bw9x7dYPIygBUaZIHks31g84uu1EuHx2VkpAuSo4y2S7xQycF1JKKACgraZJ9cEJAMl0XfgF8ygiXmGsGKjObC92oNmKm-AhklifUrju1IYG9R8xyufK3jVmpgpLb92c-9nhTJfxO5OLboeumDBa5wvLpP4IVt_xzbVb4UbNrVAtIcuQHe2LOsCe60Jp8C68IBKS3d-TN8NxEma1FbUzKN5yXMKAh5dNYrbtn0pei7ZS8rCh2Src4Yw5OAJtu3lR8A"
+		// let token = ""
 
 		this.data = data || {}
 		this.notif = notif
