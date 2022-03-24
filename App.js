@@ -11,13 +11,11 @@ import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import HideKeyboard from './src/utils/HideKeyboard'
 import InAppNotificaiton from './src/components/common/AppNotification/InAppNotification'
 import MainProvider from './src/context/Provider'
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 const { store, persistor } = configStore()
 
-const queryClient = new QueryClient();
-
-
+const queryClient = new QueryClient()
 
 export default function App() {
 	return (
@@ -29,7 +27,10 @@ export default function App() {
 						style={{ backgroundColor: globalStyles.Colors.bckColor }}
 					>
 						<InAppNotificaiton />
-						<StatusBar backgroundColor={globalStyles.Colors.bckColor} barStyle="light-content" />
+						<StatusBar
+							backgroundColor={globalStyles.Colors.bckColor}
+							barStyle="light-content"
+						/>
 						<HideKeyboard>
 							<RootNavigation />
 						</HideKeyboard>
