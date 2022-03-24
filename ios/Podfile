@@ -20,6 +20,5 @@ target 'binrexwallet' do
   # end
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
-  pod 'react-native-cloud-fs', :path => '../node_modules/react-native-cloud-fs'
 
 end
