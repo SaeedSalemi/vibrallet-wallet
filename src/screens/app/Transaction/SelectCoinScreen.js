@@ -15,8 +15,8 @@ import HttpService from '../../../services/HttpService'
 import { showMessage } from 'react-native-flash-message'
 
 const wait = timeout => {
-	return new Promise(resolve => setTimeout(resolve, timeout));
-};
+	return new Promise(resolve => setTimeout(resolve, timeout))
+}
 
 export default function SelectCoinScreen({ navigation, route }) {
 	const { coins, setCoin } = useContext(Context)
@@ -27,30 +27,29 @@ export default function SelectCoinScreen({ navigation, route }) {
 	})
 
 	const [filteredCoins, setFilteredCoins] = useState([])
-	const [refreshing, setRefreshing] = React.useState(false);
+	const [refreshing, setRefreshing] = React.useState(false)
 
 	useEffect(() => {
 		setFilteredCoins(coins.filter(c => !c.hide))
 	}, [])
 
 	const onRefresh = React.useCallback(() => {
-		setRefreshing(true);
+		setRefreshing(true)
 		setFilteredCoins([])
 		wait(0).then(() => {
 			setFilteredCoins(coins.filter(c => !c.hide))
 			setRefreshing(false)
-		});
-	}, []);
-
+		})
+	}, [])
 
 	useLayoutEffect(() => {
 		for (let item of coins) {
-			new HttpService("", {
-				"uniqueId": "abc1",
-				"action": "quotedPrice",
-				"data": {
-					"symbol": `${item.symbol}USDT`
-				}
+			new HttpService('', {
+				uniqueId: 'abc1',
+				action: 'quotedPrice',
+				data: {
+					symbol: `${item.symbol}USDT`,
+				},
 			}).Post(res => {
 				setState(res.data)
 			})
@@ -72,7 +71,6 @@ export default function SelectCoinScreen({ navigation, route }) {
 	const { params } = useRoute()
 	const mode = params?.mode || 'send'
 
-
 	const hideCoinHandler = coin => {
 		showMessage({
 			message: `${coin.name} was hide successfully.`,
@@ -80,8 +78,8 @@ export default function SelectCoinScreen({ navigation, route }) {
 			type: 'success',
 			icon: null,
 			duration: 1000,
-			style: { backgroundColor: "#6BC0B1" },
-			position: 'top'
+			style: { backgroundColor: '#6BC0B1' },
+			position: 'top',
 		})
 		coins.map(item => {
 			if (item.name === coin.name) {
@@ -90,8 +88,6 @@ export default function SelectCoinScreen({ navigation, route }) {
 		})
 		setCoin(coins)
 	}
-
-
 
 	return (
 		<Screen edges={['bottom']}>
@@ -132,21 +128,24 @@ export default function SelectCoinScreen({ navigation, route }) {
 				</AppText>
 				<View style={{ flex: 1, paddingVertical: 18 }}>
 					<View>
-
 						<FlatList
 							style={{ marginVertical: 16 }}
 							data={filteredCoins}
-							refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-							renderItem={({ item, index }) => <Coin
-								coin={item}
-								index={index}
-								length={filteredCoins.length}
-								onPress={() => {
-									// navigate(routes.coinDetailWithoutHistory, { coin: item })
-									navigate(routes[mode], { coin: item })
-								}}
-								onHideHandler={hideCoinHandler}
-							/>}
+							refreshControl={
+								<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+							}
+							renderItem={({ item, index }) => (
+								<Coin
+									coin={item}
+									index={index}
+									length={filteredCoins.length}
+									onPress={() => {
+										// navigate(routes[mode], { coin: item })
+										navigation.navigate(routes[mode], { coin: item })
+									}}
+									onHideHandler={hideCoinHandler}
+								/>
+							)}
 							keyExtractor={(_, index) => index.toString()}
 						/>
 						{/* {filterdItems.map((coin, i) => (
