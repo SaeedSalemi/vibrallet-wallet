@@ -19,6 +19,8 @@ import { getToken } from '../utils/Functions'
 import { Linking, Platform } from 'react-native'
 import WalletConnect from '@walletconnect/client'
 import { checkNetworkStauts } from './../utils/Functions'
+import { getCoinBalance } from '../utils/WalletFunctions'
+// import { getCoinBalance } from './../utils/WalletFunctions'
 
 export const Context = createContext()
 
@@ -743,46 +745,13 @@ const MainProvider = props => {
 		setState({ ...state, coins })
 	}
 
-	const getCoinBalance = coin => {
-		return 0
-		// if (!coinSymbol)
-		//   return 0
-
-		// let balance = 0
-		// AsyncStorage.getItem("supportedCoins").then(data => {
-		//   if (data !== null) {
-		//     const parsedCoins = JSON.parse(data);
-		//     for (let coin of parsedCoins) {
-		//       if (coin["symbol"] === coinSymbol) {
-
-		//         const wallet = useSelector(state => { state.wallets.data ? state.wallets.data[0] : null })
-		//         console.log('wallet', wallet)
-		//         if (wallet) {
-		//           // let selectedCoin = state.coinManager[coinSymbol];
-		//           // if (typeof selectedCoin.getWalletFromMnemonic === "function") {
-		//           //   selectedCoin.getWalletFromMnemonic(wallet.backup)
-		//           //     .then(wallet => {
-		//           //       selectedCoin.getBalance(coin.address, false).then(result => {
-		//           //         balance = parseFloat(result).toFixed(3)
-		//           //         console.log('balance wallet', balance)
-		//           //       })
-		//           //     })
-		//           //     .catch(ex => console.error('balance wallet error', ex))
-		//           // }
-		//         }
-		//       }
-		//       // if (coin.hasOwnProperty("balance")) {
-		//       //   balance = parseFloat(coin["balance"]).toFixed(3)
-		//       //   console.log('balance storage', balance)
-		//       // } else {
-
-		//       // }
-		//     }
-		//   }
-		// }).catch(error => {
-		//   console.log('error in supported coins', error)
-		// })
-		// return balance
+	const getUpdatedCoinBalance = async () => {
+		const _coins = state.coins
+		for (let item of _coins) {
+			item.balance = await getCoinBalance(item)
+		}
+		setState({ ...state, coins: _coins })
+		return _coins
 	}
 
 	return (
@@ -814,6 +783,7 @@ const MainProvider = props => {
 				setMarketScreenActiveFilter,
 				walletConnect,
 				setSessionRequestPair,
+				getUpdatedCoinBalance,
 			}}
 		>
 			{props.children}
