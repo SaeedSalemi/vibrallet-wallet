@@ -9,7 +9,7 @@ import AppText from '../common/AppText'
 import QRCode from 'react-native-qrcode-svg'
 import bscManager from '../../blockchains/BscManager'
 import Clipboard from '@react-native-community/clipboard'
-import { showMessage } from "react-native-flash-message";
+import { showMessage } from 'react-native-flash-message'
 import { share } from '../../utils/Functions'
 import { Context } from '../../context/Provider'
 import bitcoinManager from '../../blockchains/BitcoinManager'
@@ -17,14 +17,16 @@ import bitcoinManager from '../../blockchains/BitcoinManager'
 export default function AddressScreen({ route, navigation }) {
 	const { coin } = route.params || {}
 	const [state, setState] = useState({
-		amount: 0
+		amount: 0,
 	})
-
 
 	const handleShare = (symbol, address, amount) => {
 		amount = parseFloat(amount)
 		if (amount > 0)
-			share("Recive token", `https://app.vibrallet.com/send?coin=${symbol}&address=${address}&amount=${amount}`)
+			share(
+				'Recive token',
+				`https://app.vibrallet.com/send?coin=${symbol}&address=${address}&amount=${amount}`
+			)
 		else {
 			showMessage({
 				message: `Amount couldn't be 0 or less.`,
@@ -32,8 +34,8 @@ export default function AddressScreen({ route, navigation }) {
 				type: 'danger',
 				icon: null,
 				duration: 3000,
-				style: { backgroundColor: "#e74c3c" },
-				position: 'top'
+				style: { backgroundColor: '#e74c3c' },
+				position: 'top',
 			})
 		}
 	}
@@ -108,14 +110,15 @@ export default function AddressScreen({ route, navigation }) {
 					customStyle={{ flex: 0.48, fontWeight: 'bold' }}
 					onPress={() => {
 						Clipboard.setString(coin?.address)
+						console.log('amr', coin?.address)
 						showMessage({
 							message: 'Address cpied to clipbloard successfully',
 							description: null,
 							type: 'success',
 							icon: null,
 							duration: 1000,
-							style: { backgroundColor: "#6BC0B1" },
-							position: 'top'
+							style: { backgroundColor: '#6BC0B1' },
+							position: 'top',
 						})
 					}}
 				/>

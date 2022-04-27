@@ -45,7 +45,7 @@ export default function Coin({
 	useLayoutEffect(() => {
 		getCoinBalance(coin)
 			.then(resultBalance => {
-				// console.log("balance result", resultBalance)
+				console.log('balance dani 4', resultBalance)
 				setcoinBalance(resultBalance)
 			})
 			.catch(errBalance => {
@@ -87,8 +87,6 @@ export default function Coin({
 		state.balance = 0
 		// state.balance =  getCoinBalance([coin.symbol])
 		// state.balance = coin.balance
-
-		console.log('amr rate', state.rate)
 
 		state.amount = state.balance * state.rate
 		setState({ ...state })
