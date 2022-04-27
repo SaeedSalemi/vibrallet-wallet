@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useMemo, useContext, useLayoutEffect, useCallback } from 'react'
-import {
-	FlatList,
-	TouchableOpacity,
-	View,
-	RefreshControl
-} from 'react-native'
+import React, {
+	useEffect,
+	useState,
+	useMemo,
+	useContext,
+	useLayoutEffect,
+	useCallback,
+} from 'react'
+import { FlatList, TouchableOpacity, View, RefreshControl } from 'react-native'
 
 import Coin from '../../components/common/Coin'
 import PieChart from 'react-native-pie-chart'
@@ -20,7 +22,11 @@ import { showMessage } from 'react-native-flash-message'
 import { Context } from '../../context/Provider'
 import HttpService from '../../services/HttpService'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { checkExistsWallet } from '../../utils/WalletFunctions'
+import {
+	checkExistsWallet,
+	getCoinBalance,
+	getCoinBalanceFromNetwork,
+} from '../../utils/WalletFunctions'
 
 const ChartItems = ({ iconColor, title, value }) => {
 	return (
@@ -47,92 +53,82 @@ const ChartItems = ({ iconColor, title, value }) => {
 }
 
 const wait = timeout => {
-	return new Promise(resolve => setTimeout(resolve, timeout));
-};
+	return new Promise(resolve => setTimeout(resolve, timeout))
+}
 
 export default function WalletScreen({ navigation }) {
 	const { navigate } = useNavigation()
 	const [pie, setPie] = useState(true)
 	const [state, setState] = useState({ allSupportedCoins: [] })
-	const { coins, setCoin } = useContext(Context)
+	const { coins, setCoin, getUpdatedCoinBalance } = useContext(Context)
 	const [totalAmount, setTotalAmount] = useState(0)
 	const [filteredCoins, setFilteredCoins] = useState([])
 
-
 	useLayoutEffect(() => {
-		checkExistsWallet().then(wallet => {
-			if (!wallet) {
-				navigation.replace(routes.welcome)
-			}
-		}).catch(err => { console.log('splash screen catch', err) })
+		checkExistsWallet()
+			.then(wallet => {
+				if (!wallet) {
+					navigation.replace(routes.welcome)
+				}
+			})
+			.catch(err => {
+				console.log('splash screen catch', err)
+			})
 	}, [])
-
 
 	useEffect(() => {
 		setFilteredCoins(coins.filter(c => !c.hide))
 	}, [])
 
-	const [refreshing, setRefreshing] = React.useState(false);
+	const [refreshing, setRefreshing] = React.useState(false)
 
 	const onRefresh = React.useCallback(() => {
-		setRefreshing(true);
+		setRefreshing(true)
 		setFilteredCoins([])
 		wait(0).then(() => {
 			setFilteredCoins(coins.filter(c => !c.hide))
 			setRefreshing(false)
-		});
-	}, []);
-
-
-
-
-
-	useEffect(() => {
-		navigation.addListener('beforeRemove', (e) => {
-			e.preventDefault();
 		})
 	}, [])
 
+	useEffect(() => {
+		navigation.addListener('beforeRemove', e => {
+			e.preventDefault()
+		})
+	}, [])
 
 	useEffect(() => {
-		setState({ ...state, allSupportedCoins: coins })
+		const getAllcoins = async () => {
+			const _all = await getUpdatedCoinBalance()
+			setState({ ...state, allSupportedCoins: _all })
+		}
+		getAllcoins()
 	}, [])
 
 	useLayoutEffect(() => {
-
 		for (let i of coins) {
-			new HttpService("", {
-				"uniqueId": "abc1",
-				"action": "quotedPrice",
-				"data": {
-					"symbol": `${i.symbol}USDT`
-				}
+			new HttpService('', {
+				uniqueId: 'abc1',
+				action: 'quotedPrice',
+				data: {
+					symbol: `${i.symbol}USDT`,
+				},
 			}).Post(res => {
 				i.price = res.data.rate
 			})
 		}
-		setState({ allSupportedCoins: coins })
-		// console.log('q', quotedPrice)
+
+		// console.log('custom dani', coins)
+
+		// console.log('custom dani', getUpdatedCoinBalance())
+
+		// setState({ allSupportedCoins: coins })
+
 		let totalAmount = state.allSupportedCoins.reduce((acc, curr) => {
-			console.log('acc', curr.balance, curr.price, curr.symbol)
-			return acc + (curr.balance * curr.price)
+			return acc + curr.balance * curr.price
 		}, 0)
 		setTotalAmount(totalAmount)
 	}, [])
-
-
-
-	// const totalAmount = useMemo(() => {
-	// 	return state.allSupportedCoins.reduce((acc, curr) => {
-	// 		console.log('acc', curr.balance, curr.price, curr.symbol)
-	// 		return acc + (curr.balance * curr.price)
-	// 	}, 0)
-	// }, [])
-
-	// const totalAmount = state.allSupportedCoins.reduce((acc, curr) => {
-	// 	console.log('acc', curr.balance, curr.price, curr.symbol)
-	// 	return acc + (curr.balance * curr.price)
-	// }, 0)
 
 	const pieData = useMemo(() => {
 		const length = state.allSupportedCoins.length
@@ -147,17 +143,28 @@ export default function WalletScreen({ navigation }) {
 		if (counter === length) {
 			return []
 		} else {
-
 			return coins.map((item, index) => {
+				// const percent = (item.balance * item.price * 100) / totalAmount
+				// console.log('dani debugger', {
+				// 	balance: item.balance,
+				// 	price: parseFloat(item.price).toFixed(2),
+				// 	totalAmount,
+				// 	result:
+				// 		(item.balance * parseFloat(item.price).toFixed(2) * 100) /
+				// 		totalAmount,
+				// })
+				let percent = 0
+				if (totalAmount > 0) {
+					percent = Math.ceil(
+						(item.balance * parseFloat(item.price).toFixed(2) * 100) /
+							totalAmount
+					)
+				} else {
+					percent = Math.ceil(
+						item.balance * parseFloat(item.price).toFixed(2) * 100
+					)
+				}
 
-				//price قیمت لحظه ای ارز
-				//balance موجودی ارز
-				//amount == price * balance
-				//percent = amount / totalAmount
-				// const balance = ((aparseFloat(item.amount) * parseFloat(item.price)) * 100) / parseFloat(totalBalance || 0.001)
-				console.log('amr debugger', item)
-				const percent = ((item.balance * item.price) * 100) / totalAmount
-				console.log("info", item.balance, item.price, item.symbol, percent, totalAmount)
 				return {
 					series: item.balance,
 					title: item.symbol,
@@ -169,19 +176,11 @@ export default function WalletScreen({ navigation }) {
 		}
 	}, [state])
 
-
 	const data = coins
 	// calculate the pie chart series
 	// const series = []
-	const series = pieData.map(item => item.series)
-	const sliceColor = pieData.map(item => item.color)
-
-
-
-	// const filteredCoins = useMemo(() => {
-	// 	return coins.filter(c => !c.hide)
-	// }, [JSON.stringify(coins)])
-
+	// const series = pieData.map(item => item.series)
+	// const sliceColor = pieData.map(item => item.color)
 
 	const hideCoinHandler = coin => {
 		showMessage({
@@ -190,8 +189,8 @@ export default function WalletScreen({ navigation }) {
 			type: 'success',
 			icon: null,
 			duration: 1000,
-			style: { backgroundColor: "#6BC0B1" },
-			position: 'top'
+			style: { backgroundColor: '#6BC0B1' },
+			position: 'top',
 		})
 		coins.map(item => {
 			if (item.name === coin.name) {
@@ -200,8 +199,6 @@ export default function WalletScreen({ navigation }) {
 		})
 		setCoin(coins)
 	}
-
-
 
 	return (
 		<Screen>
@@ -225,25 +222,25 @@ export default function WalletScreen({ navigation }) {
 							}}
 						>
 							<View style={{ flex: 2, justifyContent: 'space-around' }}>
-
-								{pieData.length > 0 ? pieData.map((item, index) => (
-									<ChartItems
-										key={index}
-										iconColor={item.color}
-										title={item.title}
-										value={item.value}
-										index={index}
-									/>
-								)) : state.allSupportedCoins.map((item, index) => (
-									<ChartItems
-										key={index}
-										iconColor={item.color}
-										title={item.symbol}
-										value={`0%`}
-										index={index}
-									/>
-								))}
-
+								{pieData.length > 0
+									? pieData.map((item, index) => (
+											<ChartItems
+												key={index}
+												iconColor={item.color}
+												title={item.title}
+												value={item.value}
+												index={index}
+											/>
+									  ))
+									: state.allSupportedCoins.map((item, index) => (
+											<ChartItems
+												key={index}
+												iconColor={item.color}
+												title={item.symbol}
+												value={`0%`}
+												index={index}
+											/>
+									  ))}
 							</View>
 							<View
 								style={{
@@ -252,31 +249,25 @@ export default function WalletScreen({ navigation }) {
 									flex: 2,
 								}}
 							>
-
-
-
-								{totalAmount > 0 ?
+								{totalAmount > 0 ? (
 									<PieChart
 										widthAndHeight={170}
-										series={
-											state.allSupportedCoins.map(item => item.balance)
-										}
-										sliceColor={
-											state.allSupportedCoins.map(item => item.color)
-										}
+										series={state.allSupportedCoins.map(item => item.balance)}
+										sliceColor={state.allSupportedCoins.map(item => item.color)}
 										doughnut={true}
 										coverRadius={0.88}
 										coverFill={globalStyles.Colors.inputColor}
 									/>
-
-									: <PieChart
+								) : (
+									<PieChart
 										widthAndHeight={170}
 										series={[100]}
 										sliceColor={[globalStyles.Colors.text2]}
 										doughnut={true}
 										coverRadius={0.88}
 										coverFill={globalStyles.Colors.inputColor}
-									/>}
+									/>
+								)}
 
 								<View
 									style={{ position: 'absolute', ...globalStyles.flex.center }}
@@ -299,7 +290,10 @@ export default function WalletScreen({ navigation }) {
 									${totalAmount}
 								</AppText>
 							</View>
-							<BarChart data={coins} />
+							<BarChart
+								data={state.allSupportedCoins}
+								totalAmount={totalAmount}
+							/>
 						</View>
 					)}
 					<TouchableOpacity
@@ -333,23 +327,26 @@ export default function WalletScreen({ navigation }) {
 					</TouchableOpacity>
 				</View>
 
-
 				{/* =============== Coins ==================== */}
 
 				<View style={{ flex: 2 }}>
 					<FlatList
 						style={{ marginVertical: 16 }}
 						data={filteredCoins}
-						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-						renderItem={({ item, index }) => <Coin
-							coin={item}
-							index={index}
-							length={data.length}
-							onPress={() => {
-								navigate(routes.coinDetailWithoutHistory, { coin: item })
-							}}
-							onHideHandler={hideCoinHandler}
-						/>}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+						}
+						renderItem={({ item, index }) => (
+							<Coin
+								coin={item}
+								index={index}
+								length={data.length}
+								onPress={() => {
+									navigate(routes.coinDetailWithoutHistory, { coin: item })
+								}}
+								onHideHandler={hideCoinHandler}
+							/>
+						)}
 						keyExtractor={(_, index) => index.toString()}
 					/>
 				</View>
